@@ -1,6 +1,6 @@
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
-import CloseIcon from '../assets/icons/x.svg?react'
+import CloseIcon from '../../assets/icons/x.svg?react'
 
 interface TaskModalProps {
   isOpened: boolean

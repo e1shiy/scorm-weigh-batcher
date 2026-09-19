@@ -1,7 +1,7 @@
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
 import { useScormStore } from '../../api/useScormStore'
-import CloseIcon from '../assets/icons/x.svg?react'
+import CloseIcon from '../../assets/icons/x.svg?react'
 
 interface FinishModalProps {
   isOpened: boolean
