@@ -1,8 +1,8 @@
+import { useState } from 'react'
+import { useProcedureStore } from '../procedure/useProcedureStore'
+import { Button } from '../ui/components/Button'
 import SettingsIcon from '../assets/icons/settings.svg?react'
 import ChevronIcon from '../assets/icons/chevron.svg?react'
-import { Button } from '../components/Button'
-import { useProcedureStore } from '../procedure/useProcedureStore'
-import { useState } from 'react'
 
 export function ActionPanel() {
   const submitAction = useProcedureStore(s => s.submitAction)

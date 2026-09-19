@@ -1,14 +1,14 @@
-import { Button } from '../components/Button'
+import { useState } from 'react'
+import { useScormStore } from '../api/useScormStore'
+import { useProcedureStore } from '../procedure/useProcedureStore'
+import { Button } from '../ui/components/Button'
+import { TaskModal } from '../ui/modals/TaskModal'
+import { FinishModal } from '../ui/modals/FinishModal'
 import ClockIcon from '../assets/icons/clock.svg?react'
 import TrophyIcon from '../assets/icons/trophy.svg?react'
 import ChevronIcon from '../assets/icons/chevron.svg?react'
 import TaskIcon from '../assets/icons/task.svg?react'
 import CancelIcon from '../assets/icons/cancel.svg?react'
-import { useState } from 'react'
-import { useScormStore } from '../scorm/useScormStore'
-import { useProcedureStore } from '../procedure/useProcedureStore'
-import { TaskModal } from '../modals/TaskModal'
-import { FinishModal } from '../modals/FinishModal'
 
 export function HistoryPanel() {
   const scoreRaw = useScormStore(s => s.scoreRaw)

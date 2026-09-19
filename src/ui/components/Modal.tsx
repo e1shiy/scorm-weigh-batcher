@@ -1,14 +1,16 @@
 import { useEffect, useMemo } from 'react'
 import { createPortal } from 'react-dom'
+import { twMerge } from 'tailwind-merge'
 
 interface ModalProps {
   isOpened: boolean
-  children?: React.ReactNode
   onOpen?: () => void
   onClose?: () => void
+  children?: React.ReactNode
+  className?: string
 }
 
-export function Modal({ children, isOpened, onClose, onOpen }: ModalProps) {
+export function Modal({ children, className, isOpened, onClose, onOpen }: ModalProps) {
   useEffect(() => {
     onOpen?.()
     const handleEsc = (e: KeyboardEvent) => e.code === 'Escape' && onClose?.()
@@ -31,7 +33,7 @@ export function Modal({ children, isOpened, onClose, onOpen }: ModalProps) {
           aria-label='Close modal'
           className='absolute inset-0 w-full h-full cursor-default border-none bg-transparent p-0'
         />
-        <div className='p-5 rounded-st flex flex-col gap-5 bg-light max-w-100 z-2'>{children}</div>
+        <div className={twMerge('bg-light max-w-100 z-2', className)}>{children}</div>
       </div>
     ),
     modalRootElement

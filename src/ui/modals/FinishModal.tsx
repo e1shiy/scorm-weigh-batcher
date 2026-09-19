@@ -1,6 +1,6 @@
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
-import { useScormStore } from '../scorm/useScormStore'
+import { useScormStore } from '../../api/useScormStore'
 import CloseIcon from '../assets/icons/x.svg?react'
 
 interface FinishModalProps {
@@ -17,7 +17,7 @@ export function FinishModal({ isOpened, onOpen, onClose }: FinishModalProps) {
   }
 
   return (
-    <Modal isOpened={isOpened} onClose={onClose} onOpen={onOpen}>
+    <Modal className='p-5 rounded-st flex flex-col gap-5' isOpened={isOpened} onClose={onClose} onOpen={onOpen}>
       <div className='flex gap-1.25 justify-between items-center'>
         <p className='text-blue text-[16px]'>Подтверждение</p>
         <Button className='w-7.5 h-7.5 p-0.5' variant='light-borderless'>

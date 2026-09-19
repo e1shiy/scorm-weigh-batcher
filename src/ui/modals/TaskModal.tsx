@@ -10,7 +10,7 @@ interface TaskModalProps {
 
 export function TaskModal({ isOpened, onOpen, onClose }: TaskModalProps) {
   return (
-    <Modal isOpened={isOpened} onClose={onClose} onOpen={onOpen}>
+    <Modal className='p-5 rounded-st flex flex-col gap-5' isOpened={isOpened} onClose={onClose} onOpen={onOpen}>
       <div className='flex gap-1.25 justify-between items-center'>
         <p className='text-blue text-[16px]'>Задание</p>
         <Button className='w-7.5 h-7.5 p-0.5' variant='light-borderless'>

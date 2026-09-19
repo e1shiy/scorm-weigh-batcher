@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { ActionId, HistoryEntry } from './types'
 import { ACTIONS, STEPS } from './constants'
-import { useScormStore } from '../scorm/useScormStore'
+import { useScormStore } from '../api/useScormStore'
 
 type ProcedureState = {
   totalSteps: number
