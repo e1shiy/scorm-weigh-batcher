@@ -1,24 +1,24 @@
-import logoSrc from './assets/logo.png'
+import { useEffect } from 'react'
+import { useScormStore } from './api/useScormStore'
 import { HistoryPanel } from './widgets/HistoryPanel'
-import { useScormStore } from './scorm/useScormStore'
-import { ResultsModal } from './modals/ResultsModal'
 import { ActionPanel } from './widgets/ActionPanel'
 import { ProgressBar } from './widgets/ProgressBar'
 import { EquipmentDiagram } from './widgets/EquipmentDiagram'
-import { useEffect } from 'react'
+import { ResultsModal } from './ui/modals/ResultsModal'
+import logoSrc from './assets/logo.png'
 
 function App() {
   const initialize = useScormStore(s => s.initialize)
   const finish = useScormStore(s => s.finish)
-  useEffect(() => {
-    initialize()
-    window.addEventListener('beforeunload', finish)
-    window.addEventListener('pagehide', finish)
-    return () => {
-      window.removeEventListener('beforeunload', finish)
-      window.removeEventListener('pagehide', finish)
-    }
-  }, [initialize, finish])
+  // useEffect(() => {
+  //   initialize()
+  //   window.addEventListener('beforeunload', finish)
+  //   window.addEventListener('pagehide', finish)
+  //   return () => {
+  //     window.removeEventListener('beforeunload', finish)
+  //     window.removeEventListener('pagehide', finish)
+  //   }
+  // }, [initialize, finish])
 
   const isFinished = useScormStore(s => s.isTerminated)
 
