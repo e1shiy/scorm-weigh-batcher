@@ -1,0 +1,53 @@
+<?xml version="1.0" standalone="no" ?>
+<manifest identifier="eurochem-weigh-batcher-course"
+          version="1"
+          xmlns="http://www.imsglobal.org/xsd/imscp_v1p1"
+          xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_v1p3"
+          xmlns:adlseq="http://www.adlnet.org/xsd/adlseq_v1p3"
+          xmlns:adlnav="http://www.adlnet.org/xsd/adlnav_v1p3"
+          xmlns:imsss="http://www.imsglobal.org/xsd/imsss"
+          xsi:schemaLocation="http://www.imsglobal.org/xsd/imscp_v1p1 imscp_v1p1.xsd
+                              http://www.adlnet.org/xsd/adlcp_v1p3 adlcp_v1p3.xsd
+                              http://www.adlnet.org/xsd/adlseq_v1p3 adlseq_v1p3.xsd
+                              http://www.adlnet.org/xsd/adlnav_v1p3 adlnav_v1p3.xsd
+                              http://www.imsglobal.org/xsd/imsss imsss_v1p3.xsd"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <metadata>
+    <schema>ADL SCORM</schema>
+    <schemaversion>2004 4th Edition</schemaversion>
+  </metadata>
+
+  <organizations default="eurochem-org">
+    <organization identifier="eurochem-org">
+      <item identifier="item-1" identifierref="resource-1">
+        <title>Тренажёр: пуск весового дозатора</title>
+        <imsss:sequencing>
+          <imsss:objectives>
+            <imsss:primaryObjective objectiveID="PRIMARY" satisfiedByMeasure="true">
+              <imsss:minNormalizedMeasure>0</imsss:minNormalizedMeasure>
+            </imsss:primaryObjective>
+          </imsss:objectives>
+        </imsss:sequencing>
+      </item>
+    </organization>
+  </organizations>
+
+  <resources>
+    <resource identifier="resource-1" type="webcontent" adlcp:scormType="sco" href="index.html">
+      <file href="index.html"/>
+      <file href="assets/index-Dg4mIE_T.js"/>
+      <file href="assets/index-CnRykv_W.css"/>
+      <file href="assets/logo-D6FPAJhg.png"/>
+      <file href="assets/ProximaNova-Thin-D7vy8DV0.woff2"/>
+      <file href="assets/ProximaNova-Light-C3EuvXkG.woff2"/>
+      <file href="assets/ProximaNova-Regular-CkFg27jT.woff2"/>
+      <file href="assets/ProximaNova-Black-DoYbSjmd.woff2"/>
+      <file href="assets/ProximaNova-Semibold-B52BBeBg.woff2"/>
+      <file href="assets/ProximaNova-Medium-B6q11Ad1.woff2"/>
+      <file href="assets/ProximaNova-Bold-5r8Rzz5X.woff2"/>
+      <file href="assets/ProximaNova-Extrabold-obX4LlxF.woff2"/>
+    </resource>
+  </resources>
+
+</manifest>
