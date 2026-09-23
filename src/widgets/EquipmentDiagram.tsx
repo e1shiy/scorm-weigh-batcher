@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { usePan } from '../lib/usePan'
-import { useProcedureStore } from '../procedure/useProcedureStore'
 import { Button } from '../ui/components/Button'
 import ScaleUpIcon from '../assets/icons/scale-up.svg?react'
 import ScaleDownIcon from '../assets/icons/scale-down.svg?react'
@@ -9,13 +8,10 @@ import FullscreenIcon from '../assets/icons/fullscreen.svg?react'
 import FullscreenAltIcon from '../assets/icons/fullscreen-alt.svg?react'
 
 export function EquipmentDiagram() {
-  const submitAction = useProcedureStore(s => s.submitAction)
-  const currentStepIndex = useProcedureStore(s => s.currentStepIndex)
-
   const diagramRef = useRef<HTMLDivElement>(null)
   const { handlePointerDown, handlePointerMove, handlePointerUp } = usePan(diagramRef)
 
-  const [scale, setScale] = useState(1)
+  const [, setScale] = useState(1)
   const upScale = () => setScale(s => Math.min(s + 0.25, 10))
   const downScale = () => setScale(s => Math.max(s - 0.25, 1))
 

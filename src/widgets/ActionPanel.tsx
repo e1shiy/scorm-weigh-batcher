@@ -1,11 +1,9 @@
 import { useState } from 'react'
-import { useProcedureStore } from '../procedure/useProcedureStore'
 import { Button } from '../ui/components/Button'
 import SettingsIcon from '../assets/icons/settings.svg?react'
 import ChevronIcon from '../assets/icons/chevron.svg?react'
 
 export function ActionPanel() {
-  const submitAction = useProcedureStore(s => s.submitAction)
   const [isClosed, setIsClosed] = useState(window.innerWidth < 768)
 
   return isClosed ? (
@@ -31,12 +29,7 @@ export function ActionPanel() {
         </Button>
       </div>
       <div className='flex flex-col gap-2.5'>
-        <Button onClick={() => submitAction('visual-inspection')} variant='light' className='text-nowrap'>
-          Визуальный осмотр
-        </Button>
-        <Button onClick={() => submitAction('start-electric-motor')} variant='light' className='text-nowrap'>
-          Пуск электродвигателя
-        </Button>
+        <p className='text-dark font-normal'>Объекты появятся после проработки схемы</p>
       </div>
     </div>
   )

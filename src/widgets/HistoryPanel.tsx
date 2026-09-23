@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useScormStore } from '../api/useScormStore'
-import { useProcedureStore } from '../procedure/useProcedureStore'
+import { useScenarioStore } from '../scenario/useScenarioStore'
 import { Button } from '../ui/components/Button'
 import { TaskModal } from '../ui/modals/TaskModal'
 import { FinishModal } from '../ui/modals/FinishModal'
@@ -13,7 +13,7 @@ import CancelIcon from '../assets/icons/cancel.svg?react'
 export function HistoryPanel() {
   const scoreRaw = useScormStore(s => s.scoreRaw)
   const scoreMax = useScormStore(s => s.scoreMax)
-  const history = useProcedureStore(s => s.history)
+  const history = useScenarioStore(s => s.history)
 
   const [isClosed, setIsClosed] = useState(window.innerWidth < 768)
   const [isTaskOpen, setIsTaskOpen] = useState(true)
