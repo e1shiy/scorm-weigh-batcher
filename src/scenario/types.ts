@@ -12,23 +12,23 @@ export interface ActionMeta {
   toast?: string
 }
 
-export type ObjectStatusOf<O, K extends keyof O> = O[K] extends SchemeObjectBase ? O[K]['status'] : never
+export type StatusOf<T> = T extends SchemeObjectBase ? T['status'] : never
 
-export type ObjectValueOf<O, K extends keyof O> = O[K] extends SchemeObjectBase ? O[K]['value'] : never
+export type ValueOf<T> = T extends SchemeObjectBase ? T['value'] : never
 
 export type ObjectChange<O, K extends keyof O = keyof O> = {
-  [T in K]: { objectId: T; status: ObjectStatusOf<O, T>; value: ObjectValueOf<O, T> }
+  [T in K]: { objectId: T; status: StatusOf<O[T]>; value: ValueOf<O[T]> }
 }[K]
 
 export type ObjectState<O> = {
-  [K in keyof O]: { status: ObjectStatusOf<O, K>; value: ObjectValueOf<O, K> }
+  [K in keyof O]: { status: StatusOf<O[K]>; value: ValueOf<O[K]> }
 }
 
 export type Action<O> = {
   [K in keyof O]: {
     objectId: K
     meta: ActionMeta
-    check: (status: ObjectStatusOf<O, K>, value: ObjectValueOf<O, K>) => boolean
+    check: (status: StatusOf<O[K]>, value: ValueOf<O[K]>) => boolean
   }
 }[keyof O]
 

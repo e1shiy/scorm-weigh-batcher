@@ -10,18 +10,15 @@ export type ScenarioState<O> = {
   currentStepIndex: number
   history: HistoryEntry[]
 
-  initialize: (objects: ObjectState<O>) => void
   setObject: (change: ObjectChange<O>) => void
 }
 
-export const createScenarioStore = <O>(scenarioSteps: Step<O>[]) =>
+export const createScenarioStore = <O>(scenarioSteps: Step<O>[], initialObjects: ObjectState<O>) =>
   create<ScenarioState<O>>((set, get) => ({
-    objects: {},
+    objects: initialObjects,
     totalSteps: scenarioSteps.length,
     currentStepIndex: 0,
     history: [],
-
-    initialize: objects => set({ objects }),
 
     setObject: change => {
       const { history, currentStepIndex, totalSteps, objects } = get()
@@ -55,4 +52,4 @@ export const createScenarioStore = <O>(scenarioSteps: Step<O>[]) =>
     }
   }))
 
-export const useScenarioStore = createScenarioStore<Objects>(steps)
+export const useScenarioStore = createScenarioStore<Objects>(steps, {})
