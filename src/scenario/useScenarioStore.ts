@@ -1,20 +1,19 @@
 import { create } from 'zustand'
-import type { HistoryEntry, ObjectChange, ObjectState, Step } from './types'
-import type { Objects } from './objects'
+import type { HistoryEntry, ObjectState, SchemeObjectBase, Step } from './types'
 import { steps } from './steps'
 import { useScormStore } from '../api/useScormStore'
 
-export type ScenarioState<O> = {
-  objects: Partial<ObjectState<O>>
+export type ScenarioState = {
+  objects: Partial<ObjectState>
   totalSteps: number
   currentStepIndex: number
   history: HistoryEntry[]
 
-  setObject: (change: ObjectChange<O>) => void
+  setObject: (change: SchemeObjectBase) => void
 }
 
-export const createScenarioStore = <O>(scenarioSteps: Step<O>[], initialObjects: ObjectState<O>) =>
-  create<ScenarioState<O>>((set, get) => ({
+export const createScenarioStore = (scenarioSteps: Step[], initialObjects: ObjectState) =>
+  create<ScenarioState>((set, get) => ({
     objects: initialObjects,
     totalSteps: scenarioSteps.length,
     currentStepIndex: 0,
@@ -25,17 +24,17 @@ export const createScenarioStore = <O>(scenarioSteps: Step<O>[], initialObjects:
       if (currentStepIndex >= totalSteps) return
 
       const isAllowed = scenarioSteps[currentStepIndex]?.actions.some(action => {
-        if (action.objectId !== change.objectId) return false
+        if (action.objectId !== change.id) return false
         return action.check(change.status, change.value)
       })
 
-      set({ objects: { ...objects, [change.objectId]: { status: change.status, value: change.value } } })
+      set({ objects: { ...objects, [change.id]: { status: change.status, value: change.value } } })
 
       if (isAllowed) {
         set({
           currentStepIndex: currentStepIndex + 1,
           history: [
-            { id: crypto.randomUUID(), meta: { title: String(change.objectId) }, scoreDelta: 0, isSuccess: true },
+            { id: crypto.randomUUID(), meta: { title: String(change.id) }, scoreDelta: 0, isSuccess: true },
             ...history
           ]
         })
@@ -43,7 +42,7 @@ export const createScenarioStore = <O>(scenarioSteps: Step<O>[], initialObjects:
       } else {
         set({
           history: [
-            { id: crypto.randomUUID(), meta: { title: String(change.objectId) }, scoreDelta: -1, isSuccess: false },
+            { id: crypto.randomUUID(), meta: { title: String(change.id) }, scoreDelta: -1, isSuccess: false },
             ...history
           ]
         })
@@ -52,4 +51,4 @@ export const createScenarioStore = <O>(scenarioSteps: Step<O>[], initialObjects:
     }
   }))
 
-export const useScenarioStore = createScenarioStore<Objects>(steps, {})
+export const useScenarioStore = createScenarioStore(steps, {})
