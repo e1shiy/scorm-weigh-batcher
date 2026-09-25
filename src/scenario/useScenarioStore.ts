@@ -8,12 +8,14 @@ export type ScenarioState = {
   totalSteps: number
   currentStepIndex: number
   history: HistoryEntry[]
+}
 
-  setObject: (change: SchemeObjectBase) => void
+export type ScenarioActions = {
+    setObject: (change: SchemeObjectBase) => void
 }
 
 export const createScenarioStore = (scenarioSteps: Step[], initialObjects: ObjectState) =>
-  create<ScenarioState>((set, get) => ({
+  create<ScenarioState & ScenarioActions>((set, get) => ({
     objects: initialObjects,
     totalSteps: scenarioSteps.length,
     currentStepIndex: 0,
