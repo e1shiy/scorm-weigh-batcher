@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import type { CompletionStatus, SCORM_API, SuccessStatus } from './types'
 import { getAPI } from './getApi'
-import { useProcedureStore } from '../procedure/useProcedureStore'
+import { useScenarioStore } from '../scenario/useScenarioStore'
 
 type ScormState = {
   api: SCORM_API | null
@@ -59,7 +59,7 @@ export const useScormStore = create<ScormState>((set, get) => ({
     if (isTerminated || !api) return
     set({ isTerminated: true })
 
-    const { currentStepIndex, totalSteps } = useProcedureStore.getState()
+    const { currentStepIndex, totalSteps } = useScenarioStore.getState()
     const isCompleted = currentStepIndex === totalSteps
 
     const completionStatus: CompletionStatus = isCompleted ? 'completed' : 'incomplete'

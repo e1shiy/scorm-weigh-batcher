@@ -1,11 +1,11 @@
 import type { CSSProperties } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { useProcedureStore } from '../procedure/useProcedureStore'
+import { useScenarioStore } from '../scenario/useScenarioStore'
 
 export function ProgressBar() {
-  const currentStepIndex = useProcedureStore(s => s.currentStepIndex)
-  const totalSteps = useProcedureStore(s => s.totalSteps)
-  const progress = Math.floor((currentStepIndex / totalSteps) * 100)
+  const currentStepIndex = useScenarioStore(s => s.currentStepIndex)
+  const totalSteps = useScenarioStore(s => s.totalSteps)
+  const progress = totalSteps === 0 ? 0 : Math.floor((currentStepIndex / totalSteps) * 100)
 
   return (
     <div className='grow relative flex-center h-full p-1 rounded-st bg-light'>
