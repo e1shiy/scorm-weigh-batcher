@@ -6,6 +6,28 @@ export interface SchemeObjectBase {
   value?: unknown
 }
 
+export interface SchemeObject<K extends string, V> extends SchemeObjectBase {
+  kind: K
+  value: V
+}
+
+// export type InspectionObject = SchemeObject<'inspection', { done: boolean }>
+
+// Мешалки, вентилятор, конвейеры: пуск/стоп
+export type DriveObject = SchemeObject<'drive', { running: boolean }>
+
+// Циркуляторы: пуск/стоп и нагрузка 30% / 100%
+export type CirculatorObject = SchemeObject<'circulator', { running: boolean; load: 30 | 100 }>
+
+// Насосы: пуск/стоп и задание в %
+export type PumpObject = SchemeObject<'pump', { running: boolean; setpoint: number }>
+
+// Дозаторы: пуск/стоп и уставка
+export type DoserObject = SchemeObject<'doser', { running: boolean; setpoint: number }>
+
+export type ScenarioObject = DriveObject | CirculatorObject | PumpObject | DoserObject
+export type ScenarioObjectKind = ScenarioObject['kind']
+
 export interface ActionMeta {
   title: string
   description?: string
