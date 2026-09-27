@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { Action, HistoryEntry, ObjectState, SchemeObjectBase, Step } from './types'
+import type { Action, HistoryEntry, ObjectState, SchemeObject, Step } from './types'
 import { steps } from './steps'
 import { useScormStore } from '../api/useScormStore'
 
@@ -12,13 +12,13 @@ export type ScenarioState = {
 }
 
 export type ScenarioActions = {
-    setObject: (change: SchemeObjectBase) => void
+    setObject: (change: SchemeObject) => void
 }
 
 const createProgress = (step: Step | undefined) =>
     step?.groups.map(group => group.actions.map(() => false)) ?? []
 
-const applyChange = (step: Step, progress: boolean[][], change: SchemeObjectBase) => {
+const applyChange = (step: Step, progress: boolean[][], change: SchemeObject) => {
   const matches = (action: Action | undefined) =>
     !!action && action.objectId === change.id && action.check(change.status, change.value)
 
