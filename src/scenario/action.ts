@@ -5,5 +5,4 @@ export const defineAction = <A extends AnyObject>(
   objectId: A['id'],
   meta: ActionMeta,
   check: (status: SchemeStatus, value: A['value']) => boolean,
-  isRunning = false,
-): Action => ({ objectId, meta, isRunning, check: check as Action['check'] })
+): Action => ({ objectId, meta, check: check as Action['check'] })

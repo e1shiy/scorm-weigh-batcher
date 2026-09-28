@@ -18,8 +18,8 @@ export const Panel = ({ id, value, secondValue, status, unit, indicatorSlot, cla
   return (
     <div
       className={twMerge(
-        `flex flex-col divide-y divide-black border border-black bg-[#D9D9D9] min-w-11 leading-none`,
-        isExtended && 'w-13',
+        `flex flex-col divide-y divide-black border border-black bg-gray-alt min-w-11 leading-none`,
+        isExtended && 'min-w-13',
         className
       )}
     >
@@ -30,7 +30,7 @@ export const Panel = ({ id, value, secondValue, status, unit, indicatorSlot, cla
           <span className='grid grid-rows-2 divide-y divide-black' />
           <span className='' />
 
-          <div className={twMerge('flex-center transition-colors text-black', status === 'manual' && 'bg-[#03FD07]')}>
+          <div className={twMerge('flex-center transition-colors text-black', status === 'auto' && 'bg-[#03FD07]')}>
             {status === 'manual' ? 'M' : 'A'}
           </div>
 
