@@ -1,6 +1,22 @@
 @import 'tailwindcss';
 
 @font-face {
+  font-family: Inter;
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url(./assets/fonts/Inter-Medium.woff2) format('woff');
+}
+
+@font-face {
+  font-family: Inter;
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url(./assets/fonts/Inter-SemiBold.woff2) format('woff');
+}
+
+@font-face {
   font-family: ProximaNova;
   font-weight: 200;
   font-style: normal;
@@ -81,6 +97,7 @@
   --color-light-gray: #efefef;
 
   --font-primary: 'ProximaNova', sans-serif;
+  --font-secondary: 'Inter', sans-serif;
   --radius-st: 5px;
 }
 
