@@ -33,21 +33,6 @@
     </organization>
   </organizations>
 
-  <resources>
-    <resource identifier="resource-1" type="webcontent" adlcp:scormType="sco" href="index.html">
-      <file href="index.html"/>
-      <file href="assets/index-Dg4mIE_T.js"/>
-      <file href="assets/index-CnRykv_W.css"/>
-      <file href="assets/logo-D6FPAJhg.png"/>
-      <file href="assets/ProximaNova-Thin-D7vy8DV0.woff2"/>
-      <file href="assets/ProximaNova-Light-C3EuvXkG.woff2"/>
-      <file href="assets/ProximaNova-Regular-CkFg27jT.woff2"/>
-      <file href="assets/ProximaNova-Black-DoYbSjmd.woff2"/>
-      <file href="assets/ProximaNova-Semibold-B52BBeBg.woff2"/>
-      <file href="assets/ProximaNova-Medium-B6q11Ad1.woff2"/>
-      <file href="assets/ProximaNova-Bold-5r8Rzz5X.woff2"/>
-      <file href="assets/ProximaNova-Extrabold-obX4LlxF.woff2"/>
-    </resource>
-  </resources>
+  {{RESOURCES}}
 
 </manifest>
