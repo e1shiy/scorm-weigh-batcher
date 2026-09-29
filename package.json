@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
     "check": "eslint .; tsc -b --noEmit",
-    "package": "npm run build && copyfiles imsmanifest.xml dist/ && cd dist && bestzip ../scorm-package.zip *"
+    "build": "tsc -b && vite build",
+    "manifest": "node scripts/generate-manifest.js",
+    "zip:scorm": "node scripts/zip.js",
+    "build:scorm": "npm run build && npm run manifest && npm run zip:scorm"
   },
   "dependencies": {
     "react": "^19.2.8",
