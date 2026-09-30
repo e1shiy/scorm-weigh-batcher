@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import {type ReactNode, useEffect, useMemo} from 'react'
 import { createPortal } from 'react-dom'
 import { twMerge } from 'tailwind-merge'
 
@@ -6,7 +6,7 @@ interface ModalProps {
   isOpened: boolean
   onOpen?: () => void
   onClose?: () => void
-  children?: React.ReactNode
+  children?: ReactNode
   className?: string
 }
 
