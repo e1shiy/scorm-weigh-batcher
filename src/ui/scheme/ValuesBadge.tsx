@@ -18,11 +18,13 @@ export function ValuesBadge({ payload, className }: ValuesBadgeProps) {
           </p>
         ))}
       </div>
-      {payload.map(({ unit }, idx) => (
-        <span key={idx} className='text-[8px] font-bold text-black pr-0.5 select-none'>
-          {unit}
-        </span>
-      ))}
+      <div className='self-stretch flex flex-col justify-around'>
+        {payload.map(({ unit }, idx) => (
+          <span key={idx} className='text-[8px] font-medium text-black pr-0.5 select-none'>
+            {unit}
+          </span>
+        ))}
+      </div>
     </div>
   )
 }
