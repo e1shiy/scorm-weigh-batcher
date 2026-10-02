@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import type { Action, HistoryEntry, ObjectState, SchemeObject, Step } from './types'
+import { objects } from './objects'
 import { steps } from './steps'
 import { useScormStore } from '../api/useScormStore'
 
@@ -12,34 +13,63 @@ export type ScenarioState = {
 }
 
 export type ScenarioActions = {
-    setObject: (change: SchemeObject) => void
+  setObject: (change: SchemeObject) => void
 }
 
-const createProgress = (step: Step | undefined) =>
-    step?.groups.map(group => group.actions.map(() => false)) ?? []
+const WRONG_ACTION_PENALTY = 1 // штраф за неверное действие (из 100 баллов)
 
+// Генератор id для записей истории. Не использует crypto.randomUUID,
+// который недоступен вне безопасного контекста (HTTP в LMS).
+let idCounter = 0
+const createId = () =>
+  `${Date.now().toString(36)}-${(idCounter++).toString(36)}-${Math.random().toString(36).slice(2, 8)}`
+
+const createProgress = (step: Step | undefined) =>
+  step?.groups.map(group => group.actions.map(() => false)) ?? []
+
+// Применяет изменение к текущему шагу.
+// Возвращает новый прогресс и выполненные действия, либо null, если действие неверное.
 const applyChange = (step: Step, progress: boolean[][], change: SchemeObject) => {
   const matches = (action: Action | undefined) =>
     !!action && action.objectId === change.id && action.check(change.status, change.value)
 
   const next = progress.map(done => [...done])
-  const isMatched = step.groups.some((group, g) => {
+  const matched: Action[] = []
+
+  // в exclusive-шаге начатую (но не завершённую) sequence-группу нужно довести до конца
+  const busy = step.exclusive
+    ? step.groups.findIndex((group, g) => {
+        const done = progress[g] ?? []
+        return group.type === 'sequence' && done.some(Boolean) && !done.every(Boolean)
+      })
+    : -1
+
+  step.groups.forEach((group, g) => {
     const done = next[g]
-    if (!done) return false
+    if (!done) return
+    if (busy !== -1 && g !== busy) return
 
     if (group.type === 'sequence') {
+      // только следующее по порядку действие
       const i = done.indexOf(false)
-      if (!matches(group.actions[i])) return false
-      done[i] = true
-      return true
+      const action = group.actions[i]
+      if (i !== -1 && action && matches(action)) {
+        done[i] = true
+        matched.push(action)
+      }
+      return
     }
 
-    const i = group.actions.findIndex((action, j) => !done[j] && matches(action))
-    if (i === -1) return false
-    done[i] = true
-    return true
+    // all: любое ещё не выполненное действие (одно изменение может закрыть несколько)
+    group.actions.forEach((action, j) => {
+      if (!done[j] && matches(action)) {
+        done[j] = true
+        matched.push(action)
+      }
+    })
   })
-  return isMatched ? next : null
+
+  return matched.length ? { progress: next, matched } : null
 }
 
 export const createScenarioStore = (scenarioSteps: Step[], initialObjects: ObjectState) =>
@@ -55,49 +85,46 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
       const step = scenarioSteps[currentStepIndex]
       if (!step) return
 
-      set({ objects: { ...objects, [change.id]: { status: change.status, value: change.value } } })
+      const result = applyChange(step, stepProgress, change)
 
-      let stepIndex = currentStepIndex
-      let progress = applyChange(step, stepProgress, change)
-      let missed = 0
-
-      if (!progress) {
-        const nextStep = scenarioSteps[currentStepIndex + 1]
-        progress = nextStep ? applyChange(nextStep, createProgress(nextStep), change) : null
-        if (progress) {
-          missed = stepProgress.flat().filter(done => !done).length
-          stepIndex++
-        }
-      }
-
-      if (progress) {
-        if (progress.every(done => done.every(Boolean))) {
-          stepIndex++
-          progress = createProgress(scenarioSteps[stepIndex])
-        }
-        set({
-          currentStepIndex: stepIndex,
-          stepProgress: progress,
-          history: [
-            { id: crypto.randomUUID(), meta: { title: String(change.id) }, scoreDelta: 0, isSuccess: true },
-            ...(missed
-              ? [{ id: crypto.randomUUID(), meta: { title: step.title }, scoreDelta: -missed, isSuccess: false }]
-              : []),
-            ...history
-          ]
-        })
-        if (missed) useScormStore.getState().applyScoreDelta(-missed)
-        if (stepIndex === totalSteps) useScormStore.getState().finish()
-      } else {
+      // неверное действие: не фиксируем (состояние объекта и прогресс не меняются), только снимаем балл
+      if (!result) {
         set({
           history: [
-            { id: crypto.randomUUID(), meta: { title: String(change.id) }, scoreDelta: -1, isSuccess: false },
-            ...history
-          ]
+            {
+              id: createId(),
+              meta: { title: 'Неверное действие', description: String(change.id) },
+              scoreDelta: -WRONG_ACTION_PENALTY,
+              isSuccess: false,
+            },
+            ...history,
+          ],
         })
-        useScormStore.getState().applyScoreDelta(-1)
+        useScormStore.getState().applyScoreDelta(-WRONG_ACTION_PENALTY)
+        return
       }
-    }
+
+      const isStepDone = result.progress.every(done => done.every(Boolean))
+      const stepIndex = isStepDone ? currentStepIndex + 1 : currentStepIndex
+
+      set({
+        objects: { ...objects, [change.id]: { status: change.status, value: change.value } },
+        currentStepIndex: stepIndex,
+        stepProgress: isStepDone ? createProgress(scenarioSteps[stepIndex]) : result.progress,
+        history: [
+          ...result.matched
+            .map(action => ({ id: createId(), meta: action.meta, scoreDelta: 0, isSuccess: true }))
+            .reverse(),
+          ...history,
+        ],
+      })
+
+      if (stepIndex === totalSteps) useScormStore.getState().finish()
+    },
   }))
 
-export const useScenarioStore = createScenarioStore(steps, {})
+const initialObjects: ObjectState = Object.fromEntries(
+  objects.map(object => [object.id, { status: object.status, value: object.value }]),
+)
+
+export const useScenarioStore = createScenarioStore(steps, initialObjects)
