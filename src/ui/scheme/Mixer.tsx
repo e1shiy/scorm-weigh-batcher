@@ -12,11 +12,11 @@ interface MixerProps {
 }
 
 export function Mixer({id, value, status}: MixerProps) {
-    const modeBadge = <Indicator className={status === 'auto' ? 'bg-[#03FD07]' : ''}>{status === 'manual' ? 'M' : 'A'}</Indicator>
+    const modeBadge = <Indicator className={status === 'auto' ? 'bg-neon-green' : ''}>{status === 'manual' ? 'M' : 'A'}</Indicator>
 
     return (
         <div className={twMerge('flex-center flex-col gap-px')}>
-            <Panel id={id} headerClassName='bg-[#29A6A0]' />
+            <Panel id={id} headerClassName='bg-light-seagreen' />
             <div className='flex mb-0.75 relative'>
                 <Indicator>P</Indicator>
                 <MotorButton hasLabel={true} isRunning={true}/>

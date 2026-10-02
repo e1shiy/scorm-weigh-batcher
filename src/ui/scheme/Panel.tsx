@@ -23,14 +23,14 @@ export const Panel = ({ id, value, secondValue, status, unit, indicatorSlot, cla
         className
       )}
     >
-      <div className={twMerge('h-2 flex-center text-light font-medium text-[6px] bg-[#5E6099]', headerClassName)}>{id}</div>
+      <div className={twMerge('h-2 flex-center text-light font-medium text-[6px] bg-indigo', headerClassName)}>{id}</div>
 
       {isExtended && (
         <div className='h-2.25 grid grid-cols-5 divide-x divide-black font-semibold text-[7px]'>
           <span className='grid grid-rows-2 divide-y divide-black' />
           <span className='' />
 
-          <div className={twMerge('flex-center transition-colors text-black', status === 'auto' && 'bg-[#03FD07]')}>
+          <div className={twMerge('flex-center transition-colors text-black', status === 'auto' && 'bg-neon-green')}>
             {status === 'manual' ? 'M' : 'A'}
           </div>
 

@@ -13,7 +13,7 @@ export interface ValveProps {
 }
 
 export const Valve = ({ id, isVertical, status, value }: ValveProps) => {
-  const modeBadge = <Indicator className={status === 'auto' ? 'bg-[#03FD07]' : ''}>{status === 'manual' ? 'M' : 'A'}</Indicator>
+  const modeBadge = <Indicator className={status === 'auto' ? 'bg-neon-green' : ''}>{status === 'manual' ? 'M' : 'A'}</Indicator>
 
   return isVertical ? (
     <div className='flex gap-px'>
@@ -22,15 +22,15 @@ export const Valve = ({ id, isVertical, status, value }: ValveProps) => {
       <div className='flex flex-col items-start gap-px'>
         {modeBadge}
         <ValuesBadge payload={[{ value, unit: '%' }]} />
-        <Panel id={id} headerClassName='bg-[#259229]' />
+        <Panel id={id} headerClassName='bg-dark-green' />
       </div>
     </div>
   ) : (
     <div className='grid grid-cols-[auto_auto_auto] grid-rows-[auto_23px_auto] gap-px'>
-      <Panel id={id} headerClassName='bg-[#259229]' className='col-[1/4]' />
+      <Panel id={id} headerClassName='bg-dark-green' className='col-[1/4]' />
       <Indicator className='bg-[#004CB7] text-light col-1 row-2'>E</Indicator>
       <ValveHorizontalIcon className='w-6.5 h-4 col-2 row-2 self-end' />
-      <Indicator className={twMerge('col-3 row-2', status === 'auto' ? 'bg-[#03FD07]' : '')}>{status === 'manual' ? 'M' : 'A'}</Indicator>
+      <Indicator className={twMerge('col-3 row-2', status === 'auto' ? 'bg-neon-green' : '')}>{status === 'manual' ? 'M' : 'A'}</Indicator>
       <ValuesBadge className='col-[1/4] row-3 mx-auto w-max' payload={[{ value, unit: '%' }]} />
     </div>
   )
