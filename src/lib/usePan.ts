@@ -1,11 +1,11 @@
 import { useCallback, useRef, type RefObject } from 'react'
 
 export const usePan = (containerRef: RefObject<HTMLDivElement | null>) => {
-  const isDragging = useRef(false)
-  const startX = useRef(0)
-  const startY = useRef(0)
-  const startScrollLeft = useRef(0)
-  const startScrollTop = useRef(0)
+  const isDraggingRef = useRef(false)
+  const startXRef = useRef(0)
+  const startYRef = useRef(0)
+  const startScrollLeftRef = useRef(0)
+  const startScrollTopRef = useRef(0)
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
@@ -15,11 +15,11 @@ export const usePan = (containerRef: RefObject<HTMLDivElement | null>) => {
       const container = containerRef.current
       if (!container) return
 
-      isDragging.current = true
-      startX.current = e.clientX
-      startY.current = e.clientY
-      startScrollLeft.current = container.scrollLeft
-      startScrollTop.current = container.scrollTop
+      isDraggingRef.current = true
+      startXRef.current = e.clientX
+      startYRef.current = e.clientY
+      startScrollLeftRef.current = container.scrollLeft
+      startScrollTopRef.current = container.scrollTop
 
       container.style.cursor = 'grabbing'
       container.setPointerCapture(e.pointerId)
@@ -29,15 +29,15 @@ export const usePan = (containerRef: RefObject<HTMLDivElement | null>) => {
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent) => {
-      if (!isDragging.current) return
+      if (!isDraggingRef.current) return
       const container = containerRef.current
       if (!container) return
 
-      const deltaX = e.clientX - startX.current
-      const deltaY = e.clientY - startY.current
+      const deltaX = e.clientX - startXRef.current
+      const deltaY = e.clientY - startYRef.current
 
-      let newScrollLeft = startScrollLeft.current - deltaX
-      let newScrollTop = startScrollTop.current - deltaY
+      let newScrollLeft = startScrollLeftRef.current - deltaX
+      let newScrollTop = startScrollTopRef.current - deltaY
 
       const maxScrollLeft = container.scrollWidth - container.clientWidth
       const maxScrollTop = container.scrollHeight - container.clientHeight
@@ -53,7 +53,7 @@ export const usePan = (containerRef: RefObject<HTMLDivElement | null>) => {
 
   const handlePointerUp = useCallback(
     (e: React.PointerEvent) => {
-      isDragging.current = false
+      isDraggingRef.current = false
       const container = containerRef.current
       if (!container) return
       container.removeAttribute('style')
