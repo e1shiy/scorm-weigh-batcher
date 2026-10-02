@@ -6,6 +6,7 @@ import ScaleDownIcon from '../assets/icons/scale-down.svg?react'
 import ScaleResetIcon from '../assets/icons/scale-reset.svg?react'
 import FullscreenIcon from '../assets/icons/fullscreen.svg?react'
 import FullscreenAltIcon from '../assets/icons/fullscreen-alt.svg?react'
+import Tooltip from '../ui/components/Tooltip'
 
 export function EquipmentDiagram() {
   const diagramRef = useRef<HTMLDivElement>(null)
@@ -63,18 +64,26 @@ export function EquipmentDiagram() {
       onPointerUp={handlePointerUp}
     >
       <div className='sticky top-2.5 left-2.5 flex flex-col gap-2.5 z-2 w-max'>
-        <Button onClick={upScale} className='w-8 h-8'>
-          <ScaleUpIcon className='w-full h-full' />
-        </Button>
-        <Button onClick={downScale} className='w-8 h-8'>
-          <ScaleDownIcon className='w-full h-full' />
-        </Button>
-        <Button onClick={() => setScale(1)} className='w-8 h-8'>
-          <ScaleResetIcon className='w-full h-full' />
-        </Button>
-        <Button onClick={toggleFullscreen} className='w-8 h-8'>
-          {isFullscreen ? <FullscreenAltIcon className='w-full h-full' /> : <FullscreenIcon className='w-full h-full' />}
-        </Button>
+        <Tooltip content='Приблизить'>
+          <Button onClick={upScale} className='w-8 h-8'>
+            <ScaleUpIcon className='w-full h-full' />
+          </Button>
+        </Tooltip>
+        <Tooltip content='Отдалить'>
+          <Button onClick={downScale} className='w-8 h-8'>
+            <ScaleDownIcon className='w-full h-full' />
+          </Button>
+        </Tooltip>
+        <Tooltip content='Сбросить зум'>
+          <Button onClick={() => setScale(1)} className='w-8 h-8'>
+            <ScaleResetIcon className='w-full h-full' />
+          </Button>
+        </Tooltip>
+        <Tooltip content={isFullscreen ? 'Свернуть' : 'На весь экран'}>
+          <Button onClick={toggleFullscreen} className='w-8 h-8'>
+            {isFullscreen ? <FullscreenAltIcon className='w-full h-full' /> : <FullscreenIcon className='w-full h-full' />}
+          </Button>
+        </Tooltip>
       </div>
       {/* тут будет диаграмма */}
     </div>
