@@ -9,6 +9,7 @@ import TrophyIcon from '../assets/icons/trophy.svg?react'
 import ChevronIcon from '../assets/icons/chevron.svg?react'
 import TaskIcon from '../assets/icons/task.svg?react'
 import CancelIcon from '../assets/icons/cancel.svg?react'
+import Tooltip from '../ui/components/Tooltip'
 
 export function HistoryPanel() {
   const scoreRaw = useScormStore(s => s.scoreRaw)
@@ -39,9 +40,11 @@ export function HistoryPanel() {
     <>
       {isClosed ? (
         <div className='w-7 shrink-0 flex flex-col gap-2.5'>
-          <Button onClick={() => setIsClosed(false)} className='border-none w-full h-10'>
-            <ChevronIcon className='w-2 h-4 rotate-180' />
-          </Button>
+          <Tooltip content='Свернуть'>
+            <Button onClick={() => setIsClosed(false)} className='border-none w-full h-10'>
+              <ChevronIcon className='w-2 h-4 rotate-180' />
+            </Button>
+          </Tooltip>
           <button
             onClick={() => setIsClosed(false)}
             className='grow flex flex-col justify-between g-1.25 py-3.75 cursor-pointer rounded-st hover:bg-dark/60'
@@ -61,12 +64,16 @@ export function HistoryPanel() {
             </div>
           </button>
           <div className='flex flex-col gap-2.5'>
-            <Button onClick={() => setIsTaskOpen(true)} className='p-1'>
-              <TaskIcon />
-            </Button>
-            <Button onClick={() => setIsConfirmOpen(true)} className='p-1'>
-              <CancelIcon />
-            </Button>
+            <Tooltip content='Задание'>
+              <Button onClick={() => setIsTaskOpen(true)} className='p-1'>
+                <TaskIcon />
+              </Button>
+            </Tooltip>
+            <Tooltip content='Завершить досрочно'>
+              <Button onClick={() => setIsConfirmOpen(true)} className='p-1'>
+                <CancelIcon />
+              </Button>
+            </Tooltip>
           </div>
         </div>
       ) : (
@@ -76,9 +83,11 @@ export function HistoryPanel() {
               <ClockIcon className='w-4 h-4' />
               <p>История</p>
             </div>
-            <Button onClick={() => setIsClosed(true)} className='border-none w-7 h-full'>
-              <ChevronIcon className='w-2 h-4' />
-            </Button>
+            <Tooltip content='Свернуть'>
+              <Button onClick={() => setIsClosed(true)} className='border-none w-7 h-full'>
+                <ChevronIcon className='w-2 h-4' />
+              </Button>
+            </Tooltip>
           </div>
           <div className='grow min-h-0 flex flex-col gap-5'>
             <div className={'bg-light rounded-st grow overflow-y-auto'}>
