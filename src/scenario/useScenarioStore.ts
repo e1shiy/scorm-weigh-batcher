@@ -10,6 +10,7 @@ import { objects } from './objects'
 import { steps } from './steps'
 import { useScormStore } from '../api/useScormStore'
 
+// ───────── типы состояния и действий стора ─────────
 
 export type ScenarioState = {
   objects: Partial<ObjectState> // текущее состояние объектов схемы: id → { режим, значение }
@@ -26,9 +27,13 @@ export type ScenarioActions = {
   setObject: (change: SchemeObject) => void
 }
 
-const WRONG_ACTION_PENALTY = 1 
+// Штраф за каждое неверное действие. Баллы идут из 100, каждая ошибка = −1.
+const WRONG_ACTION_PENALTY = 1 // штраф за неверное действие (из 100 баллов)
 
-// Генератор id для записей истории.
+// Генератор id для записей истории. Не использует crypto.randomUUID,
+// который недоступен вне безопасного контекста (HTTP в LMS).
+// Id составляется из времени, счётчика (гарантирует уникальность внутри одной миллисекунды)
+// и случайной части.
 let idCounter = 0
 const createId = () =>
   `${Date.now().toString(36)}-${(idCounter++).toString(36)}-${Math.random().toString(36).slice(2, 8)}`
@@ -38,6 +43,7 @@ const createId = () =>
 const createProgress = (step: Step | undefined) =>
   step?.groups.map(group => group.actions.map(() => false)) ?? []
 
+// ───────── проверка действия по текущему шагу ─────────
 
 // Применяет изменение к текущему шагу.
 // Возвращает новый прогресс и выполненные действия, либо null, если действие неверное.
@@ -52,6 +58,7 @@ const applyChange = (step: Step, progress: boolean[][], change: SchemeObject) =>
 
   // Режим exclusive (насосы 5145): если какая-то sequence-группа уже начата, но не закончена,
   // то принимаются только действия этой группы. Индекс такой группы — busy (или −1, если её нет).
+  // Считаем по ИСХОДНОМУ progress, т.е. по состоянию до этого действия.
   const busy = step.exclusive
     ? step.groups.findIndex((group, g) => {
         const done = progress[g] ?? []
