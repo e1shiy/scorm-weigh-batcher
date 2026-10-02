@@ -11,7 +11,7 @@ interface ValuesBadgeProps {
 export function ValuesBadge({ payload, className }: ValuesBadgeProps) {
   return (
     <div className={twMerge('border border-black bg-gray-alt p-px flex items-center gap-0.5 leading-none', className)}>
-      <div className='bg-white border border-black divide-y divide-black'>
+      <div className='bg-white border border-black divide-y'>
         {payload.map(({ value }, idx) => (
           <p key={idx} className='flex-center text-black font-semibold text-[7px] min-w-6'>
             {value.toFixed(2)}
