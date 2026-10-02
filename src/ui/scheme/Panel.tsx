@@ -18,7 +18,7 @@ export const Panel = ({ id, value, secondValue, status, unit, indicatorSlot, cla
   return (
     <div
       className={twMerge(
-        `flex flex-col divide-y divide-black border border-black bg-gray-alt min-w-10.25 leading-none`,
+        `flex flex-col divide-y border border-black bg-gray-alt min-w-10.25 leading-none`,
         isExtended && 'min-w-13',
         className
       )}
