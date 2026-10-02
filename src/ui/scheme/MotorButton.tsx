@@ -7,15 +7,16 @@ interface MotorButtonProps {
     hasArrow?: boolean
     hasBorder?: boolean
     isRunning: boolean
+    className?: string
 }
 
 /*Надо подумать над названием */
-export function MotorButton({ hasLabel, hasArrow, hasBorder, isRunning }: MotorButtonProps) {
+export function MotorButton({ hasLabel, hasArrow, hasBorder, isRunning, className }: MotorButtonProps) {
     const button = (
         <div
             className={twMerge(
                 'size-4.75 border border-black rounded-full flex-center text-[8px] font-medium relative text-white',
-                isRunning ? 'bg-light-green' : 'bg-gray-alt'
+                isRunning ? 'bg-light-green' : 'bg-gray-alt', className
             )}
         >
             {isRunning ? (
