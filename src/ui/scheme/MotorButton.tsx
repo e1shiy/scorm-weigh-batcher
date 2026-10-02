@@ -13,7 +13,7 @@ interface MotorButtonProps {
 /*Надо подумать над названием */
 export function MotorButton({ hasLabel, hasArrow, hasBorder, isRunning, className }: MotorButtonProps) {
     const button = (
-        <div
+        <button
             className={twMerge(
                 'size-4.75 border border-black rounded-full flex-center text-[8px] font-medium relative text-white',
                 isRunning ? 'bg-light-green' : 'bg-gray-alt', className
@@ -27,7 +27,7 @@ export function MotorButton({ hasLabel, hasArrow, hasBorder, isRunning, classNam
             ) : (
                 <MotorStoppedIcon />
             )}
-        </div>
+        </button>
     )
 
     if (!hasBorder) return button
