@@ -17,7 +17,7 @@ export function Mixer({id, value, status, isRunning}: MixerProps) {
 
     return (
         <div className={twMerge('flex-center flex-col gap-px')}>
-            <Panel id={id} headerClassName='bg-light-seagreen' />
+            <Panel id={`2M${id}`} headerClassName='bg-light-seagreen' />
             <div className='flex mb-0.75 relative'>
                 <Indicator>P</Indicator>
                 <MotorButton hasLabel={true} isRunning={isRunning}/>
