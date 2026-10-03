@@ -2,6 +2,14 @@
 
 @font-face {
   font-family: Inter;
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url(./assets/fonts/Inter-Regular.woff2) format('woff');
+}
+
+@font-face {
+  font-family: Inter;
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -93,10 +101,15 @@
   --color-orange: rgb(253, 196, 39);
   --color-yellow: rgb(255, 255, 2);
   --color-light-yellow: rgb(254, 226, 147);
+  --color-light-seagreen: #29A6A0;
+  --color-light-green: rgb(32, 225, 52);
+  --color-neon-green: #03FD07;
   --color-green: rgb(135, 207, 67);
+  --color-dark-green: #259229;
   --color-gray: #c4c4c4;
   --color-gray-alt: #d9d9d9;
   --color-light-gray: #efefef;
+  --color-indigo: #5E6099;
 
   --font-primary: 'ProximaNova', sans-serif;
   --font-secondary: 'Inter', sans-serif;
