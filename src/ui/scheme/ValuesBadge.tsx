@@ -11,18 +11,18 @@ interface ValuesBadgeProps {
 export function ValuesBadge({ payload, className }: ValuesBadgeProps) {
   return (
     <div className={twMerge('border border-black bg-gray-alt p-px flex items-center gap-0.5 leading-none', className)}>
-      <div className='bg-white border border-black divide-y divide-black'>
+      <div className='bg-white border border-black divide-y'>
         {payload.map(({ value }, idx) => (
           <p key={idx} className='text-center px-px text-black font-semibold text-[7px] min-w-6'>
-            {value.toFixed(2)}
+            {value.toFixed(1)}
           </p>
         ))}
       </div>
-      <div className='flex flex-col items-center justify-around self-stretch'>
+      <div className='self-stretch flex flex-col justify-around'>
         {payload.map(({ unit }, idx) => (
-          <p key={idx} className='text-[8px] font-normal text-black select-none'>
+          <span key={idx} className='text-[8px] font-medium text-black pr-0.5 select-none'>
             {unit}
-          </p>
+          </span>
         ))}
       </div>
     </div>

@@ -4,7 +4,6 @@ import { twMerge } from 'tailwind-merge'
 export interface PanelProps {
   id: string
   value?: number
-  secondValue?: number
   status?: 'manual' | 'auto'
   unit?: string
   indicatorSlot?: ReactNode
@@ -13,8 +12,8 @@ export interface PanelProps {
   valueClassName?: string
 }
 
-export const Panel = ({ id, value, secondValue, status, unit, indicatorSlot, className, headerClassName, valueClassName }: PanelProps) => {
-  const isExtended = secondValue && unit && status
+export const Panel = ({ id, value, status, unit, indicatorSlot, className, headerClassName, valueClassName }: PanelProps) => {
+  const isExtended = unit && status
   return (
     <div
       className={twMerge(
@@ -48,12 +47,12 @@ export const Panel = ({ id, value, secondValue, status, unit, indicatorSlot, cla
                 valueClassName
               )}
             >
-              {value.toFixed(2)}
+              {value.toFixed(1)}
             </div>
           )}
 
           {unit && <div className='flex-center font-medium text-black text-[6px] row-[1/3] col-2'>{unit}</div>}
-          {secondValue && <p className={'flex-center font-semibold text-blue-alt text-[7px] row-2 col-1'}>{secondValue.toFixed(2)}</p>}
+          {value && <p className={'flex-center font-semibold text-blue-alt text-[7px] row-2 col-1'}>{value.toFixed(1)}</p>}
         </div>
       ) : (
         <>

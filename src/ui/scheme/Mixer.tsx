@@ -9,17 +9,18 @@ interface MixerProps {
     id: string
     value: number
     status?: 'manual' | 'auto'
+    isRunning: boolean
 }
 
-export function Mixer({id, value, status}: MixerProps) {
+export function Mixer({id, value, status, isRunning}: MixerProps) {
     const modeBadge = <Indicator className={status === 'auto' ? 'bg-neon-green' : ''}>{status === 'manual' ? 'M' : 'A'}</Indicator>
 
     return (
         <div className={twMerge('flex-center flex-col gap-px')}>
-            <Panel id={id} headerClassName='bg-light-seagreen' />
+            <Panel id={`2M${id}`} headerClassName='bg-light-seagreen' />
             <div className='flex mb-0.75 relative'>
                 <Indicator>P</Indicator>
-                <MotorButton hasLabel={true} isRunning={true}/>
+                <MotorButton hasLabel={true} isRunning={isRunning}/>
                 <MixerIcon className='absolute top-full left-1/2 -translate-x-1/2' />
                 {modeBadge}
             </div>
