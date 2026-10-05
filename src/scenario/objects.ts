@@ -22,15 +22,15 @@ const create = <Id extends string, K extends string, V>(
 // Начальное состояние: остановлен (running: false), уставка 0.
 // Приведение «as DeviceValue» нужно, чтобы поле running имело тип boolean, а не литерал false.
 const device = <Id extends string, K extends string>(id: Id, kind: K) =>
-  create(id, kind, { running: false, setpoint: 0 } as DeviceValue)
+  create(id, kind, { running: false, setpoint: 0 })
 
 // Клапан 2FIC: у него нет пуска/стопа, только уставка (изначально 0 — клапан закрыт).
 const valve = <Id extends string>(id: Id) => 
-  create(id, 'valve', { setpoint: 0 } as ValveValue)
+  create(id, 'valve', { setpoint: 0 })
 
 // Кнопка-действие (здесь — «Осмотр оборудования»). checked: false — осмотр ещё не выполнен.
 const button = <Id extends string>(id: Id) => 
-  create(id, 'button', { checked: false } as ButtonValue)
+  create(id, 'button', { checked: false })
 
 // ───────── список объектов схемы ─────────
 // Id записаны латиницей так, как в колонке «Кнопка» таблицы.
@@ -84,6 +84,10 @@ export const objects = [
   valve('2FIC 307'),
 ] satisfies SchemeObject[] // проверяем, что каждый элемент соответствует SchemeObject, не теряя точных типов
  
+// Десять мешалок узла. «as const satisfies» — фиксирует точные id и проверяет, что все они агрегаты.
+export const mixers = ['3121/A', '3121/B', '3121/C', '3121/D', '3121/E', '3121/K', '3121/L', '3121/M', '3121/N', '3121/O'] as const satisfies readonly DeviceId[]
+
+
 // ───────── типы, выводимые из списка ─────────
 // Тип любого объекта из списка (объединение всех элементов массива).
 export type AnyObject = (typeof objects)[number]
