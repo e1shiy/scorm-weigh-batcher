@@ -1,4 +1,4 @@
-import { defineAction, start, setpoint, toAuto, feederGroupActions, pumpStartGroup, valveGroup, pumpUnloadGroup, stop } from './action'
+import { defineAction, start, setpoint, toAuto, feederGroupActions, pumpStartGroup, valveGroup } from './action'
 import type { ButtonId } from './objects'
 import type { Step } from './types'
 import { mixers } from './objects'
@@ -156,47 +156,5 @@ export const steps: Step[] = [
     id: 'start-21',
     title: 'Нагрузка циркулятора 3122/C на 100%',
     groups: [{ type: 'sequence', actions: [setpoint('3122/C', 'Нагрузка циркулятора 3122/C', 100)] }],
-  },
-
-  // ===== ОСТАНОВКА ДОЗИРОВАНИЯ =====
-  {
-    id: 'stop-1',
-    title: 'Остановка дозаторов 3117/1 и 3117/2',
-    groups: [
-      {
-        type: 'all',
-        actions: (['3117/1', '3117/2'] as const).map(id => stop(id, `Остановка дозатора ${id}`, 'Дозатор остановлен')),
-      },
-    ],
-  },
-  {
-    id: 'stop-2',
-    title: 'Разгрузка циркулятора 3122/A на 30%',
-    groups: [{ type: 'sequence', actions: [setpoint('3122/A', 'Разгрузка циркулятора 3122/A', 30)] }],
-  },
-  {
-    id: 'stop-3',
-    title: 'Разгрузка насоса 5145/1',
-    groups: [pumpUnloadGroup('5145/1', 'насоса 5145/1')],
-  },
-  {
-    id: 'stop-4',
-    title: 'Остановка дозаторов 1118/3 и 1118/4',
-    groups: [
-      {
-        type: 'all',
-        actions: (['1118/3', '1118/4'] as const).map(id => stop(id, `Остановка дозатора ${id}`, 'Дозатор остановлен')),
-      },
-    ],
-  },
-  {
-    id: 'stop-4_1',
-    title: 'Разгрузка циркулятора 3122/C на 30%',
-    groups: [{ type: 'sequence', actions: [setpoint('3122/C', 'Разгрузка циркулятора 3122/C', 30)] }],
-  },
-  {
-    id: 'stop-5',
-    title: 'Разгрузка насоса 5145/2',
-    groups: [pumpUnloadGroup('5145/2', 'насоса 5145/2')],
   },
 ]

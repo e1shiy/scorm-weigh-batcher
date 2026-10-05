@@ -124,7 +124,7 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
           history: [
             {
               id: createId(),
-              meta: { title: 'Неверное действие', description: String(change.id) },
+              meta: { title: 'Выбрано неверно', description: String(change.id) },
               scoreDelta: -WRONG_ACTION_PENALTY,
               isSuccess: false,
             },
