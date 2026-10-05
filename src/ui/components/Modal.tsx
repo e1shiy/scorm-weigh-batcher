@@ -29,6 +29,7 @@ export function Modal({ children, className, isOpened, onClose, onOpen }: ModalP
     <AnimatePresence initial={false}>
       {isOpened && (
         <motion.div
+          key='modal'
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
