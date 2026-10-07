@@ -1,13 +1,15 @@
-import { defineAction, start, setpoint, toAuto, feederGroupActions, pumpStartGroup, valveGroup } from './action'
+import { defineAction, feederGroupActions, pumpStartGroup, setpoint, start, toAuto, valveGroup } from './action'
+import { mixers } from './objects'
 import type { ButtonId } from './objects'
 import type { Step } from './types'
-import { mixers } from './objects'
 
-
-// ───────── сценарий ─────────
+const one = (id: string, title: string, action: Step['groups'][number]['actions'][number]): Step => ({
+  id,
+  title,
+  groups: [{ type: 'sequence', actions: [action] }],
+})
 
 export const steps: Step[] = [
-  // ===== ПУСК =====
   {
     id: 'start-1',
     title: 'Визуальный осмотр',
@@ -23,6 +25,7 @@ export const steps: Step[] = [
                 'Проверка фланцевых соединений, наличие защитных ограждений на конвейере, расположение ленты на конвейере и дозаторе, заземление в норме',
             },
             (_s, v) => v.checked,
+            prev => ({ ...prev, value: { checked: true } }),
           ),
         ],
       },
@@ -55,11 +58,7 @@ export const steps: Step[] = [
       },
     ],
   },
-  {
-    id: 'start-5',
-    title: 'Запуск вентилятора 3166A',
-    groups: [{ type: 'sequence', actions: [start('3166A', 'Запуск вентилятора 3166A', 'Вентилятор в работе')] }],
-  },
+  one('start-5', 'Запуск вентилятора 3166A', start('3166A', 'Запуск вентилятора 3166A', 'Вентилятор в работе')),
   {
     id: 'start-6',
     title: 'Запуск конвейеров 3119 и 1119/V',
@@ -70,43 +69,16 @@ export const steps: Step[] = [
       },
     ],
   },
-  {
-    id: 'start-7',
-    title: 'Запуск конвейера 1119/B',
-    groups: [{ type: 'sequence', actions: [start('1119/B', 'Запуск конвейера 1119/B', 'Конвейер в работе')] }],
-  },
-  // насосы 3129: каждый шаг строго по порядку
-  {
-    id: 'start-8',
-    title: 'Запуск насоса 3129/1',
-    groups: [{ type: 'sequence', actions: [start('3129/1', 'Запуск насоса 3129/1', 'Насос в работе')] }],
-  },
-  {
-    id: 'start-9',
-    title: 'Задание параметра насоса 3129/1',
-    groups: [{ type: 'sequence', actions: [setpoint('3129/1', 'Задание насоса 3129/1', 45, 55)] }],
-  },
-  {
-    id: 'start-10',
-    title: 'Перевод насоса 3129/1 в автоматический режим',
-    groups: [{ type: 'sequence', actions: [toAuto('3129/1', 'Перевод насоса 3129/1 в автоматический режим')] }],
-  },
-  {
-    id: 'start-11',
-    title: 'Запуск насоса 3129/2',
-    groups: [{ type: 'sequence', actions: [start('3129/2', 'Запуск насоса 3129/2', 'Насос в работе')] }],
-  },
-  {
-    id: 'start-12',
-    title: 'Задание параметра насоса 3129/2',
-    groups: [{ type: 'sequence', actions: [setpoint('3129/2', 'Задание насоса 3129/2', 45, 55)] }],
-  },
-  {
-    id: 'start-13',
-    title: 'Перевод насоса 3129/2 в автоматический режим',
-    groups: [{ type: 'sequence', actions: [toAuto('3129/2', 'Перевод насоса 3129/2 в автоматический режим')] }],
-  },
-  // насосы 5145: начинать можно с любого, но начатый нужно довести до автоматического режима
+  one('start-7', 'Запуск конвейера 1119/B', start('1119/B', 'Запуск конвейера 1119/B', 'Конвейер в работе')),
+
+  // насосы 3129: каждое действие отдельным шагом
+  one('start-8', 'Запуск насоса 3129/1', start('3129/1', 'Запуск насоса 3129/1', 'Насос в работе')),
+  one('start-9', 'Задание параметра насоса 3129/1', setpoint('3129/1', 'Задание насоса 3129/1', 45, 55)),
+  one('start-10', 'Перевод насоса 3129/1 в автоматический режим', toAuto('3129/1', 'Перевод насоса 3129/1 в автоматический режим')),
+  one('start-11', 'Запуск насоса 3129/2', start('3129/2', 'Запуск насоса 3129/2', 'Насос в работе')),
+  one('start-12', 'Задание параметра насоса 3129/2', setpoint('3129/2', 'Задание насоса 3129/2', 45, 55)),
+  one('start-13', 'Перевод насоса 3129/2 в автоматический режим', toAuto('3129/2', 'Перевод насоса 3129/2 в автоматический режим')),
+
   {
     id: 'start-14',
     title: 'Запуск насосов 5145',
@@ -132,11 +104,7 @@ export const steps: Step[] = [
     title: 'Открытие клапанов по серной кислоте (точки 1 и 2)',
     groups: [valveGroup('2FIC 310', 'клапана 2FIC 310', 20, 23), valveGroup('2FIC 311', 'клапана 2FIC 311', 35, 37)],
   },
-  {
-    id: 'start-18',
-    title: 'Нагрузка циркулятора 3122/A на 100%',
-    groups: [{ type: 'sequence', actions: [setpoint('3122/A', 'Нагрузка циркулятора 3122/A', 100)] }],
-  },
+  one('start-18', 'Нагрузка циркулятора 3122/A на 100%', setpoint('3122/A', 'Нагрузка циркулятора 3122/A', 100)),
   {
     id: 'start-19',
     title: 'Запуск дозаторов 1118/3 и 1118/4',
@@ -149,12 +117,8 @@ export const steps: Step[] = [
   },
   {
     id: 'start-20',
-    title: 'Открытие клапанов по серной кислоте (точки 1 и 2)',
+    title: 'Открытие клапанов по серной кислоте (точки 3 и 4)',
     groups: [valveGroup('2FIC 308', 'клапана 2FIC 308', 20), valveGroup('2FIC 307', 'клапана 2FIC 307', 36)],
   },
-  {
-    id: 'start-21',
-    title: 'Нагрузка циркулятора 3122/C на 100%',
-    groups: [{ type: 'sequence', actions: [setpoint('3122/C', 'Нагрузка циркулятора 3122/C', 100)] }],
-  },
+  one('start-21', 'Нагрузка циркулятора 3122/C на 100%', setpoint('3122/C', 'Нагрузка циркулятора 3122/C', 100)),
 ]
