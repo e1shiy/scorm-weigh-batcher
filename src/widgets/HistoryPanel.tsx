@@ -50,7 +50,9 @@ export function HistoryPanel() {
       return (
         <div key={id} className='text-blue flex justify-between items-end'>
           <div className='w-57.5 flex flex-col gap-1'>
-            <p className='leading-[110%]'>{history.length - index}. {title}</p>
+            <p className='leading-[110%]'>
+              {history.length - index}. {title}
+            </p>
             <p className='text-dark font-medium'>{isSuccess ? (description ?? title) : 'Выбрано неверно'}</p>
           </div>
           {!isSuccess && <p>{scoreDelta}</p>}
@@ -75,7 +77,13 @@ export function HistoryPanel() {
                 <p>История</p>
               </div>
               <Tooltip content='Свернуть'>
-                <Button ref={collapseToggleRef} onClick={handleClose} className='border-none w-7 h-full' aria-expanded={isOpen} aria-label='Свернуть историю'>
+                <Button
+                  ref={collapseToggleRef}
+                  onClick={handleClose}
+                  className='border-none w-7 h-full'
+                  aria-expanded={isOpen}
+                  aria-label='Свернуть историю'
+                >
                   <ChevronIcon className='w-2 h-4' />
                 </Button>
               </Tooltip>
@@ -106,11 +114,22 @@ export function HistoryPanel() {
         collapsed={
           <div className='h-full w-full flex flex-col gap-2.5'>
             <Tooltip content='Развернуть'>
-              <Button ref={expandToggleRef} onClick={open} className='border-none w-full h-10' aria-expanded={isOpen} aria-label='Развернуть историю'>
+              <Button
+                ref={expandToggleRef}
+                onClick={open}
+                className='border-none w-full h-10'
+                aria-expanded={isOpen}
+                aria-label='Развернуть историю'
+              >
                 <ChevronIcon className='w-2 h-4 rotate-180' />
               </Button>
             </Tooltip>
-            <button type='button' onClick={open} aria-label='Развернуть историю' className='grow flex flex-col justify-between py-3.75 cursor-pointer rounded-st hover:bg-dark/60'>
+            <button
+              type='button'
+              onClick={open}
+              aria-label='Развернуть историю'
+              className='grow flex flex-col justify-between py-3.75 cursor-pointer rounded-st hover:bg-dark/60'
+            >
               <div className='flex-center flex-col gap-2.5'>
                 <ClockIcon className='w-4 h-4' />
                 <p className='[writing-mode:vertical-rl] tracking-[1.5px] font-normal text-nowrap'>История</p>

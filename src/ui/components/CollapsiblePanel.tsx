@@ -30,15 +30,11 @@ function PanelLayer({ width, anchor, children }: PanelLayerProps) {
       initial={{ opacity: 0 }}
       animate={{
         opacity: 1,
-        transition: prefersReducedMotion
-          ? { duration: 0 }
-          : { duration: FADE_IN_DURATION, delay: FADE_IN_DELAY, ease: 'easeOut' }
+        transition: prefersReducedMotion ? { duration: 0 } : { duration: FADE_IN_DURATION, delay: FADE_IN_DELAY, ease: 'easeOut' }
       }}
       exit={{
         opacity: 0,
-        transition: prefersReducedMotion
-          ? { duration: 0 }
-          : { duration: FADE_OUT_DURATION, ease: 'easeIn' }
+        transition: prefersReducedMotion ? { duration: 0 } : { duration: FADE_OUT_DURATION, ease: 'easeIn' }
       }}
       inert={!isPresent}
     >
@@ -56,29 +52,15 @@ export interface CollapsiblePanelProps {
   className?: string
 }
 
-export function CollapsiblePanel({
-  isOpen,
-  openWidth,
-  expanded,
-  collapsed,
-  anchor = 'left',
-  className
-}: CollapsiblePanelProps) {
+export function CollapsiblePanel({ isOpen, openWidth, expanded, collapsed, anchor = 'left', className }: CollapsiblePanelProps) {
   const prefersReducedMotion = useReducedMotion()
 
   return (
     <motion.div
-      className={twMerge(
-        'relative isolate self-stretch shrink-0 overflow-clip transition-none',
-        className
-      )}
+      className={twMerge('relative isolate self-stretch shrink-0 overflow-clip transition-none', className)}
       initial={false}
       animate={{ width: isOpen ? openWidth : RAIL_WIDTH }}
-      transition={
-        prefersReducedMotion
-          ? { duration: 0 }
-          : { duration: WIDTH_DURATION, ease: WIDTH_EASE }
-      }
+      transition={prefersReducedMotion ? { duration: 0 } : { duration: WIDTH_DURATION, ease: WIDTH_EASE }}
     >
       <AnimatePresence mode='sync' initial={false}>
         {isOpen ? (

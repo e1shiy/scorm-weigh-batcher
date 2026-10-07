@@ -26,7 +26,14 @@ export function ActionPanel() {
               <p className='text-nowrap'>Действия по установке</p>
             </div>
             <Tooltip content='Свернуть'>
-              <Button ref={collapseToggleRef} onClick={close} variant='light-borderless' className='w-8 h-8' aria-expanded={isOpen} aria-label='Свернуть панель действий'>
+              <Button
+                ref={collapseToggleRef}
+                onClick={close}
+                variant='light-borderless'
+                className='w-8 h-8'
+                aria-expanded={isOpen}
+                aria-label='Свернуть панель действий'
+              >
                 <ChevronIcon className='w-2.5 h-3.5 rotate-180' />
               </Button>
             </Tooltip>
