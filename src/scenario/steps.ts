@@ -8,7 +8,7 @@ const one = (id: string, title: string, action: Step['groups'][number]['actions'
   title,
   groups: [{ type: 'sequence', actions: [action] }],
 })
-
+//
 export const steps: Step[] = [
   {
     id: 'start-1',

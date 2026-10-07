@@ -24,7 +24,7 @@ export interface Action {
 }
 
 export type StepGroup =
-  | { type: 'all'; actions: Action[] } // любой порядок
+  | { type: 'all'; actions: Action[] } // любой порядок.
   | { type: 'sequence'; actions: Action[] } // строго по порядку
 
 export interface Step {

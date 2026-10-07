@@ -15,7 +15,7 @@ const device = <Id extends string, K extends string>(id: Id, kind: K) =>
   create(id, kind, { running: false, setpoint: 0 })
 const valve = <Id extends string>(id: Id) => create(id, 'valve', { setpoint: 0 })
 const button = <Id extends string>(id: Id) => create(id, 'button', { checked: false })
-
+//q
 export const objects = [
   button('inspection'),
 

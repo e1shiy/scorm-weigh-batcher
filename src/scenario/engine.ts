@@ -21,7 +21,7 @@ export const applyChange = (step: Step, progress: boolean[][], change: SchemeObj
     if (!done || (busy !== -1 && g !== busy)) return
 
     if (group.type === 'sequence') {
-      const i = done.indexOf(false) // только следующее по порядку
+      const i = done.indexOf(false) // только следующее по порядку.
       const action = group.actions[i]
       if (i !== -1 && matches(action)) {
         done[i] = true

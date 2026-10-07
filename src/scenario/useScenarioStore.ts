@@ -5,7 +5,7 @@ import { objects } from './objects'
 import { steps } from './steps'
 import type { ObjectState, ScenarioActions, ScenarioState, Step } from './types'
 
-const WRONG_ACTION_PENALTY = 1 // из 100 баллов
+const WRONG_ACTION_PENALTY = 1 // из 100 баллов.
 
 // Без crypto.randomUUID: он недоступен по HTTP в LMS.
 let idCounter = 0

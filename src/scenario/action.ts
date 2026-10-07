@@ -21,7 +21,7 @@ export const inRange = (value: number, min: number, max = min) => value >= min &
 export const label = (min: number, max = min) => (min === max ? `${min}` : `${min}–${max}`)
 const middle = (min: number, max = min) => Math.round((min + max) / 2)
 
-// Пуск: running: true.
+// Пуск: running: True.
 export const start = (id: DeviceId, title: string, toast?: string) =>
   defineAction(
     id,
