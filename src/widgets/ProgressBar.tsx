@@ -13,7 +13,7 @@ export function ProgressBar() {
         style={{ '--sco-progress': `${progress}%` } as CSSProperties}
         className={twMerge(
           'flex-center w-full h-full relative',
-          'after:absolute after:left-0 after:w-(--sco-progress) after:transition-[width] after:h-full after:bg-orange after:rounded-[3px]'
+          'after:absolute after:left-0 after:w-(--sco-progress) after:transition-[width] after:duration-400 after:h-full after:bg-orange after:rounded-[3px]'
         )}
       >
         <p className='text-dark font-semibold z-2 text-nowrap'>
