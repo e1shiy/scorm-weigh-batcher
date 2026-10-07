@@ -14,6 +14,7 @@ import { useScormStore } from '../api/useScormStore'
 
 export type ScenarioState = {
   objects: Partial<ObjectState> // текущее состояние объектов схемы: id → { режим, значение }
+  steps: Step[]
   totalSteps: number // сколько всего шагов в сценарии
   currentStepIndex: number // индекс текущего шага (0 — первый; равен totalSteps, когда всё пройдено)
   // Прогресс текущего шага: матрица «группа × действие».
@@ -25,6 +26,7 @@ export type ScenarioState = {
 export type ScenarioActions = {
   // Единственная точка входа для UI: «пользователь перевёл объект в такое-то состояние».
   setObject: (change: SchemeObject) => void
+  setCurrentStep: (stepIndex: number) => void // для админ-панели
 }
 
 // Штраф за каждое неверное действие. Баллы идут из 100, каждая ошибка = −1.
@@ -35,13 +37,11 @@ const WRONG_ACTION_PENALTY = 1 // штраф за неверное действ�
 // Id составляется из времени, счётчика (гарантирует уникальность внутри одной миллисекунды)
 // и случайной части.
 let idCounter = 0
-const createId = () =>
-  `${Date.now().toString(36)}-${(idCounter++).toString(36)}-${Math.random().toString(36).slice(2, 8)}`
+const createId = () => `${Date.now().toString(36)}-${(idCounter++).toString(36)}-${Math.random().toString(36).slice(2, 8)}`
 
 // Создаёт «пустой» прогресс для шага: все действия всех групп не выполнены (false).
 // Если шага нет (сценарий закончился) — пустой массив.
-const createProgress = (step: Step | undefined) =>
-  step?.groups.map(group => group.actions.map(() => false)) ?? []
+const createProgress = (step: Step | undefined) => step?.groups.map(group => group.actions.map(() => false)) ?? []
 
 // ───────── проверка действия по текущему шагу ─────────
 
@@ -50,8 +50,7 @@ const createProgress = (step: Step | undefined) =>
 // Сам прогресс НЕ мутируется: работаем с копией (next), чтобы стор получил новый объект.
 const applyChange = (step: Step, progress: boolean[][], change: SchemeObject) => {
   // Подходит ли действие под изменение: тот же объект И состояние проходит check действия.
-  const matches = (action: Action | undefined) =>
-    !!action && action.objectId === change.id && action.check(change.status, change.value)
+  const matches = (action: Action | undefined) => !!action && action.objectId === change.id && action.check(change.status, change.value)
 
   const next = progress.map(done => [...done]) // копия прогресса
   const matched: Action[] = [] // какие действия это изменение засчитало (для истории)
@@ -105,11 +104,16 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
   create<ScenarioState & ScenarioActions>((set, get) => ({
     // начальное состояние
     objects: initialObjects,
+    steps: scenarioSteps,
     totalSteps: scenarioSteps.length,
     currentStepIndex: 0,
     stepProgress: createProgress(scenarioSteps[0]),
     history: [],
 
+    setCurrentStep: stepIndex => {
+      set({ currentStepIndex: stepIndex })
+      if (stepIndex >= get().totalSteps) useScormStore.getState().finish()
+    },
     setObject: change => {
       const { history, currentStepIndex, totalSteps, objects, stepProgress } = get()
       const step = scenarioSteps[currentStepIndex]
@@ -126,10 +130,10 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
               id: createId(),
               meta: { title: 'Выбрано неверно', description: String(change.id) },
               scoreDelta: -WRONG_ACTION_PENALTY,
-              isSuccess: false,
+              isSuccess: false
             },
-            ...history,
-          ],
+            ...history
+          ]
         })
         useScormStore.getState().applyScoreDelta(-WRONG_ACTION_PENALTY)
         return
@@ -148,22 +152,18 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
         history: [
           // по одной записи на каждое засчитанное действие; reverse() сохраняет хронологию,
           // т.к. новые записи кладутся в начало списка
-          ...result.matched
-            .map(action => ({ id: createId(), meta: action.meta, scoreDelta: 0, isSuccess: true }))
-            .reverse(),
-          ...history,
-        ],
+          ...result.matched.map(action => ({ id: createId(), meta: action.meta, scoreDelta: 0, isSuccess: true })).reverse(),
+          ...history
+        ]
       })
 
       // Прошли последний шаг — сообщаем в SCORM, что сценарий завершён.
       if (stepIndex === totalSteps) useScormStore.getState().finish()
-    },
+    }
   }))
 
 // Начальное состояние объектов строится из списка objects.ts: { id → { status, value } }.
-const initialObjects: ObjectState = Object.fromEntries(
-  objects.map(object => [object.id, { status: object.status, value: object.value }]),
-)
+const initialObjects: ObjectState = Object.fromEntries(objects.map(object => [object.id, { status: object.status, value: object.value }]))
 
 // Боевой стор, который использует UI: реальный сценарий и начальные объекты.
 export const useScenarioStore = createScenarioStore(steps, initialObjects)
