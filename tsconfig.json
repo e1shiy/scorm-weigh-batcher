@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "strict": true,
-    "noImplicitReturns": true,
-    "noUncheckedIndexedAccess": true
-  },
-  "files": [],
-  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
-}
