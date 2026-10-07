@@ -126,7 +126,7 @@
   }
 
   *::-webkit-scrollbar {
-    @apply w-1.5;
+    @apply size-1.5;
   }
 
   *::-webkit-scrollbar-track {

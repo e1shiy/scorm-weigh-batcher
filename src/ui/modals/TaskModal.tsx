@@ -1,6 +1,7 @@
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
 import CloseIcon from '../../assets/icons/x.svg?react'
+import { useAdminStore } from '../../widgets/admin/useAdminStore'
 
 interface TaskModalProps {
   isOpened: boolean
@@ -9,6 +10,12 @@ interface TaskModalProps {
 }
 
 export function TaskModal({ isOpened, onOpen, onClose }: TaskModalProps) {
+  const isAdmin = useAdminStore(s => s.isAdmin)
+  const setIsAdmin = useAdminStore(s => s.setIsAdmin)
+  const handleAdminToggle = () => {
+    setIsAdmin(!isAdmin)
+    onClose?.()
+  }
   return (
     <Modal className='p-5 rounded-st flex flex-col gap-5' isOpened={isOpened} onClose={onClose} onOpen={onOpen}>
       <div className='flex gap-1.25 justify-between items-center'>
@@ -20,6 +27,10 @@ export function TaskModal({ isOpened, onOpen, onClose }: TaskModalProps) {
       <p className='font-normal leading-[150%] text-dark'>
         Приемка насосных установок в эксплуатацию: требуется выполнить пуск водокольцевого вакуумного насоса
       </p>
+
+      <Button variant='light' onClick={handleAdminToggle}>
+        {isAdmin ? 'Выйти из режима тестирования' : 'Перейти в режим тестирования'}
+      </Button>
     </Modal>
   )
 }
