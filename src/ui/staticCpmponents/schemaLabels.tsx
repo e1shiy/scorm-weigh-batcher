@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const SchemeLabels = ({}) => {
   return (
     <div className="absolute left-[0px] top-[0px] w-[1395px] h-[626px]">

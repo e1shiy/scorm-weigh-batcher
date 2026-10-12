@@ -1,5 +1,3 @@
-import React from 'react';
-
 const MARKERS = [
 { id: 1, left: 228, top: 549 },
   { id: 2, left: 166, top: 549 },
