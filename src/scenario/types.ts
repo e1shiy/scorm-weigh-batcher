@@ -20,7 +20,6 @@ export interface Action {
   objectId: string
   meta: ActionMeta
   check: (status: SchemeStatus, value: unknown) => boolean // состояние верное?
-  effect: (prev: ObjectSnapshot) => ObjectSnapshot // во что действие переводит объект
 }
 
 export type StepGroup =
@@ -51,5 +50,4 @@ export type ScenarioState = {
 
 export type ScenarioActions = {
   setObject: (change: SchemeObject) => void
-  jumpToStep: (index: number) => void
 }

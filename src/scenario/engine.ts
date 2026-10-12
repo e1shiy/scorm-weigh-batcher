@@ -1,4 +1,4 @@
-import type { Action, ObjectState, SchemeObject, Step } from './types'
+import type { Action, SchemeObject, Step } from './types'
 
 // Возвращает новый прогресс и засчитанные действия, либо null, если действие неверное.
 export const applyChange = (step: Step, progress: boolean[][], change: SchemeObject) => {
@@ -39,16 +39,4 @@ export const applyChange = (step: Step, progress: boolean[][], change: SchemeObj
   })
 
   return matched.length ? { progress: next, matched } : null
-}
-
-// Состояние объектов после всех шагов до upTo (не включая его), считается с нуля.
-export const replayObjects = (steps: Step[], upTo: number, initial: ObjectState): ObjectState => {
-  const state: ObjectState = { ...initial }
-  for (const step of steps.slice(0, upTo))
-    for (const group of step.groups)
-      for (const action of group.actions) {
-        const prev = state[action.objectId]
-        if (prev) state[action.objectId] = action.effect(prev)
-      }
-  return state
 }

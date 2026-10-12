@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { useScormStore } from '../api/useScormStore'
-import { applyChange, replayObjects } from './engine'
+import { applyChange } from './engine'
 import { objects } from './objects'
 import { steps } from './steps'
 import type { ObjectState, ScenarioActions, ScenarioState, Step } from './types'
@@ -64,27 +64,6 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
       })
 
       if (stepIndex === totalSteps) useScormStore.getState().finish()
-    },
-
-    // Старт с шага index: предыдущие действия засчитываются, баллы не меняются.
-    jumpToStep: index => {
-      const target = Math.max(0, Math.min(index, scenarioSteps.length - 1))
-      const step = scenarioSteps[target]
-      if (!step) return
-
-      set({
-        objects: replayObjects(scenarioSteps, target, initialObjects),
-        currentStepIndex: target,
-        stepProgress: createProgress(step),
-        history: [
-          {
-            id: createId(),
-            meta: { title: 'Начало со шага', description: step.title },
-            scoreDelta: 0,
-            isSuccess: true,
-          },
-        ],
-      })
     },
   }))
 
