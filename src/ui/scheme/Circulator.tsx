@@ -8,7 +8,7 @@ import LongMixerIcon from '../../assets/icons/long-mixer.svg?react'
 
 interface CirculatorProps {
     id: string
-    load: 0 | 30 | 100
+    load: number
     value: number
     status?: 'manual' | 'auto'
     isRunning: boolean
