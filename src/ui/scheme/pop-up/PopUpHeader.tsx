@@ -1,7 +1,6 @@
 import type {ReactNode} from 'react'
 import {twMerge} from 'tailwind-merge'
 import {Indicator} from '../Indicator.tsx'
-import type {PopUpType} from './PopUp.tsx'
 import HouseIcon from '../../../assets/icons/house.svg?react'
 import DocumentIcon from '../../../assets/icons/document.svg?react'
 import RulerIcon from '../../../assets/icons/ruler.svg?react'
@@ -11,12 +10,12 @@ import PinIcon from '../../../assets/icons/pin.svg?react'
 import ReloadIcon from '../../../assets/icons/reload.svg?react'
 
 interface PopUpHeaderProps {
-    type: PopUpType
+    hasSetpoint: boolean
+    isRunning: boolean
 }
 
-const getIndicator = (type: PopUpType, index: number): { className?: string, content?: ReactNode } => {
-    if (index === 0 && type === 'pump') return {className: 'bg-red text-light', content: 'A'}
-    if (index === 1 && type === 'vent') return {className: 'bg-light-yellow', content: 'W'}
+const getIndicator = (isRunning: boolean, index: number): { className?: string, content?: ReactNode } => {
+    if (index === 0 && !isRunning) return {className: 'bg-red text-light', content: 'A'}
     if (index === 4) return {className: 'bg-light-seagreen text-light', content: 'P'}
     return {}
 }
@@ -29,14 +28,12 @@ const HeaderButton = ({className, children}: { className?: string, children: Rea
     </button>
 )
 
-export function PopUpHeader({type}: PopUpHeaderProps) {
-    const hasSetpoint = type === 'circulator' || type === 'pump'
-
+export function PopUpHeader({hasSetpoint, isRunning}: PopUpHeaderProps) {
     return (
         <header className='h-5.5 flex'>
             <div className='-ml-px flex items-end -space-x-px'>
                 {Array.from({length: 13}, (_, index) => {
-                    const {className, content} = getIndicator(type, index)
+                    const {className, content} = getIndicator(isRunning, index)
                     return (
                         <Indicator
                             key={index}
