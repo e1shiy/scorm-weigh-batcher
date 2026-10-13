@@ -1,7 +1,7 @@
 import type {ReactNode} from 'react'
 import {twMerge} from 'tailwind-merge'
 import {Indicator} from '../Indicator.tsx'
-import type {PopUpType} from './PopUpWindow.tsx'
+import type {PopUpType} from './PopUp.tsx'
 import HouseIcon from '../../../assets/icons/house.svg?react'
 import DocumentIcon from '../../../assets/icons/document.svg?react'
 import RulerIcon from '../../../assets/icons/ruler.svg?react'
