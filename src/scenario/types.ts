@@ -44,6 +44,7 @@ export type HistoryEntry = {
 
 export type ScenarioState = {
   objects: Partial<ObjectState>
+  steps: Step[]
   totalSteps: number
   currentStepIndex: number
   stepProgress: boolean[][] // группа × действие
@@ -52,4 +53,5 @@ export type ScenarioState = {
 
 export type ScenarioActions = {
   setObject: (change: SchemeObject) => void
+  setCurrentStep: (stepIndex: number) => void // для админ-панели
 }
