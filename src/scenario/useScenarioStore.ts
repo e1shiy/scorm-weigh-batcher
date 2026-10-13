@@ -3,20 +3,18 @@ import { useScormStore } from '../api/useScormStore'
 import { applyChange } from './engine'
 import { objects } from './objects'
 import { steps } from './steps'
-import type { ObjectState, ScenarioActions, ScenarioState, Step } from './types'
+import type { ObjectsState, ScenarioActions, ScenarioState, Step } from './types'
 
 const WRONG_ACTION_PENALTY = 1 // из 100 баллов.
 
 // Без crypto.randomUUID: он недоступен по HTTP в LMS.
 let idCounter = 0
-const createId = () =>
-  `${Date.now().toString(36)}-${(idCounter++).toString(36)}-${Math.random().toString(36).slice(2, 8)}`
+const createId = () => `${Date.now().toString(36)}-${(idCounter++).toString(36)}-${Math.random().toString(36).slice(2, 8)}`
 
-const createProgress = (step: Step | undefined) =>
-  step?.groups.map(group => group.actions.map(() => false)) ?? []
+const createProgress = (step: Step | undefined) => step?.groups.map(group => group.actions.map(() => false)) ?? []
 
 // Фабрика принимает сценарий и объекты, чтобы в тестах подставлять свои.
-export const createScenarioStore = (scenarioSteps: Step[], initialObjects: ObjectState) =>
+export const createScenarioStore = (scenarioSteps: Step[], initialObjects: ObjectsState) =>
   create<ScenarioState & ScenarioActions>((set, get) => ({
     objects: initialObjects,
     steps: scenarioSteps,
@@ -44,10 +42,10 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
               id: createId(),
               meta: { title: 'Выбрано неверно', description: String(change.id) },
               scoreDelta: -WRONG_ACTION_PENALTY,
-              isSuccess: false,
+              isSuccess: false
             },
-            ...history,
-          ],
+            ...history
+          ]
         })
         useScormStore.getState().applyScoreDelta(-WRONG_ACTION_PENALTY)
         return
@@ -61,19 +59,15 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
         currentStepIndex: stepIndex,
         stepProgress: isStepDone ? createProgress(scenarioSteps[stepIndex]) : result.progress,
         history: [
-          ...result.matched
-            .map(action => ({ id: createId(), meta: action.meta, scoreDelta: 0, isSuccess: true }))
-            .reverse(), // хронология: новые записи в начале
-          ...history,
-        ],
+          ...result.matched.map(action => ({ id: createId(), meta: action.meta, scoreDelta: 0, isSuccess: true })).reverse(), // хронология: новые записи в начале
+          ...history
+        ]
       })
 
       if (stepIndex === totalSteps) useScormStore.getState().finish()
-    },
+    }
   }))
 
-const initialObjects: ObjectState = Object.fromEntries(
-  objects.map(object => [object.id, { status: object.status, value: object.value }]),
-)
+const initialObjects: ObjectsState = Object.fromEntries(objects.map(object => [object.id, { status: object.status, value: object.value }]))
 
 export const useScenarioStore = createScenarioStore(steps, initialObjects)

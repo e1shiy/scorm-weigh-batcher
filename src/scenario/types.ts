@@ -1,4 +1,4 @@
-import type { AnyObject } from "./objects"
+import type { AnyObject } from './objects'
 
 export type SchemeStatus = 'manual' | 'auto'
 
@@ -10,7 +10,7 @@ export interface SchemeObject<K extends string = string, V = unknown> {
 }
 
 type ObjectSnapshot = { status: SchemeStatus; value: unknown }
-export type ObjectState = Partial<Record<AnyObject['id'], ObjectSnapshot>>
+export type ObjectsState = Partial<Record<AnyObject['id'], ObjectSnapshot>>
 
 export interface ActionMeta {
   title: string
@@ -43,7 +43,7 @@ export type HistoryEntry = {
 }
 
 export type ScenarioState = {
-  objects: Partial<ObjectState>
+  objects: Partial<ObjectsState>
   steps: Step[]
   totalSteps: number
   currentStepIndex: number
