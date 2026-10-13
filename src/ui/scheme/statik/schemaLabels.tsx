@@ -1,4 +1,4 @@
-export const SchemeLabels = ({}) => {
+export const SchemeLabels = () => {
   return (
     <div className="absolute left-[0px] top-[0px] w-[1395px] h-[626px]">
       {/* Разложение и дозревание */}

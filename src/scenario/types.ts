@@ -1,3 +1,5 @@
+import type { AnyObject } from "./objects"
+
 export type SchemeStatus = 'manual' | 'auto'
 
 export interface SchemeObject<K extends string = string, V = unknown> {
@@ -8,7 +10,7 @@ export interface SchemeObject<K extends string = string, V = unknown> {
 }
 
 type ObjectSnapshot = { status: SchemeStatus; value: unknown }
-export type ObjectState = Record<string, ObjectSnapshot>
+export type ObjectState = Record<AnyObject['id'], ObjectSnapshot>
 
 export interface ActionMeta {
   title: string

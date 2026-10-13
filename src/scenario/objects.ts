@@ -58,7 +58,7 @@ export const objects = [
   valve('2FIC 307'),
 ] satisfies SchemeObject[]
 
-export const mixers = [
+export const mixers: DeviceId[] = [
   '3121/A', '3121/B', '3121/C', '3121/D', '3121/E',
   '3121/K', '3121/L', '3121/M', '3121/N', '3121/O',
 ] as const
