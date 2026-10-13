@@ -5,7 +5,11 @@ import { RightPanelka } from "./rightPanelka";
 import { SidePanelka } from "./sidePanelka";
 import { SchemeLabels } from "./schemaLabels";
 import { StaticMarkers } from "./stepsNumber";
-import { DiagramDefs, DiagramLines, DimensionArrow } from "./diagramVectors";
+import { DiagramDefs, DiagramLines } from "./diagramVectors";
+import { Kvit } from "./Kvit";
+import { Accord } from "./Accord";
+import { P2K9 } from "./2k-9";
+
 
 export interface SpacingDiagramProps {
   className?: string;
@@ -25,26 +29,31 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
       {/* 1. Графические маркеры */}
       <DiagramDefs />
 
-      {/* 2. HTML-панели через foreignObject */}
-      <foreignObject x="0" y="0" width="1395" height="626" overflow="visible">
-        <div style={{ position: "relative", width: 1128, height: 546 }}>
-          <div style={{ position: "absolute", left: 0, top: 395 }}>
-            <LeftPanelka />
-          </div>
-          <div style={{ position: "absolute", left: 678, top: 395 }}>
-            <RightPanelka />
-          </div>
-          <SidePanelka />
-          <SchemeLabels />
-          <StaticMarkers />
-        </div>
-      </foreignObject>
-
       {/* 3. Слой векторных линий и точек */}
       <DiagramLines />
 
-      {/* 4. Если нужно разместить отдельную векторную стрелку по координатам x, y: */}
-      <DimensionArrow x={200} y={150} />
+            {/* 2. HTML-панели через foreignObject */}
+      <foreignObject x="0" y="0" width="1395" height="626" overflow="visible">
+          {/* Левая панель */}
+          <div style={{ position: "absolute", left: 0, top: 395 }}>
+            <LeftPanelka />
+          </div>
+          {/* Правая панель */}
+          <div style={{ position: "absolute", left: 678, top: 395 }}>
+            <RightPanelka />
+          </div>
+          {/* Боковая панель */}
+          <SidePanelka />
+          {/* Тексты */}
+          <SchemeLabels />
+          {/* Метки шагов */}
+          <StaticMarkers />
+          {/* Квитирование */}
+          <Kvit />  
+          {/* Каратау, Ковдорский */}
+          <Accord />
+          <P2K9 />
+      </foreignObject>
     </svg>
   );
 }

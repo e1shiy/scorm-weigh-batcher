@@ -2,7 +2,7 @@ export const SchemeLabels = ({}) => {
   return (
     <div className="absolute left-[0px] top-[0px] w-[1395px] h-[626px]">
       {/* Разложение и дозревание */}
-      <div className="absolute left-[490px] top-[7px] flex h-[15px] w-[157px] items-center justify-center text-center font-['Inter'] text-[14px] font-medium leading-[15px] text-[#50154D]">
+      <div className="absolute left-[490px] top-[3px] flex h-[15px] w-[190px] items-center justify-center text-center font-['Inter'] text-[14px] font-medium leading-[15px] text-[#50154D]">
         Разложение и дозревание
       </div>
 

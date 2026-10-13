@@ -2,22 +2,22 @@ export const RightPanelka = () => {
   return (
     <div className="absolute -left-[4px] -top-[400px] w-[563px] h-[620px]">
       {/* Rectangle 153 */}
-      <div className="absolute left-[10px] top-[526px] w-[545px] h-[71px] bg-[#B7B7B7]" />
+      <div className="absolute left-[10px] top-[526px] w-[436px] h-[71px] bg-[#B7B7B7]" />
 
       {/* Rectangle 152 */}
       <div className="absolute left-[8px] top-[405px] w-[13px] h-[119px] bg-[#B7B7B7] border-[1.5px] border-black rounded-t-[1px]" />
 
       {/* Rectangle 147 */}
-      <div className="absolute left-[552px] top-[526px] w-[4px] h-[71px] bg-[#ABABAB] border-[1.5px] border-black" />
+      <div className="absolute left-[444px] top-[526px] w-[4px] h-[71px] bg-[#ABABAB] border-[1.5px] border-black" />
 
       {/* Rectangle 146 */}
       <div className="absolute left-[7px] top-[526px] w-[4px] h-[71px] bg-[#ABABAB] border-[1.5px] border-black" />
 
       {/* Rectangle 145 */}
-      <div className="absolute left-[4px] top-[523px] w-[555px] h-[4px] bg-[#ABABAB] border-[1.5px] border-black" />
+      <div className="absolute left-[4px] top-[523px] w-[448px] h-[4px] bg-[#ABABAB] border-[1.5px] border-black" />
 
       {/* Rectangle 144 */}
-      <div className="absolute left-[4px] top-[596px] w-[555px] h-[8px] bg-[#ABABAB] border-[1.5px] border-black" />
+      <div className="absolute left-[4px] top-[596px] w-[448px] h-[8px] bg-[#ABABAB] border-[1.5px] border-black" />
 
       {/* Group 30 */}
       <div className="absolute left-[151px] top-[429px] w-[27px] h-[98px]">
@@ -51,8 +51,8 @@ export const RightPanelka = () => {
       </div>
 
       {/* Group 74 справа */}
-      <div className="absolute left-[543px] top-[528px] w-[7px] h-[69px] bg-[#717171] border-[1.5px] border-black rounded-t-[1px]" />
-      <div className="absolute left-[544px] top-[552px] w-[5px] h-[44px] bg-[#7C0000]" />
+      <div className="absolute left-[435px] top-[528px] w-[7px] h-[69px] bg-[#717171] border-[1.5px] border-black rounded-t-[1px]" />
+      <div className="absolute left-[436px] top-[552px] w-[5px] h-[44px] bg-[#7C0000]" />
 
       {/* Group 74 слева */}
       <div className="absolute left-[13px] top-[528px] w-[7px] h-[69px] bg-[#717171] border-[1.5px] border-black rounded-t-[1px]" />

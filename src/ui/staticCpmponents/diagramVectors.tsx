@@ -13,17 +13,6 @@ export interface DimensionArrowProps {
   className?: string;
 }
 
-export function DimensionArrow({ x, y, color = "#E9A8CD", className }: DimensionArrowProps) {
-  return (
-    <g transform={`translate(${x}, ${y})`} className={className}>
-      <path
-        d="M6.7735 10L11.547 2.54857e-10L-4.76837e-07 -2.54857e-10L4.7735 10L6.7735 10ZM5.7735 9L4.7735 9L4.7735 218L5.7735 218L6.7735 218L6.7735 9L5.7735 9Z"
-        fill={color}
-      />
-    </g>
-  );
-}
-
 /** Маркеры для стрелок в SVG defs */
 export function DiagramDefs() {
   const colorKeys = Object.keys(COLORS) as ColorKey[];
