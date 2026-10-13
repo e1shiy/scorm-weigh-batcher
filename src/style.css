@@ -148,7 +148,7 @@
   }
 
   body {
-    @apply font-primary font-bold mx-auto relative bg-[#E7E7E7] text-black text-sm;
+    @apply font-primary font-bold mx-auto relative bg-blue text-light text-sm;
   }
 
   #root {
