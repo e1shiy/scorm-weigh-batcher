@@ -10,7 +10,7 @@ export interface SchemeObject<K extends string = string, V = unknown> {
 }
 
 type ObjectSnapshot = { status: SchemeStatus; value: unknown }
-export type ObjectState = Record<AnyObject['id'], ObjectSnapshot>
+export type ObjectState = Partial<Record<AnyObject['id'], ObjectSnapshot>>
 
 export interface ActionMeta {
   title: string
