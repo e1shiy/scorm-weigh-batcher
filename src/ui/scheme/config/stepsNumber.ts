@@ -31,10 +31,3 @@ export const MARKERS = [
   { id: 31, left: 1039, top: 65 },
   { id: 32, left: 1127, top: 154 },
 ] as const;
-
-
-export const StepMarker = ({ id }: { id: number }) => (
-  <div className="box-border flex h-[10px] w-[11px] items-center justify-center rounded-[2px] border border-black bg-white text-center font-['Inter'] text-[7px] font-medium leading-[8px] text-black shadow-[2px_2px_4px_rgba(0,0,0,0.25)]">
-    {id}
-  </div>
-);
