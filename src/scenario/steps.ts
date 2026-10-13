@@ -3,7 +3,7 @@ import { mixers } from './objects'
 import type { ButtonId } from './objects'
 import type { Step } from './types'
 
-const one = (id: string, title: string, action: Step['groups'][number]['actions'][number]): Step => ({
+const createStep = (id: string, title: string, action: Step['groups'][number]['actions'][number]): Step => ({
   id,
   title,
   groups: [{ type: 'sequence', actions: [action] }],

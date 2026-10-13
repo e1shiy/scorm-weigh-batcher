@@ -7,7 +7,7 @@ export interface SchemeObject<K extends string = string, V = unknown> {
   value: V
 }
 
-export type ObjectSnapshot = { status: SchemeStatus; value: unknown }
+type ObjectSnapshot = { status: SchemeStatus; value: unknown }
 export type ObjectState = Record<string, ObjectSnapshot>
 
 export interface ActionMeta {

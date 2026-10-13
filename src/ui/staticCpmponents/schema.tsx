@@ -33,7 +33,7 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
       <DiagramLines />
 
             {/* 2. HTML-панели через foreignObject */}
-      <foreignObject x="0" y="0" width="1395" height="626" overflow="visible">
+      <foreignObject x="0" y="0" overflow="visible">
           {/* Левая панель */}
           <div style={{ position: "absolute", left: 0, top: 395 }}>
             <LeftPanelka />

@@ -61,7 +61,7 @@ export const objects = [
 export const mixers = [
   '3121/A', '3121/B', '3121/C', '3121/D', '3121/E',
   '3121/K', '3121/L', '3121/M', '3121/N', '3121/O',
-] as const satisfies readonly DeviceId[]
+] as const
 
 export type AnyObject = (typeof objects)[number]
 export type ObjectId = AnyObject['id']

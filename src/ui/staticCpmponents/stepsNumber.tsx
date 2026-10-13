@@ -48,5 +48,3 @@ export const StaticMarkers = ({}) => {
     </div>
   );
 };
-
-export default StaticMarkers;
