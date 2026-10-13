@@ -1,7 +1,7 @@
 // DiagramVectors.tsx
 import React from "react";
-import {  COLORS,  LINES,  ARROWS,  FLIPPED_ARROWS,  DASHED,  DASH_PATHS,  DOTS,} from "./diagramData";
-import type { ByColor, ColorKey } from "./diagramData";
+import {  COLORS,  LINES,  ARROWS,  FLIPPED_ARROWS,  DASHED,  DASH_PATHS,  DOTS,} from "../config/diagramData";
+import type { ByColor, ColorKey } from "../config/diagramData";
 
 const entries = (o: ByColor) => Object.entries(o) as [ColorKey, (readonly [number, number, number, number])[]][];
 

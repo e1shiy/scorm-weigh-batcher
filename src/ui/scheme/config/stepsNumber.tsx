@@ -1,4 +1,4 @@
-const MARKERS = [
+export const MARKERS = [
 { id: 1, left: 228, top: 549 },
   { id: 2, left: 166, top: 549 },
   { id: 3, left: 102, top: 549 },
@@ -33,18 +33,8 @@ const MARKERS = [
 ] as const;
 
 
-export const StaticMarkers = ({}) => {
-  return (
-    <div className="absolute left-[0px] top-[0px] w-[1395px] h-[626px]">
-      {MARKERS.map(({ id, left, top }) => (
-        <div
-          key={id}
-          style={{ left: `${left}px`, top: `${top}px` }}
-          className="absolute box-border flex h-[10px] w-[11px] items-center justify-center rounded-[2px] border border-black bg-white text-center font-['Inter'] text-[7px] font-medium leading-[8px] text-black shadow-[2px_2px_4px_rgba(0,0,0,0.25)]"
-        >
-          {id}
-        </div>
-      ))}
-    </div>
-  );
-};
+export const StepMarker = ({ id }: { id: number }) => (
+  <div className="box-border flex h-[10px] w-[11px] items-center justify-center rounded-[2px] border border-black bg-white text-center font-['Inter'] text-[7px] font-medium leading-[8px] text-black shadow-[2px_2px_4px_rgba(0,0,0,0.25)]">
+    {id}
+  </div>
+);
