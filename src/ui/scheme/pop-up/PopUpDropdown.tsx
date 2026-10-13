@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from 'react'
 import {twMerge} from 'tailwind-merge'
-import {PopUpButton} from './PopUpButton'
+import {PopUpButton} from './PopUpButton.tsx'
 
 interface PopUpDropdownProps {
     options: string[]

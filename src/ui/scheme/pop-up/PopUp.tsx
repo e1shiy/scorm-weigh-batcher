@@ -1,4 +1,4 @@
-import {PopUpWindow, type PopUpWindowProps} from './PopUpWindow'
+import {PopUpWindow, type PopUpWindowProps} from './PopUpWindow.tsx'
 
 type PopUpProps = PopUpWindowProps & { onClose: () => void }
 

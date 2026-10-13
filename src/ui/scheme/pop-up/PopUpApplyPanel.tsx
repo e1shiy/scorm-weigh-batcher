@@ -1,7 +1,7 @@
 import type {ReactNode} from 'react'
 import {twMerge} from 'tailwind-merge'
-import {PopUpButton} from './PopUpButton'
-import PinIcon from '../../assets/icons/pin.svg?react'
+import {PopUpButton} from './PopUpButton.tsx'
+import PinIcon from '../../../assets/icons/pin.svg?react'
 
 interface PopUpApplyPanelProps {
     className?: string

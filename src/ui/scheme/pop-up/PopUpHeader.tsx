@@ -1,14 +1,14 @@
 import type {ReactNode} from 'react'
 import {twMerge} from 'tailwind-merge'
-import {Indicator} from './Indicator'
-import type {PopUpType} from './PopUpWindow'
-import HouseIcon from '../../assets/icons/house.svg?react'
-import DocumentIcon from '../../assets/icons/document.svg?react'
-import RulerIcon from '../../assets/icons/ruler.svg?react'
-import TrendIcon from '../../assets/icons/trend.svg?react'
-import BackIcon from '../../assets/icons/back.svg?react'
-import PinIcon from '../../assets/icons/pin.svg?react'
-import ReloadIcon from '../../assets/icons/reload.svg?react'
+import {Indicator} from '../Indicator.tsx'
+import type {PopUpType} from './PopUpWindow.tsx'
+import HouseIcon from '../../../assets/icons/house.svg?react'
+import DocumentIcon from '../../../assets/icons/document.svg?react'
+import RulerIcon from '../../../assets/icons/ruler.svg?react'
+import TrendIcon from '../../../assets/icons/trend.svg?react'
+import BackIcon from '../../../assets/icons/back.svg?react'
+import PinIcon from '../../../assets/icons/pin.svg?react'
+import ReloadIcon from '../../../assets/icons/reload.svg?react'
 
 interface PopUpHeaderProps {
     type: PopUpType
