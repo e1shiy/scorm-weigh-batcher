@@ -1,31 +1,25 @@
 import {twMerge} from 'tailwind-merge'
 
 const TICKS_COUNT = 11
-const TICK_STEP = 9.7
 
 const Ticks = ({side}: { side: 'left' | 'right' }) => (
-    <>
+    <div className={twMerge('flex flex-col justify-between', side === 'left' ? 'items-end' : 'items-start')}>
         {Array.from({length: TICKS_COUNT}, (_, index) => (
-            <div
-                key={index}
-                className={twMerge(
-                    'absolute h-px bg-black',
-                    side === 'left' ? 'right-full' : 'left-full',
-                    index % 5 === 0 ? 'w-1.25' : 'w-0.75'
-                )}
-                style={{top: index * TICK_STEP - 1}}
-            />
+            <div key={index} className={twMerge('h-px bg-black', index % 5 === 0 ? 'w-1.25' : 'w-0.75')}/>
         ))}
-    </>
+    </div>
 )
 
-const Fill = ({value, className}: { value: number, className: string }) => (
-    value > 0 && (
-        <div
-            className={twMerge('absolute inset-x-0 bottom-0 border-t border-black', className)}
-            style={{height: `${Math.min(value, 100)}%`}}
-        />
-    )
+const Bar = ({value, className}: { value: number, className: string }) => (
+    <div className='w-2 flex flex-col justify-end border border-black'>
+        {value > 0 && (
+            <div className={twMerge('border-t border-black', className)} style={{height: `${Math.min(value, 100)}%`}}/>
+        )}
+    </div>
+)
+
+const Triangle = ({className}: { className: string }) => (
+    <div className={twMerge('w-1.5 h-[3.5px] bg-bright-blue', className)}/>
 )
 
 interface PopUpGaugeProps {
@@ -34,18 +28,22 @@ interface PopUpGaugeProps {
 
 export function PopUpGauge({value}: PopUpGaugeProps) {
     return (
-        <div className='relative w-10.25 h-26 shrink-0'>
-            <div className='absolute left-[8.5px] top-[0.5px] w-1.5 h-[3.5px] bg-bright-blue [clip-path:polygon(0_0,0_100%,100%_100%)]'/>
-            <div className='absolute left-4.75 top-0.75 w-2 h-24.5 border border-black'>
-                <Fill value={value} className='bg-bright-blue'/>
-                <Ticks side='left'/>
+        <div className='h-26 flex shrink-0'>
+            <div className='w-3.5 flex flex-col justify-between items-end'>
+                <Triangle className='[clip-path:polygon(0_0,0_100%,100%_100%)]'/>
+                <div className='flex items-end'>
+                    <span className='mr-0.5 mb-1 text-[7px] leading-none underline text-bright-blue'>E</span>
+                    <Triangle className='[clip-path:polygon(0_0,100%_0,0_100%)]'/>
+                </div>
             </div>
-            <div className='absolute left-7.25 top-0.75 w-2 h-24.5 border border-black'>
-                <Fill value={value} className='bg-teal'/>
+            <div className='flex py-0.75'>
+                <Ticks side='left'/>
+                <div className='flex gap-0.5'>
+                    <Bar value={value} className='bg-bright-blue'/>
+                    <Bar value={value} className='bg-teal'/>
+                </div>
                 <Ticks side='right'/>
             </div>
-            <span className='absolute left-px top-[91.5px] text-[7px] leading-none underline text-bright-blue'>E</span>
-            <div className='absolute left-[8.5px] top-25 w-1.5 h-[3.5px] bg-bright-blue [clip-path:polygon(0_0,100%_0,0_100%)]'/>
         </div>
     )
 }
