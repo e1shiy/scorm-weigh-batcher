@@ -3,13 +3,14 @@ import { LeftPanelka } from "./leftPanelka";
 import { RightPanelka } from "./rightPanelka";
 import { SidePanelka } from "./sidePanelka";
 import { SchemeLabels } from "./schemaLabels";
-import { MARKERS, StepMarker } from "../config/stepsNumber";
+import { MARKERS } from "../config/stepsNumber";
 import { DiagramDefs, DiagramLines } from "./diagramVectors";
 import { KvitButton } from "./kvit";
 import { AccordItem } from "./Accord";
 import { P2K9Badge } from "./2k-9";
 import { P2k9_DATA, Kvit_Data, Accord_Data } from "../config/diagramData";
 import { At } from "./map_shablon";
+import { StepMarker } from "./StepMarker";
 
 export interface SpacingDiagramProps {
   className?: string;
