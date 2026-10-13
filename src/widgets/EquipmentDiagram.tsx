@@ -7,12 +7,13 @@ import ScaleResetIcon from '../assets/icons/scale-reset.svg?react'
 import FullscreenIcon from '../assets/icons/fullscreen.svg?react'
 import FullscreenAltIcon from '../assets/icons/fullscreen-alt.svg?react'
 import Tooltip from '../ui/components/Tooltip'
+import SpacingDiagram from '../ui/scheme/statik/schema'
 
 export function EquipmentDiagram() {
   const diagramRef = useRef<HTMLDivElement>(null)
   const { handlePointerDown, handlePointerMove, handlePointerUp } = usePan(diagramRef)
 
-  const [, setScale] = useState(1)
+  const [scale, setScale] = useState(1)
   const upScale = () => setScale(s => Math.min(s + 0.25, 10))
   const downScale = () => setScale(s => Math.max(s - 0.25, 1))
 
@@ -85,7 +86,7 @@ export function EquipmentDiagram() {
           </Button>
         </Tooltip>
       </div>
-      {/* тут будет диаграмма */}
+      <SpacingDiagram className={`w-348.75 h-156.5 top-0 left-0 absolute origin-top-left`} style={{ scale }} />
     </div>
   )
 }
