@@ -1,13 +1,9 @@
-import type { AnyObject } from './objects'
+import type { AnyObject, ObjectId } from './objects'
 
 export type SchemeStatus = 'manual' | 'auto'
 
-export interface SchemeObject<K extends string = string, V = unknown> {
-  id: string
-  kind: K
-  status: SchemeStatus
-  value: V
-}
+// Объект с точным типом value: выводится по переданному id.
+export type SchemeObject<Id extends ObjectId = ObjectId> = Extract<AnyObject, { id: Id }>
 
 type ObjectSnapshot = { status: SchemeStatus; value: unknown }
 export type ObjectsState = Partial<Record<AnyObject['id'], ObjectSnapshot>>
@@ -52,6 +48,6 @@ export type ScenarioState = {
 }
 
 export type ScenarioActions = {
-  setObject: (change: SchemeObject) => void
+  setObject: <Id extends ObjectId>(change: SchemeObject<Id>) => void
   setCurrentStep: (stepIndex: number) => void // для админ-панели
 }
