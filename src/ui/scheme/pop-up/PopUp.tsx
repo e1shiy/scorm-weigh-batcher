@@ -8,6 +8,7 @@ import {PopUpField} from './PopUpField.tsx'
 import {PopUpGauge} from './PopUpGauge.tsx'
 import {PopUpApplyPanel} from './PopUpApplyPanel.tsx'
 import {PopUpDropdown} from './PopUpDropdown.tsx'
+import {formatValue} from './formatValue.ts'
 import PopUpArrowRightIcon from '../../../assets/icons/pop-up-arrow-right.svg?react'
 import PopUpArrowRightWithLineIcon from '../../../assets/icons/pop-up-arrow-right-with-line.svg?react'
 import PopUpStoppedIcon from '../../../assets/icons/pop-up-stopped.svg?react'
@@ -21,9 +22,11 @@ interface PopUpProps {
     isRunning: boolean
     onRunningChange?: (isRunning: boolean) => void
     setpoint?: number
+    onSetpointChange?: (setpoint: number) => void
 }
 
-const formatValue = (value: number) => value.toFixed(1).replace('.', ',')
+const SETPOINT_MIN = 0
+const SETPOINT_MAX = 100
 
 const ValueField = ({className, onClick, children}: {
     className?: string,
@@ -63,8 +66,18 @@ const SetpointRow = ({label, color, valueClassName, isActive, onClick, children}
     </div>
 )
 
-export function PopUp({isOpened, onClose, status, onStatusChange, isRunning, onRunningChange, setpoint}: PopUpProps) {
+export function PopUp({
+    isOpened,
+    onClose,
+    status,
+    onStatusChange,
+    isRunning,
+    onRunningChange,
+    setpoint,
+    onSetpointChange
+}: PopUpProps) {
     const [isEditingSetpoint, setIsEditingSetpoint] = useState(false)
+    const [setpointDelta, setSetpointDelta] = useState(0)
     const hasSetpoint = setpoint !== undefined
     const isApplyPanelShown = hasSetpoint && isEditingSetpoint
     const RunningIcon = hasSetpoint ? PopUpArrowRightWithLineIcon : PopUpArrowRightIcon
@@ -73,6 +86,18 @@ export function PopUp({isOpened, onClose, status, onStatusChange, isRunning, onR
     const handleClose = () => {
         setIsEditingSetpoint(false)
         onClose?.()
+    }
+
+    const handleEditSetpoint = () => {
+        setSetpointDelta(0)
+        setIsEditingSetpoint(true)
+    }
+
+    const handleApplySetpoint = () => {
+        if (hasSetpoint) {
+            onSetpointChange?.(Math.min(Math.max(setpoint + setpointDelta, SETPOINT_MIN), SETPOINT_MAX))
+        }
+        setIsEditingSetpoint(false)
     }
 
     return (
@@ -154,7 +179,7 @@ export function PopUp({isOpened, onClose, status, onStatusChange, isRunning, onR
                                     color='border-deep-blue'
                                     valueClassName='bg-light'
                                     isActive={isEditingSetpoint}
-                                    onClick={() => setIsEditingSetpoint(true)}
+                                    onClick={handleEditSetpoint}
                                 >
                                     {formatValue(setpoint)}
                                 </SetpointRow>
@@ -168,7 +193,9 @@ export function PopUp({isOpened, onClose, status, onStatusChange, isRunning, onR
             {isApplyPanelShown && (
                 <PopUpApplyPanel
                     className='mt-auto mx-0.5 mb-0.5'
-                    onApply={() => setIsEditingSetpoint(false)}
+                    delta={setpointDelta}
+                    onStep={step => setSetpointDelta(delta => delta + step)}
+                    onApply={handleApplySetpoint}
                     onCancel={() => setIsEditingSetpoint(false)}
                 />
             )}

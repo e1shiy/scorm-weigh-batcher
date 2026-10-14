@@ -1,10 +1,15 @@
 import type {ReactNode} from 'react'
 import {twMerge} from 'tailwind-merge'
 import {PopUpButton} from './PopUpButton.tsx'
+import {formatValue} from './formatValue.ts'
 import PinIcon from '../../../assets/icons/pin.svg?react'
+
+const STEPS = [-5, -1, 1, 5]
 
 interface PopUpApplyPanelProps {
     className?: string
+    delta: number
+    onStep: (step: number) => void
     onApply?: () => void
     onCancel?: () => void
 }
@@ -41,7 +46,7 @@ const Chevron = ({className}: { className?: string }) => (
     </svg>
 )
 
-export function PopUpApplyPanel({className, onApply, onCancel}: PopUpApplyPanelProps) {
+export function PopUpApplyPanel({className, delta, onStep, onApply, onCancel}: PopUpApplyPanelProps) {
     return (
         <div
             className={twMerge(
@@ -58,8 +63,10 @@ export function PopUpApplyPanel({className, onApply, onCancel}: PopUpApplyPanelP
                     <div className='w-22.25 flex flex-col gap-0.5 p-0.5 pl-1 border border-black'>
                         <span>Прямое задание [%]</span>
                         <div className='flex gap-1'>
-                            {['-5', '-1', '1', '5'].map(step => (
-                                <PopUpButton key={step} className='w-4 h-3 bg-light text-[9px]'>{step}</PopUpButton>
+                            {STEPS.map(step => (
+                                <PopUpButton key={step} className='w-4 h-3 bg-light text-[9px]' onClick={() => onStep(step)}>
+                                    {step}
+                                </PopUpButton>
                             ))}
                         </div>
                     </div>
@@ -69,7 +76,7 @@ export function PopUpApplyPanel({className, onApply, onCancel}: PopUpApplyPanelP
                     <div className='flex justify-end gap-px'>
                         <div className='mt-1.25 flex flex-col items-end'>
                             <Triangle className='mr-px [clip-path:polygon(0_0,100%_0,50%_100%)]'/>
-                            <SunkenField>+20.0</SunkenField>
+                            <SunkenField>{delta > 0 && '+'}{formatValue(delta)}</SunkenField>
                             <Triangle className='mr-px [clip-path:polygon(50%_0,100%_100%,0_100%)]'/>
                         </div>
                         <div className='flex flex-col gap-0.5'>
