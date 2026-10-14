@@ -2,7 +2,7 @@ import {twMerge} from "tailwind-merge";
 
 interface LoadPanelProps {
     isActive: boolean
-    load: 30 | 100
+    load: number
 }
 
 export function LoadPanel({isActive, load}: LoadPanelProps) {

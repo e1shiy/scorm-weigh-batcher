@@ -1,0 +1,105 @@
+import type {ReactNode} from 'react'
+import {twMerge} from 'tailwind-merge'
+import {PopUpButton} from './PopUpButton.tsx'
+import {formatValue} from './formatValue.ts'
+import PinIcon from '../../../assets/icons/pin.svg?react'
+
+const STEPS = [-5, -1, 1, 5]
+
+interface PopUpApplyPanelProps {
+    className?: string
+    delta: number
+    onStep: (step: number) => void
+    onApply?: () => void
+    onCancel?: () => void
+}
+
+const SunkenField = ({children}: { children: ReactNode }) => (
+    <div
+        className={twMerge(
+            'w-12.75 h-[11.5px] flex items-center justify-end pr-0.5 border border-black bg-gray-alt',
+            'shadow-[inset_2px_2px_0_var(--color-dark-gray)] text-[10px] leading-none'
+        )}
+    >
+        {children}
+    </div>
+)
+
+const Triangle = ({className}: { className: string }) => (
+    <div className={twMerge('w-1.25 h-[3.5px] bg-black', className)}/>
+)
+
+const SliderButton = ({className, children}: { className?: string, children?: ReactNode }) => (
+    <div
+        className={twMerge(
+            'absolute top-px w-1.75 h-2 flex-center bg-gray-alt shadow-[1.5px_1.5px_1.5px_rgb(0_0_0/0.5)]',
+            className
+        )}
+    >
+        {children}
+    </div>
+)
+
+const Chevron = ({className}: { className?: string }) => (
+    <svg viewBox='0 0 4 6.5' className={twMerge('w-1 h-[6.5px]', className)}>
+        <path d='M3.6 0.3 L0.5 3.25 L3.6 6.2' fill='none' stroke='currentColor' strokeWidth={0.9}/>
+    </svg>
+)
+
+export function PopUpApplyPanel({className, delta, onStep, onApply, onCancel}: PopUpApplyPanelProps) {
+    return (
+        <div
+            className={twMerge(
+                'w-57.5 h-16.25 flex flex-col border border-black bg-pale-seagreen text-[8px] leading-none',
+                className
+            )}
+        >
+            <div className='grow flex justify-between px-0.5 pt-0.5'>
+                <div className='flex flex-col gap-1.5 pt-0.5'>
+                    <div className='flex gap-2.5'>
+                        <span>Уставка</span>
+                        <span>Применить?</span>
+                    </div>
+                    <div className='w-22.25 flex flex-col gap-0.5 p-0.5 pl-1 border border-black'>
+                        <span>Прямое задание [%]</span>
+                        <div className='flex gap-1'>
+                            {STEPS.map(step => (
+                                <PopUpButton key={step} className='w-4 h-3 bg-light text-[9px]' onClick={() => onStep(step)}>
+                                    {step}
+                                </PopUpButton>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className='w-27.5 flex flex-col gap-0.5'>
+                    <div className='flex justify-end gap-px'>
+                        <div className='mt-1.25 flex flex-col items-end'>
+                            <Triangle className='mr-px [clip-path:polygon(0_0,100%_0,50%_100%)]'/>
+                            <SunkenField>{delta > 0 && '+'}{formatValue(delta)}</SunkenField>
+                            <Triangle className='mr-px [clip-path:polygon(50%_0,100%_100%,0_100%)]'/>
+                        </div>
+                        <div className='flex flex-col gap-0.5'>
+                            <SunkenField>100,0</SunkenField>
+                            <SunkenField>0,0</SunkenField>
+                        </div>
+                    </div>
+                    <div className='relative w-27.5 h-3 border border-black bg-dark-gray select-none'>
+                        <SliderButton className='left-px'><Chevron/></SliderButton>
+                        <SliderButton className='left-1/2 -translate-x-1/2'/>
+                        <SliderButton className='right-px'><Chevron className='rotate-180'/></SliderButton>
+                    </div>
+                </div>
+            </div>
+
+            <div className='h-4.75 flex items-center justify-between pl-0.5 pr-1.5 border-t border-black'>
+                <span>Применить?</span>
+                <div className='flex gap-0.5'>
+                    <PopUpButton className='size-3 bg-light'><PinIcon/></PopUpButton>
+                    <PopUpButton className='w-12.5 h-3 bg-light' onClick={onApply}>Да</PopUpButton>
+                    <PopUpButton className='w-12.5 h-3 bg-light' onClick={onCancel}>Отмена</PopUpButton>
+                </div>
+            </div>
+        </div>
+    )
+}

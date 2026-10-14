@@ -25,7 +25,9 @@ export function MotorButton({ hasLabel, hasArrow, hasBorder, isRunning, classNam
                     {hasArrow && <TriangleRightIcon className='absolute size-1 bottom-0.5' />}
                 </>
             ) : (
-                <MotorStoppedIcon />
+                <>
+                    {hasLabel && (<MotorStoppedIcon />)}
+                </>
             )}
         </button>
     )
