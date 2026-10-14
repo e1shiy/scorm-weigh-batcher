@@ -17,6 +17,7 @@ interface PopUpProps {
     isOpened: boolean
     onClose?: () => void
     status: SchemeStatus
+    onStatusChange?: (status: SchemeStatus) => void
     isRunning: boolean
     onRunningChange?: (isRunning: boolean) => void
     setpoint?: number
@@ -62,7 +63,7 @@ const SetpointRow = ({label, color, valueClassName, isActive, onClick, children}
     </div>
 )
 
-export function PopUp({isOpened, onClose, status, isRunning, onRunningChange, setpoint}: PopUpProps) {
+export function PopUp({isOpened, onClose, status, onStatusChange, isRunning, onRunningChange, setpoint}: PopUpProps) {
     const [isEditingSetpoint, setIsEditingSetpoint] = useState(false)
     const hasSetpoint = setpoint !== undefined
     const isApplyPanelShown = hasSetpoint && isEditingSetpoint
@@ -108,7 +109,11 @@ export function PopUp({isOpened, onClose, status, isRunning, onRunningChange, se
                         <div className='flex items-center'>
                             <span className='grow text-[8px]'>Режим</span>
                             <PopUpField>{status === 'auto' ? 'Автоматический' : 'Ручной'}</PopUpField>
-                            <PopUpButton className='ml-0.75 w-3.75'>...</PopUpButton>
+                            <PopUpDropdown
+                                className='ml-0.75'
+                                options={['Автоматический', 'Ручной']}
+                                onSelect={option => onStatusChange?.(option === 'Автоматический' ? 'auto' : 'manual')}
+                            />
                         </div>
                         {hasSetpoint && <PopUpField className='self-end mr-4.5 bg-dark-gray'/>}
                         <div className='flex items-center'>
