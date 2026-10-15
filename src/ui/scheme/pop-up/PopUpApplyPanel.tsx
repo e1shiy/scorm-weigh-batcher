@@ -1,6 +1,7 @@
 import type {ReactNode} from 'react'
 import {twMerge} from 'tailwind-merge'
 import {PopUpButton} from './PopUpButton.tsx'
+import {Nudge} from './Nudge.tsx'
 import {formatValue} from './formatValue.ts'
 import PinIcon from '../../../assets/icons/pin.svg?react'
 
@@ -27,23 +28,6 @@ const SunkenField = ({children}: { children: ReactNode }) => (
 
 const Triangle = ({className}: { className: string }) => (
     <div className={twMerge('w-1.25 h-[3.5px] bg-black', className)}/>
-)
-
-const SliderButton = ({className, children}: { className?: string, children?: ReactNode }) => (
-    <div
-        className={twMerge(
-            'absolute top-px w-1.75 h-2 flex-center bg-gray-alt shadow-[1.5px_1.5px_1.5px_rgb(0_0_0/0.5)]',
-            className
-        )}
-    >
-        {children}
-    </div>
-)
-
-const Chevron = ({className}: { className?: string }) => (
-    <svg viewBox='0 0 4 6.5' className={twMerge('w-1 h-[6.5px]', className)}>
-        <path d='M3.6 0.3 L0.5 3.25 L3.6 6.2' fill='none' stroke='currentColor' strokeWidth={0.9}/>
-    </svg>
 )
 
 export function PopUpApplyPanel({className, delta, onStep, onApply, onCancel}: PopUpApplyPanelProps) {
@@ -84,11 +68,7 @@ export function PopUpApplyPanel({className, delta, onStep, onApply, onCancel}: P
                             <SunkenField>0,0</SunkenField>
                         </div>
                     </div>
-                    <div className='relative w-27.5 h-3 border border-black bg-dark-gray select-none'>
-                        <SliderButton className='left-px'><Chevron/></SliderButton>
-                        <SliderButton className='left-1/2 -translate-x-1/2'/>
-                        <SliderButton className='right-px'><Chevron className='rotate-180'/></SliderButton>
-                    </div>
+                    <Nudge className='w-27.5'/>
                 </div>
             </div>
 
