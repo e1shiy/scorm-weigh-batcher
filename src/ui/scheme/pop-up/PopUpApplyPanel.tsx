@@ -39,12 +39,12 @@ export function PopUpApplyPanel({className, delta, onStep, onApply, onCancel}: P
             )}
         >
             <div className='grow flex justify-between px-0.5 pt-0.5'>
-                <div className='flex flex-col gap-1.5 pt-0.5'>
+                <div className='flex flex-col gap-0.25 pt-0.5'>
                     <div className='flex gap-2.5'>
                         <span>Уставка</span>
                         <span>Применить?</span>
                     </div>
-                    <div className='w-22.25 flex flex-col gap-0.5 p-0.5 pl-1 border border-black'>
+                    <div className='w-22.25 h-7 flex flex-col gap-0.5 p-0.5 pl-1 border border-black'>
                         <span>Прямое задание [%]</span>
                         <div className='flex gap-1'>
                             {STEPS.map(step => (
