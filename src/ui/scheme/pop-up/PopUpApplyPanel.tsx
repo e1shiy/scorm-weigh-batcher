@@ -1,4 +1,4 @@
-import type {ReactNode} from 'react'
+import {useRef, type ReactNode} from 'react'
 import {twMerge} from 'tailwind-merge'
 import {PopUpButton} from './PopUpButton.tsx'
 import {Nudge} from './Nudge.tsx'
@@ -31,6 +31,15 @@ const Triangle = ({className}: { className: string }) => (
 )
 
 export function PopUpApplyPanel({className, delta, onStep, onApply, onCancel}: PopUpApplyPanelProps) {
+    const nudgeValueRef = useRef(0)
+
+    const handleNudgeChange = (value: number) => {
+        const rounded = Math.round(value * 10) / 10
+        if (rounded === nudgeValueRef.current) return
+        onStep(rounded - nudgeValueRef.current)
+        nudgeValueRef.current = rounded
+    }
+
     return (
         <div
             className={twMerge(
@@ -68,7 +77,7 @@ export function PopUpApplyPanel({className, delta, onStep, onApply, onCancel}: P
                             <SunkenField>0,0</SunkenField>
                         </div>
                     </div>
-                    <Nudge className='w-27.5'/>
+                    <Nudge className='w-27.5' onChange={handleNudgeChange}/>
                 </div>
             </div>
 
