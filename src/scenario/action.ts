@@ -26,14 +26,12 @@ export const start = (id: DeviceId, title: string, toast?: string) =>
   )
 
 // Уставка: ручной режим и значение в диапазоне, running не проверяем.
-export const setpoint = (id: DeviceId | ValveId, title: string, min: number, max = min): Action => ({
-  ...defineAction(
+export const setpoint = (id: DeviceId | ValveId, title: string, min: number, max = min) =>
+  defineAction(
     id,
     { title: `${title}: ${label(min, max)}` },
     (s, v) => s === 'manual' && inRange(v.setpoint, min, max),
-  ),
-  isSetpoint: true,
-})
+  )
 
 // Автоматический режим: значение не важно.
 export const toAuto = (id: DeviceId | ValveId, title: string) =>

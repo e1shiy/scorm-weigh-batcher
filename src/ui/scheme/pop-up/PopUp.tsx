@@ -1,9 +1,9 @@
-import {useMemo, useState, type ReactNode} from 'react'
+import {useState, type ReactNode} from 'react'
 import {twMerge} from 'tailwind-merge'
 import {Modal} from '../../components/Modal.tsx'
 import {useScenarioStore} from '../../../scenario/useScenarioStore.ts'
 import type {DeviceId} from '../../../scenario/objects.ts'
-import type {SchemeStatus, Step} from '../../../scenario/types.ts'
+import type {SchemeStatus} from '../../../scenario/types.ts'
 import {PopUpHeader} from './PopUpHeader.tsx'
 import {PopUpButton} from './PopUpButton.tsx'
 import {PopUpField} from './PopUpField.tsx'
@@ -24,11 +24,6 @@ interface PopUpProps {
 
 const SETPOINT_MIN = 0
 const SETPOINT_MAX = 100
-
-const hasSetpointAction = (steps: Step[], objectId: DeviceId) =>
-    steps.some(step => step.groups.some(group => group.actions.some(
-        action => action.objectId === objectId && action.isSetpoint
-    )))
 
 const ValueField = ({className, onClick, children}: {
     className?: string,
@@ -70,12 +65,11 @@ const SetpointRow = ({label, color, valueClassName, isActive, onClick, children}
 
 export function PopUp({isOpened, onClose, objectId}: PopUpProps) {
     const {status, value} = useScenarioStore(s => s.objects[objectId])
-    const steps = useScenarioStore(s => s.steps)
     const setObject = useScenarioStore(s => s.setObject)
 
     const [isEditingSetpoint, setIsEditingSetpoint] = useState(false)
     const [setpointDelta, setSetpointDelta] = useState(0)
-    const isSetpointObject = useMemo(() => hasSetpointAction(steps, objectId), [steps, objectId])
+    const isSetpointObject = 'setpoint' in value && typeof value.setpoint === 'number'
     const isRunning = value.running
     const setpoint = isSetpointObject ? value.setpoint : undefined
     const hasSetpoint = setpoint !== undefined
