@@ -5,14 +5,11 @@ export type SchemeStatus = 'manual' | 'auto'
 // Объект с точным типом value: выводится по переданному id.
 export type SchemeObject<Id extends ObjectId = ObjectId> = Extract<AnyObject, { id: Id }>
 
-// Изменение объекта: value выводится по id, работает и для union id (например, DeviceId).
 export type ObjectChange<Id extends ObjectId = ObjectId> = {
   id: Id
   status: SchemeStatus
   value: SchemeObject<Id>['value']
 }
-
-// Состояние каждого объекта с точным типом value по его id.
 export type ObjectsState = { [O in AnyObject as O['id']]: Pick<O, 'status' | 'value'> }
 
 export interface ActionMeta {
@@ -25,7 +22,6 @@ export interface Action {
   objectId: string
   meta: ActionMeta
   check: (status: SchemeStatus, value: unknown) => boolean // состояние верное?
-  isSetpoint?: boolean // действие задаёт уставку, по нему попап понимает, что у объекта есть уставка
 }
 
 export type StepGroup =
