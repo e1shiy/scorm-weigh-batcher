@@ -1,7 +1,7 @@
 import type { SchemeStatus } from './types'
 
-export type DeviceValue = { running: boolean; setpoint: number }
-export type ValveValue = { setpoint: number }
+export type DeviceValue = { running: boolean; amperage: number; setpoint: number }
+export type ValveValue = { amperage: number; setpoint: number }
 export type ButtonValue = { checked: boolean }
 
 const create = <Id extends string, V>(
@@ -11,10 +11,10 @@ const create = <Id extends string, V>(
 ) => ({ id, status, value })
 
 const device = <Id extends string>(id: Id) =>
-  create(id, { running: false, setpoint: 0 })
-const valve = <Id extends string>(id: Id) => create(id, { setpoint: 0 })
+  create(id, { running: false, amperage: 0, setpoint: 0 })
+const valve = <Id extends string>(id: Id) => create(id, { amperage: 0, setpoint: 0 })
 const button = <Id extends string>(id: Id) => create(id, { checked: false })
-//q
+
 export const objects = [
   button('inspection'),
 
@@ -75,3 +75,26 @@ export type DeviceId = IdsWhere<DeviceValue>
 export type ButtonId = IdsWhere<ButtonValue>
 // value клапана — подмножество value устройства, поэтому вычитаем устройства.
 export type ValveId = Exclude<IdsWhere<ValveValue>, DeviceId>
+
+export const circulators = [
+  '3122/A', '3122/B', '3122/B1', '3122/C',
+] as const satisfies readonly DeviceId[]
+
+export type CirculatorId = (typeof circulators)[number]
+
+// setpoint циркуляторов после пуска: 0 → 30.
+export const CIRCULATOR_START_SETPOINT = 30
+
+// Ампераж всех устройств после пуска: 0 → число. Значения — заглушки, замените на свои.
+// Новое устройство без записи здесь даст ошибку компиляции.
+export const startAmperage: Record<DeviceId, number> = {
+  '3121/A': 10, '3121/B': 10, '3121/C': 10, '3121/D': 10, '3121/E': 10,
+  '3121/K': 10, '3121/L': 10, '3121/M': 10, '3121/N': 10, '3121/O': 10,
+  '3122/A': 10, '3122/B': 10, '3122/B1': 10, '3122/C': 10,
+  '3166A': 10,
+  '3119': 10, '1119/V': 10, '1119/B': 10,
+  '3129/1': 10, '3129/2': 10,
+  '5145/1': 10, '5145/2': 10, '5145/3': 10,
+  '3117/1': 10, '3117/2': 10,
+  '1118/3': 10, '1118/4': 10,
+}
