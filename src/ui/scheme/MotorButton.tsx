@@ -8,7 +8,7 @@ interface MotorButtonProps {
     hasArrow?: boolean
     hasBorder?: boolean
     isRunning: boolean
-    onClick: MouseEventHandler
+    onClick?: MouseEventHandler
     className?: string
 }
 

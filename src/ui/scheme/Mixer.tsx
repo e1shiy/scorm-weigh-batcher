@@ -13,7 +13,8 @@ interface MixerProps {
 }
 
 export function Mixer({ id }: MixerProps) {
-  const { setIsOpen, setObjectId } = usePopUpStore()
+  const setIsOpen = usePopUpStore(s => s.setIsOpen)
+  const setObjectId = usePopUpStore(s => s.setObjectId)
   const handlePopUpOpen = () => {
     setObjectId(id)
     setIsOpen(true)
