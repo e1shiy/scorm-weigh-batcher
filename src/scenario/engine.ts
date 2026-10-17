@@ -1,7 +1,8 @@
-import type { Action, SchemeObject, Step } from './types'
+import type { ObjectId } from './objects'
+import type { Action, ObjectChange, Step } from './types'
 
 // Возвращает новый прогресс и засчитанные действия, либо null, если действие неверное.
-export const applyChange = (step: Step, progress: boolean[][], change: SchemeObject) => {
+export const applyChange = <Id extends ObjectId>(step: Step, progress: boolean[][], change: ObjectChange<Id>) => {
   const matches = (action: Action | undefined) =>
     !!action && action.objectId === change.id && action.check(change.status, change.value)
 

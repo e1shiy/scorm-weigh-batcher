@@ -1,6 +1,8 @@
 import {useState, type ReactNode} from 'react'
 import {twMerge} from 'tailwind-merge'
 import {Modal} from '../../components/Modal.tsx'
+import {useScenarioStore} from '../../../scenario/useScenarioStore.ts'
+import type {DeviceId} from '../../../scenario/objects.ts'
 import type {SchemeStatus} from '../../../scenario/types.ts'
 import {PopUpHeader} from './PopUpHeader.tsx'
 import {PopUpButton} from './PopUpButton.tsx'
@@ -17,12 +19,7 @@ import OpenedLockIcon from '../../../assets/icons/opened-lock.svg?react'
 interface PopUpProps {
     isOpened: boolean
     onClose?: () => void
-    status: SchemeStatus
-    onStatusChange?: (status: SchemeStatus) => void
-    isRunning: boolean
-    onRunningChange?: (isRunning: boolean) => void
-    setpoint?: number
-    onSetpointChange?: (setpoint: number) => void
+    objectId: DeviceId
 }
 
 const SETPOINT_MIN = 0
@@ -39,7 +36,7 @@ const ValueField = ({className, onClick, children}: {
     )
 
     return onClick
-        ? <button type='button' className={classes} onClick={onClick}>{children}</button>
+        ? <button type='button' className={twMerge(classes, 'hover:brightness-80')} onClick={onClick}>{children}</button>
         : <div className={classes}>{children}</div>
 }
 
@@ -66,18 +63,15 @@ const SetpointRow = ({label, color, valueClassName, isActive, onClick, children}
     </div>
 )
 
-export function PopUp({
-    isOpened,
-    onClose,
-    status,
-    onStatusChange,
-    isRunning,
-    onRunningChange,
-    setpoint,
-    onSetpointChange
-}: PopUpProps) {
+export function PopUp({isOpened, onClose, objectId}: PopUpProps) {
+    const {status, value} = useScenarioStore(s => s.objects[objectId])
+    const setObject = useScenarioStore(s => s.setObject)
+
     const [isEditingSetpoint, setIsEditingSetpoint] = useState(false)
     const [setpointDelta, setSetpointDelta] = useState(0)
+    const isSetpointObject = 'setpoint' in value && typeof value.setpoint === 'number'
+    const isRunning = value.running
+    const setpoint = isSetpointObject ? value.setpoint : undefined
     const hasSetpoint = setpoint !== undefined
     const isApplyPanelShown = hasSetpoint && isEditingSetpoint
     const RunningIcon = hasSetpoint ? PopUpArrowRightWithLineIcon : PopUpArrowRightIcon
@@ -93,9 +87,18 @@ export function PopUp({
         setIsEditingSetpoint(true)
     }
 
+    const handleStatusChange = (nextStatus: SchemeStatus) => {
+        setObject({id: objectId, status: nextStatus, value})
+    }
+
+    const handleRunningChange = (running: boolean) => {
+        setObject({id: objectId, status, value: {...value, running}})
+    }
+
     const handleApplySetpoint = () => {
         if (hasSetpoint) {
-            onSetpointChange?.(Math.min(Math.max(setpoint + setpointDelta, SETPOINT_MIN), SETPOINT_MAX))
+            const nextSetpoint = Math.min(Math.max(setpoint + setpointDelta, SETPOINT_MIN), SETPOINT_MAX)
+            setObject({id: objectId, status, value: {...value, setpoint: nextSetpoint}})
         }
         setIsEditingSetpoint(false)
     }
@@ -105,7 +108,7 @@ export function PopUp({
             isOpened={isOpened}
             onClose={handleClose}
             className={twMerge(
-                'w-59 h-39.5 flex flex-col border border-black bg-gray-alt text-black font-medium',
+                'w-59 h-39.5 flex flex-col border border-black bg-gray-alt text-black font-medium select-none scale-200',
                 hasSetpoint && 'h-66.25',
                 isApplyPanelShown && 'h-83'
             )}
@@ -137,7 +140,7 @@ export function PopUp({
                             <PopUpDropdown
                                 className='ml-0.75'
                                 options={['Автоматический', 'Ручной']}
-                                onSelect={option => onStatusChange?.(option === 'Автоматический' ? 'auto' : 'manual')}
+                                onSelect={option => handleStatusChange(option === 'Автоматический' ? 'auto' : 'manual')}
                             />
                         </div>
                         {hasSetpoint && <PopUpField className='self-end mr-4.5 bg-dark-gray'/>}
@@ -149,7 +152,7 @@ export function PopUp({
                             <PopUpDropdown
                                 className='ml-0.75'
                                 options={['Пуск', 'Стоп']}
-                                onSelect={option => onRunningChange?.(option === 'Пуск')}
+                                onSelect={option => handleRunningChange(option === 'Пуск')}
                             />
                         </div>
                         {hasSetpoint && (
@@ -181,7 +184,7 @@ export function PopUp({
                                     isActive={isEditingSetpoint}
                                     onClick={handleEditSetpoint}
                                 >
-                                    {formatValue(setpoint)}
+                                    <div className='cursor-pointer'>{formatValue(setpoint)}</div>
                                 </SetpointRow>
                                 <SetpointRow label='Эхоконтроль' color='border-teal'>{formatValue(setpoint)}</SetpointRow>
                             </div>

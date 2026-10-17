@@ -89,6 +89,8 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
     }
   }))
 
-const initialObjects: ObjectsState = Object.fromEntries(objects.map(object => [object.id, { status: object.status, value: object.value }]))
+const initialObjects = Object.fromEntries(
+  objects.map(object => [object.id, { status: object.status, value: object.value }]),
+) as ObjectsState
 
 export const useScenarioStore = createScenarioStore(steps, initialObjects)

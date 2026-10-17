@@ -1,6 +1,7 @@
-import type {ReactNode} from 'react'
+import {useRef, useState, type ReactNode} from 'react'
 import {twMerge} from 'tailwind-merge'
 import {PopUpButton} from './PopUpButton.tsx'
+import {Nudge} from './Nudge.tsx'
 import {formatValue} from './formatValue.ts'
 import PinIcon from '../../../assets/icons/pin.svg?react'
 
@@ -14,39 +15,67 @@ interface PopUpApplyPanelProps {
     onCancel?: () => void
 }
 
-const SunkenField = ({children}: { children: ReactNode }) => (
-    <div
-        className={twMerge(
-            'w-12.75 h-[11.5px] flex items-center justify-end pr-0.5 border border-black bg-gray-alt',
-            'shadow-[inset_2px_2px_0_var(--color-dark-gray)] text-[10px] leading-none'
-        )}
-    >
-        {children}
-    </div>
+const DELTA_PATTERN = /^[+-]?\d*[.,]?\d?$/
+const DELTA_LIMIT = 100
+
+const sunkenFieldClassName = twMerge(
+    'w-12.75 h-[11.5px] flex items-center justify-end pr-0.5 border border-black bg-gray-alt',
+    'shadow-[inset_2px_2px_0_var(--color-dark-gray)] text-[10px] leading-none'
 )
+
+const formatDelta = (value: number) => `${value > 0 ? '+' : ''}${formatValue(value)}`
+
+const SunkenField = ({children}: { children: ReactNode }) => (
+    <div className={sunkenFieldClassName}>{children}</div>
+)
+
+const DeltaInput = ({value, onChange}: { value: number, onChange: (value: number) => void }) => {
+    const [draft, setDraft] = useState<string | null>(null)
+
+    const commit = () => {
+        if (draft !== null && draft !== '') {
+            const parsed = Number(draft.replace(',', '.'))
+            if (Number.isFinite(parsed)) {
+                const clamped = Math.min(Math.max(parsed, -DELTA_LIMIT), DELTA_LIMIT)
+                onChange(Math.round(clamped * 10) / 10)
+            }
+        }
+        setDraft(null)
+    }
+
+    return (
+        <input
+            type='text'
+            inputMode='decimal'
+            aria-label='Изменение уставки'
+            value={draft ?? formatDelta(value)}
+            onFocus={() => setDraft(formatDelta(value))}
+            onChange={event => {
+                if (DELTA_PATTERN.test(event.target.value)) setDraft(event.target.value)
+            }}
+            onBlur={commit}
+            onKeyDown={event => {
+                if (event.key === 'Enter') event.currentTarget.blur()
+            }}
+            className={twMerge(sunkenFieldClassName, 'text-right outline-none hover:brightness-80')}
+        />
+    )
+}
 
 const Triangle = ({className}: { className: string }) => (
     <div className={twMerge('w-1.25 h-[3.5px] bg-black', className)}/>
 )
 
-const SliderButton = ({className, children}: { className?: string, children?: ReactNode }) => (
-    <div
-        className={twMerge(
-            'absolute top-px w-1.75 h-2 flex-center bg-gray-alt shadow-[1.5px_1.5px_1.5px_rgb(0_0_0/0.5)]',
-            className
-        )}
-    >
-        {children}
-    </div>
-)
-
-const Chevron = ({className}: { className?: string }) => (
-    <svg viewBox='0 0 4 6.5' className={twMerge('w-1 h-[6.5px]', className)}>
-        <path d='M3.6 0.3 L0.5 3.25 L3.6 6.2' fill='none' stroke='currentColor' strokeWidth={0.9}/>
-    </svg>
-)
-
 export function PopUpApplyPanel({className, delta, onStep, onApply, onCancel}: PopUpApplyPanelProps) {
+    const nudgeValueRef = useRef(0)
+
+    const handleNudgeChange = (value: number) => {
+        const rounded = Math.round(value * 10) / 10
+        if (rounded === nudgeValueRef.current) return
+        onStep(rounded - nudgeValueRef.current)
+        nudgeValueRef.current = rounded
+    }
+
     return (
         <div
             className={twMerge(
@@ -55,12 +84,12 @@ export function PopUpApplyPanel({className, delta, onStep, onApply, onCancel}: P
             )}
         >
             <div className='grow flex justify-between px-0.5 pt-0.5'>
-                <div className='flex flex-col gap-1.5 pt-0.5'>
+                <div className='flex flex-col gap-0.25 pt-0.5'>
                     <div className='flex gap-2.5'>
                         <span>Уставка</span>
                         <span>Применить?</span>
                     </div>
-                    <div className='w-22.25 flex flex-col gap-0.5 p-0.5 pl-1 border border-black'>
+                    <div className='w-22.25 h-7 flex flex-col gap-0.5 p-0.5 pl-1 border border-black'>
                         <span>Прямое задание [%]</span>
                         <div className='flex gap-1'>
                             {STEPS.map(step => (
@@ -76,7 +105,7 @@ export function PopUpApplyPanel({className, delta, onStep, onApply, onCancel}: P
                     <div className='flex justify-end gap-px'>
                         <div className='mt-1.25 flex flex-col items-end'>
                             <Triangle className='mr-px [clip-path:polygon(0_0,100%_0,50%_100%)]'/>
-                            <SunkenField>{delta > 0 && '+'}{formatValue(delta)}</SunkenField>
+                            <DeltaInput value={delta} onChange={next => onStep(next - delta)}/>
                             <Triangle className='mr-px [clip-path:polygon(50%_0,100%_100%,0_100%)]'/>
                         </div>
                         <div className='flex flex-col gap-0.5'>
@@ -84,11 +113,7 @@ export function PopUpApplyPanel({className, delta, onStep, onApply, onCancel}: P
                             <SunkenField>0,0</SunkenField>
                         </div>
                     </div>
-                    <div className='relative w-27.5 h-3 border border-black bg-dark-gray select-none'>
-                        <SliderButton className='left-px'><Chevron/></SliderButton>
-                        <SliderButton className='left-1/2 -translate-x-1/2'/>
-                        <SliderButton className='right-px'><Chevron className='rotate-180'/></SliderButton>
-                    </div>
+                    <Nudge className='w-27.5' onChange={handleNudgeChange}/>
                 </div>
             </div>
 

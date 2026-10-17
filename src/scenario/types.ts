@@ -5,8 +5,12 @@ export type SchemeStatus = 'manual' | 'auto'
 // Объект с точным типом value: выводится по переданному id.
 export type SchemeObject<Id extends ObjectId = ObjectId> = Extract<AnyObject, { id: Id }>
 
-type ObjectSnapshot = { status: SchemeStatus; value: unknown }
-export type ObjectsState = Partial<Record<AnyObject['id'], ObjectSnapshot>>
+export type ObjectChange<Id extends ObjectId = ObjectId> = {
+  id: Id
+  status: SchemeStatus
+  value: SchemeObject<Id>['value']
+}
+export type ObjectsState = { [O in AnyObject as O['id']]: Pick<O, 'status' | 'value'> }
 
 export interface ActionMeta {
   title: string
@@ -40,7 +44,7 @@ export type HistoryEntry = {
 }
 
 export type ScenarioState = {
-  objects: Partial<ObjectsState>
+  objects: ObjectsState
   steps: Step[]
   totalSteps: number
   currentStepIndex: number
@@ -49,6 +53,6 @@ export type ScenarioState = {
 }
 
 export type ScenarioActions = {
-  setObject: <Id extends ObjectId>(change: SchemeObject<Id>) => void
+  setObject: <Id extends ObjectId>(change: ObjectChange<Id>) => void
   setCurrentStep: (stepIndex: number) => void // для админ-панели
 }
