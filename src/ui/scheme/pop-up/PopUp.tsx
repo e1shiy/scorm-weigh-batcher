@@ -36,7 +36,7 @@ const ValueField = ({className, onClick, children}: {
     )
 
     return onClick
-        ? <button type='button' className={classes} onClick={onClick}>{children}</button>
+        ? <button type='button' className={twMerge(classes, 'hover:brightness-80')} onClick={onClick}>{children}</button>
         : <div className={classes}>{children}</div>
 }
 
@@ -108,7 +108,7 @@ export function PopUp({isOpened, onClose, objectId}: PopUpProps) {
             isOpened={isOpened}
             onClose={handleClose}
             className={twMerge(
-                'w-59 h-39.5 flex flex-col border border-black bg-gray-alt text-black font-medium scale-200',
+                'w-59 h-39.5 flex flex-col border border-black bg-gray-alt text-black font-medium select-none scale-200',
                 hasSetpoint && 'h-66.25',
                 isApplyPanelShown && 'h-83'
             )}
@@ -159,17 +159,17 @@ export function PopUp({isOpened, onClose, objectId}: PopUpProps) {
                             <div className='flex items-center'>
                                 <span className='grow text-[8px]'>Уставка</span>
                                 <PopUpField>Внутренняя</PopUpField>
-                                <PopUpButton className='ml-0.75 w-3.75 cursor-auto'>...</PopUpButton>
+                                <PopUpButton className='ml-0.75 w-3.75'>...</PopUpButton>
                             </div>
                         )}
-                        <PopUpButton className='self-end w-21.25 cursor-auto'>Сброс</PopUpButton>
+                        <PopUpButton className='self-end w-21.25'>Сброс</PopUpButton>
                     </div>
 
                     <div className={twMerge('mt-1.25 h-px bg-black', hasSetpoint && 'mt-2.5')}/>
 
                     <div className={twMerge('mt-6 flex justify-end items-end gap-1.5', hasSetpoint && 'mt-9')}>
                         <OpenedLockIcon className='mb-0.5'/>
-                        <PopUpButton className='w-21.25 cursor-auto'>Блокировка</PopUpButton>
+                        <PopUpButton className='w-21.25'>Блокировка</PopUpButton>
                     </div>
 
                     {hasSetpoint && (

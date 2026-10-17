@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { animate, motion, useAnimationFrame, useDragControls, useMotionValue } from 'motion/react'
+import { animate, motion, MotionConfig, useAnimationFrame, useDragControls, useMotionValue } from 'motion/react'
 import { twMerge } from 'tailwind-merge'
 
 type NudgeProps = {
@@ -26,6 +26,18 @@ export function Nudge({ onChange, vMax = 30, holdSpeed = 3, k = 4, deadZone = 0.
   const valueRef = useRef(0)
 
   const holdRef = useRef<-1 | 0 | 1>(0)
+  const scaleRef = useRef(1)
+
+  const measureScale = () => {
+    const inner = innerRef.current
+    if (!inner || inner.offsetWidth === 0) return
+    scaleRef.current = inner.getBoundingClientRect().width / inner.offsetWidth
+  }
+
+  const transformPagePoint = (point: { x: number; y: number }) => ({
+    x: point.x / scaleRef.current,
+    y: point.y / scaleRef.current
+  })
 
   useEffect(() => {
     const inner = innerRef.current
@@ -99,20 +111,25 @@ export function Nudge({ onChange, vMax = 30, holdSpeed = 3, k = 4, deadZone = 0.
       ></button>
 
       <div ref={innerRef} className='grow flex items-center justify-center'>
-        <motion.div
-          ref={thumbRef}
-          drag='x'
-          dragControls={dragControls}
-          dragListener={false}
-          onPointerDown={e => dragControls.start(e, { distanceThreshold: 0 })}
-          dragConstraints={{ left: -range, right: range }}
-          dragElastic={0}
-          dragMomentum={false}
-          style={{ x }}
-          onDragStart={() => x.stop()}
-          onDragEnd={release}
-          className='h-full aspect-8/7 bg-gray-alt shadow-st touch-none cursor-grab active:cursor-grabbing'
-        />
+        <MotionConfig transformPagePoint={transformPagePoint}>
+          <motion.div
+            ref={thumbRef}
+            drag='x'
+            dragControls={dragControls}
+            dragListener={false}
+            onPointerDown={e => {
+              measureScale()
+              dragControls.start(e, { distanceThreshold: 0 })
+            }}
+            dragConstraints={{ left: -range, right: range }}
+            dragElastic={0}
+            dragMomentum={false}
+            style={{ x }}
+            onDragStart={() => x.stop()}
+            onDragEnd={release}
+            className='h-full aspect-8/7 bg-gray-alt shadow-st touch-none cursor-grab active:cursor-grabbing'
+          />
+        </MotionConfig>
       </div>
 
       <button
