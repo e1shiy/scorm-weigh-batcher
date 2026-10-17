@@ -108,7 +108,7 @@ export function PopUp({isOpened, onClose, objectId}: PopUpProps) {
             isOpened={isOpened}
             onClose={handleClose}
             className={twMerge(
-                'w-59 h-39.5 flex flex-col border border-black bg-gray-alt text-black font-medium',
+                'w-59 h-39.5 flex flex-col border border-black bg-gray-alt text-black font-medium scale-200',
                 hasSetpoint && 'h-66.25',
                 isApplyPanelShown && 'h-83'
             )}
