@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react'
+import { type MouseEventHandler, type ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 export interface PanelProps {
@@ -7,12 +7,13 @@ export interface PanelProps {
   status?: 'manual' | 'auto'
   unit?: string
   indicatorSlot?: ReactNode
+  onStatusClick?: MouseEventHandler,
   className?: string
   headerClassName?: string
   valueClassName?: string
 }
 
-export const Panel = ({ id, value, status, unit, indicatorSlot, className, headerClassName, valueClassName }: PanelProps) => {
+export const Panel = ({ id, value, status, unit, indicatorSlot, onStatusClick, className, headerClassName, valueClassName }: PanelProps) => {
   const isExtended = unit !== undefined && status
   return (
     <div
@@ -29,9 +30,9 @@ export const Panel = ({ id, value, status, unit, indicatorSlot, className, heade
           <span className='grid grid-rows-2 divide-y divide-black' />
           <span className='' />
 
-          <div className={twMerge('flex-center transition-colors text-black', status === 'auto' && 'bg-neon-green')}>
+          <button onClick={onStatusClick} className={twMerge('flex-center transition-colors text-black', status === 'auto' && 'bg-neon-green')}>
             {status === 'manual' ? 'M' : 'A'}
-          </div>
+          </button>
 
           <div className='flex-center text-black'>I</div>
           <div className='flex-center text-black'>{indicatorSlot}</div>
