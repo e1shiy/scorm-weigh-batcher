@@ -1,14 +1,14 @@
 import { create } from 'zustand'
-import type { DeviceId } from '../../../scenario/objects'
+import type { DeviceId, ValveId } from '../../../scenario/objects'
 
 type PopUpState = {
   isOpen: boolean
-  objectId: DeviceId | null
+  objectId: DeviceId | ValveId | null
 }
 
 type PopUpActions = {
   setIsOpen: (value: boolean) => void
-  setObjectId: (id: DeviceId) => void
+  setObjectId: (id: DeviceId | ValveId) => void
 }
 
 export const usePopUpStore = create<PopUpState & PopUpActions>(set => ({
