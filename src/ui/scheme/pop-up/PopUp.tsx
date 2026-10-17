@@ -159,17 +159,17 @@ export function PopUp({isOpened, onClose, objectId}: PopUpProps) {
                             <div className='flex items-center'>
                                 <span className='grow text-[8px]'>Уставка</span>
                                 <PopUpField>Внутренняя</PopUpField>
-                                <PopUpButton className='ml-0.75 w-3.75'>...</PopUpButton>
+                                <PopUpButton className='ml-0.75 w-3.75 cursor-auto'>...</PopUpButton>
                             </div>
                         )}
-                        <PopUpButton className='self-end w-21.25'>Сброс</PopUpButton>
+                        <PopUpButton className='self-end w-21.25 cursor-auto'>Сброс</PopUpButton>
                     </div>
 
                     <div className={twMerge('mt-1.25 h-px bg-black', hasSetpoint && 'mt-2.5')}/>
 
                     <div className={twMerge('mt-6 flex justify-end items-end gap-1.5', hasSetpoint && 'mt-9')}>
                         <OpenedLockIcon className='mb-0.5'/>
-                        <PopUpButton className='w-21.25'>Блокировка</PopUpButton>
+                        <PopUpButton className='w-21.25 cursor-auto'>Блокировка</PopUpButton>
                     </div>
 
                     {hasSetpoint && (
