@@ -2,7 +2,6 @@ import {useState, type ReactNode} from 'react'
 import {twMerge} from 'tailwind-merge'
 import {Modal} from '../../components/Modal.tsx'
 import {useScenarioStore} from '../../../scenario/useScenarioStore.ts'
-import type {DeviceId} from '../../../scenario/objects.ts'
 import type {SchemeStatus} from '../../../scenario/types.ts'
 import {PopUpHeader} from './PopUpHeader.tsx'
 import {PopUpButton} from './PopUpButton.tsx'
@@ -15,12 +14,7 @@ import PopUpArrowRightIcon from '../../../assets/icons/pop-up-arrow-right.svg?re
 import PopUpArrowRightWithLineIcon from '../../../assets/icons/pop-up-arrow-right-with-line.svg?react'
 import PopUpStoppedIcon from '../../../assets/icons/pop-up-stopped.svg?react'
 import OpenedLockIcon from '../../../assets/icons/opened-lock.svg?react'
-
-interface PopUpProps {
-    isOpened: boolean
-    onClose?: () => void
-    objectId: DeviceId
-}
+import { usePopUpStore } from './usePopUpStore.ts'
 
 const SETPOINT_MIN = 0
 const SETPOINT_MAX = 100
@@ -63,23 +57,29 @@ const SetpointRow = ({label, color, valueClassName, isActive, onClick, children}
     </div>
 )
 
-export function PopUp({isOpened, onClose, objectId}: PopUpProps) {
-    const {status, value} = useScenarioStore(s => s.objects[objectId])
+export function PopUp() {
+    const { isOpen, setIsOpen, objectId } = usePopUpStore()
+    
+    const objects = useScenarioStore(s => s.objects)
     const setObject = useScenarioStore(s => s.setObject)
-
+    
     const [isEditingSetpoint, setIsEditingSetpoint] = useState(false)
     const [setpointDelta, setSetpointDelta] = useState(0)
-    const isSetpointObject = 'setpoint' in value && typeof value.setpoint === 'number'
-    const isRunning = value.running
-    const setpoint = isSetpointObject ? value.setpoint : undefined
+    
+    if (!objectId) return
+
+    const { status, value } = objects[objectId]
+    const { running, setpoint } = value
+
     const hasSetpoint = setpoint !== undefined
     const isApplyPanelShown = hasSetpoint && isEditingSetpoint
+    
     const RunningIcon = hasSetpoint ? PopUpArrowRightWithLineIcon : PopUpArrowRightIcon
-    const StateIcon = isRunning ? RunningIcon : PopUpStoppedIcon
+    const StateIcon = running ? RunningIcon : PopUpStoppedIcon
 
     const handleClose = () => {
         setIsEditingSetpoint(false)
-        onClose?.()
+        setIsOpen(false)
     }
 
     const handleEditSetpoint = () => {
@@ -105,7 +105,7 @@ export function PopUp({isOpened, onClose, objectId}: PopUpProps) {
 
     return (
         <Modal
-            isOpened={isOpened}
+            isOpened={isOpen}
             onClose={handleClose}
             className={twMerge(
                 'w-59 h-39.5 flex flex-col border border-black bg-gray-alt text-black font-medium select-none scale-200',
@@ -113,7 +113,7 @@ export function PopUp({isOpened, onClose, objectId}: PopUpProps) {
                 isApplyPanelShown && 'h-83'
             )}
         >
-            <PopUpHeader hasSetpoint={hasSetpoint} isRunning={isRunning}/>
+            <PopUpHeader hasSetpoint={hasSetpoint} isRunning={running}/>
             <div className='flex gap-1.5 px-0.75 pt-1.5'>
                 <div className='w-18 shrink-0 flex flex-col'>
                     <div className='grid grid-cols-[1fr_auto_1fr] items-end'>
@@ -146,7 +146,7 @@ export function PopUp({isOpened, onClose, objectId}: PopUpProps) {
                         {hasSetpoint && <PopUpField className='self-end mr-4.5 bg-dark-gray'/>}
                         <div className='flex items-center'>
                             <span className='grow text-[8px]'>Команда</span>
-                            {isRunning
+                            {running
                                 ? <PopUpField className='bg-lime'>Пуск</PopUpField>
                                 : <PopUpField>Стоп</PopUpField>}
                             <PopUpDropdown

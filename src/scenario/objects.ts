@@ -11,7 +11,7 @@ const create = <Id extends string, V>(
 ) => ({ id, status, value })
 
 const device = <Id extends string>(id: Id, setpoint?: number) =>
-  create(id, { running: false, amperage: 0 setpoint })
+  create(id, { running: false, amperage: 0, setpoint })
 const valve = <Id extends string>(id: Id) => create(id, { amperage: 0, setpoint: 0 })
 const button = <Id extends string>(id: Id) => create(id, { checked: false })
 
