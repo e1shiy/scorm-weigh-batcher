@@ -1,6 +1,6 @@
 import type { SchemeStatus } from './types'
 
-export type DeviceValue = { running: boolean; setpoint: number }
+export type DeviceValue = { running: boolean; setpoint?: number }
 export type ValveValue = { setpoint: number }
 export type ButtonValue = { checked: boolean }
 
@@ -10,8 +10,8 @@ const create = <Id extends string, V>(
   status: SchemeStatus = 'manual',
 ) => ({ id, status, value })
 
-const device = <Id extends string>(id: Id) =>
-  create(id, { running: false, setpoint: 0 })
+const device = <Id extends string>(id: Id, setpoint?: number) =>
+  create(id, { running: false, setpoint })
 const valve = <Id extends string>(id: Id) => create(id, { setpoint: 0 })
 const button = <Id extends string>(id: Id) => create(id, { checked: false })
 //q
@@ -29,10 +29,10 @@ export const objects = [
   device('3121/N'),
   device('3121/O'),
 
-  device('3122/A'),
-  device('3122/B'),
-  device('3122/B1'),
-  device('3122/C'),
+  device('3122/A', 0),
+  device('3122/B', 0),
+  device('3122/B1', 0),
+  device('3122/C', 0),
 
   device('3166A'),
 
@@ -40,16 +40,16 @@ export const objects = [
   device('1119/V'),
   device('1119/B'),
 
-  device('3129/1'),
-  device('3129/2'),
-  device('5145/1'),
-  device('5145/2'),
-  device('5145/3'),
+  device('3129/1', 0),
+  device('3129/2', 0),
+  device('5145/1', 0),
+  device('5145/2', 0),
+  device('5145/3', 0),
 
-  device('3117/1'),
-  device('3117/2'),
-  device('1118/3'),
-  device('1118/4'),
+  device('3117/1', 0),
+  device('3117/2', 0),
+  device('1118/3', 0),
+  device('1118/4', 0),
 
   valve('2FIC 310'),
   valve('2FIC 311'),

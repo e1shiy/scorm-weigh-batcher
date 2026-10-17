@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { animate, motion, useAnimationFrame, useMotionValue } from 'motion/react'
+import { animate, motion, useAnimationFrame, useDragControls, useMotionValue } from 'motion/react'
 import { twMerge } from 'tailwind-merge'
 
 type NudgeProps = {
@@ -22,6 +22,7 @@ export function Nudge({ onChange, vMax = 30, holdSpeed = 3, k = 4, deadZone = 0.
   const maxXRef = useRef(0)
 
   const x = useMotionValue(0)
+  const dragControls = useDragControls()
   const valueRef = useRef(0)
 
   const holdRef = useRef<-1 | 0 | 1>(0)
@@ -101,6 +102,9 @@ export function Nudge({ onChange, vMax = 30, holdSpeed = 3, k = 4, deadZone = 0.
         <motion.div
           ref={thumbRef}
           drag='x'
+          dragControls={dragControls}
+          dragListener={false}
+          onPointerDown={e => dragControls.start(e, { distanceThreshold: 0 })}
           dragConstraints={{ left: -range, right: range }}
           dragElastic={0}
           dragMomentum={false}

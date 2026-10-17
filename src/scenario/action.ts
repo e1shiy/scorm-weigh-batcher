@@ -30,7 +30,7 @@ export const setpoint = (id: DeviceId | ValveId, title: string, min: number, max
   defineAction(
     id,
     { title: `${title}: ${label(min, max)}` },
-    (s, v) => s === 'manual' && inRange(v.setpoint, min, max),
+    (s, v) => s === 'manual' && inRange(v.setpoint!, min, max),
   )
 
 // Автоматический режим: значение не важно.
