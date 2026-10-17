@@ -4,19 +4,27 @@ import {Panel} from "./Panel.tsx";
 import {MotorButton} from "./MotorButton.tsx";
 import {Indicator} from "./Indicator.tsx";
 import {ValuesBadge} from "./ValuesBadge.tsx";
+import { usePopUpStore } from "./pop-up/usePopUpStore.ts";
+import type { PumpId } from "../../scenario/objects.ts";
+import { useScenarioStore } from "../../scenario/useScenarioStore.ts";
 
 interface PumpProps {
-    id: string
-    payload: {
-        value: number,
-        unit: string
-    }[]
-    status: SchemeStatus
-    isRunning: boolean
+    id: PumpId
     className?: string
 }
 
-export function Pump({id, payload, status, isRunning, className}: PumpProps) {
+export function Pump({ id, className }: PumpProps) {
+    const setIsOpen = usePopUpStore(s => s.setIsOpen)
+    const setObjectId = usePopUpStore(s => s.setObjectId)
+    const handlePopUpOpen = () => {
+      setObjectId(id)
+      setIsOpen(true)
+    }
+
+    const { status, value: payload } = useScenarioStore(s => s.objects[id])
+    const { running, setpoint, amperage } = payload
+
+    const values = [{ value: setpoint ?? 0, unit: '%' }, { value: amperage, unit: 'A' }]
     const statusBg = status === 'manual' ? 'bg-red' : 'bg-neon-green'
 
     return (
@@ -27,10 +35,10 @@ export function Pump({id, payload, status, isRunning, className}: PumpProps) {
                     <Indicator className='bg-bright-blue text-light'>E</Indicator>
                     <Indicator className='bg-light-seagreen text-light'>P</Indicator>
                 </div>
-                <MotorButton isRunning={isRunning} hasLabel={true} hasArrow={true} hasBorder={true} />
-                <Indicator className={twMerge('', statusBg)}>A</Indicator>
+                <MotorButton onClick={handlePopUpOpen} isRunning={running} hasLabel hasArrow hasBorder />
+                <Indicator className={statusBg}>{status === 'manual' ? 'M' : 'A'}</Indicator>
             </div>
-            <ValuesBadge payload={payload}/>
+            <ValuesBadge payload={values}/>
         </div>
     )
 }
