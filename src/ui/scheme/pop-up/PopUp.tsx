@@ -184,7 +184,7 @@ export function PopUp({isOpened, onClose, objectId}: PopUpProps) {
                                     isActive={isEditingSetpoint}
                                     onClick={handleEditSetpoint}
                                 >
-                                    {formatValue(setpoint)}
+                                    <div className='cursor-pointer'>{formatValue(setpoint)}</div>
                                 </SetpointRow>
                                 <SetpointRow label='Эхоконтроль' color='border-teal'>{formatValue(setpoint)}</SetpointRow>
                             </div>
