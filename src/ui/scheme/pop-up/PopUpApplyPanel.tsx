@@ -57,7 +57,7 @@ const DeltaInput = ({value, onChange}: { value: number, onChange: (value: number
             onKeyDown={event => {
                 if (event.key === 'Enter') event.currentTarget.blur()
             }}
-            className={twMerge(sunkenFieldClassName, 'text-right outline-none')}
+            className={twMerge(sunkenFieldClassName, 'text-right outline-none hover:brightness-80')}
         />
     )
 }
