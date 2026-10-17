@@ -1,31 +1,44 @@
+import { CIRCULATOR_START_SETPOINT, circulators, startAmperage } from './objects'
 import type { Action, ActionMeta, SchemeStatus, StepGroup } from './types'
-import type { AnyObject, DeviceId, ObjectId, ValveId } from './objects'
+import type { AnyObject, CirculatorId, DeviceId, ObjectId, ValveId } from './objects'
 
 type ValueOf<Id extends ObjectId> = Extract<AnyObject, { id: Id }>['value']
 
 // Id выводится из objectId, поэтому check и effect знают точный тип value.
+// effect вызывается стором, только если check прошёл.
 export const defineAction = <Id extends ObjectId>(
   objectId: Id,
   meta: ActionMeta,
   check: (status: SchemeStatus, value: ValueOf<Id>) => boolean,
+  effect?: (value: ValueOf<Id>) => ValueOf<Id>,
 ): Action => ({
   objectId,
   meta,
   check: check as Action['check'],
+  effect: effect as Action['effect'],
 })
 
 export const inRange = (value: number, min: number, max = min) => value >= min && value <= max
 export const label = (min: number, max = min) => (min === max ? `${min}` : `${min}–${max}`)
 
-// Пуск: running: True.
+const isCirculator = (id: DeviceId): id is CirculatorId =>
+  (circulators as readonly DeviceId[]).includes(id)
+
+// Пуск: running: true.
+// Эффект: у всех amperage 0 → число, у циркуляторов дополнительно setpoint 0 → 30.
 export const start = (id: DeviceId, title: string, toast?: string) =>
   defineAction(
     id,
     { title, toast },
     (_s, v) => v.running,
+    v => ({
+      ...v,
+      amperage: startAmperage[id],
+      ...(isCirculator(id) ? { setpoint: CIRCULATOR_START_SETPOINT } : {}),
+    }),
   )
 
-// Уставка: ручной режим и значение в диапазоне, running не проверяем.
+// Уставка: ручной режим и setpoint в диапазоне, running не проверяем.
 export const setpoint = (id: DeviceId | ValveId, title: string, min: number, max = min) =>
   defineAction(
     id,
