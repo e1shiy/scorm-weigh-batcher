@@ -80,6 +80,7 @@ export const circulators = [
   '3122/A', '3122/B', '3122/B1', '3122/C',
 ] as const satisfies readonly DeviceId[]
 
+export type MixerId = (typeof mixers)[number]
 export type CirculatorId = (typeof circulators)[number]
 
 // setpoint циркуляторов после пуска: 0 → 30.
