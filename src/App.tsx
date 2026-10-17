@@ -8,6 +8,7 @@ import logoSrc from './assets/logo.png'
 import { AdminPanel } from './widgets/admin/AdminPanel'
 import { useAdminStore } from './widgets/admin/useAdminStore'
 import { AnimatePresence, motion } from 'motion/react'
+import { PopUp } from './ui/scheme/pop-up/PopUp'
 
 function App() {
   // SCORM init (появляется при запуске в LMS):
@@ -54,6 +55,7 @@ function App() {
         <HistoryPanel />
       </div>
       <ResultsModal isOpened={isFinished} />
+      <PopUp />
     </>
   )
 }
