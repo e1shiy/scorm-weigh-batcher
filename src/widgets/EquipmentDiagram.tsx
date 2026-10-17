@@ -86,7 +86,7 @@ export function EquipmentDiagram() {
           </Button>
         </Tooltip>
       </div>
-      <SpacingDiagram className={`w-348.75 h-156.5 top-0 left-0 absolute origin-top-left`} style={{ scale }} />
+      <SpacingDiagram className={`w-348.75 h-156.5 top-0 left-0 absolute origin-top-left font-secondary`} style={{ scale }} />
     </div>
   )
 }

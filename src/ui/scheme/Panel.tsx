@@ -1,19 +1,20 @@
-import { type ReactNode } from 'react'
+import { type MouseEventHandler, type ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 export interface PanelProps {
   id: string
-  value?: number
+  value?: string
   status?: 'manual' | 'auto'
   unit?: string
   indicatorSlot?: ReactNode
+  onStatusClick?: MouseEventHandler,
   className?: string
   headerClassName?: string
   valueClassName?: string
 }
 
-export const Panel = ({ id, value, status, unit, indicatorSlot, className, headerClassName, valueClassName }: PanelProps) => {
-  const isExtended = unit && status
+export const Panel = ({ id, value, status, unit, indicatorSlot, onStatusClick, className, headerClassName, valueClassName }: PanelProps) => {
+  const isExtended = unit !== undefined && status
   return (
     <div
       className={twMerge(
@@ -29,9 +30,9 @@ export const Panel = ({ id, value, status, unit, indicatorSlot, className, heade
           <span className='grid grid-rows-2 divide-y divide-black' />
           <span className='' />
 
-          <div className={twMerge('flex-center transition-colors text-black', status === 'auto' && 'bg-neon-green')}>
+          <button onClick={onStatusClick} className={twMerge('flex-center transition-colors text-black', status === 'auto' && 'bg-neon-green')}>
             {status === 'manual' ? 'M' : 'A'}
-          </div>
+          </button>
 
           <div className='flex-center text-black'>I</div>
           <div className='flex-center text-black'>{indicatorSlot}</div>
@@ -47,19 +48,19 @@ export const Panel = ({ id, value, status, unit, indicatorSlot, className, heade
                 valueClassName
               )}
             >
-              {value.toFixed(1)}
+              {value}
             </div>
           )}
 
-          {unit && <div className='flex-center font-medium text-black text-[6px] row-[1/3] col-2'>{unit}</div>}
-          {value && <p className={'flex-center font-semibold text-blue-alt text-[7px] row-2 col-1'}>{value.toFixed(1)}</p>}
+          <div className='flex-center font-medium text-black text-[6px] row-[1/3] col-2'>{unit}</div>
+          {value && <p className={'flex-center font-semibold text-blue-alt text-[7px] row-2 col-1'}>{value}</p>}
         </div>
       ) : (
         <>
           {value && (
-            <div className={twMerge('min-w-6.5 flex-center bg-light text-black font-semibold text-[9px]', valueClassName)}>{value.toFixed(2)}</div>
+            <div className={twMerge('min-w-6.5 flex-center bg-light text-black font-semibold text-[9px]', valueClassName)}>{value}</div>
           )}
-          {unit && <div className='flex-center font-medium text-black text-[7px]'>{unit}</div>}
+          {unit !== undefined && <div className='flex-center font-medium text-black text-[7px]'>{unit}</div>}
         </>
       )}
     </div>
