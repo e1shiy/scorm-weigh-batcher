@@ -23,7 +23,7 @@ const getIndicator = (isRunning: boolean, index: number): { className?: string, 
 const cell = 'border border-black rounded-xs bg-gray-alt shadow-[inset_1px_1px_3px_rgb(0_0_0/0.25)]'
 
 const HeaderButton = ({className, children}: { className?: string, children: ReactNode }) => (
-    <button type='button' className={twMerge('flex-1 h-full flex-center hover:brightness-80', cell, className)}>
+    <button type='button' className={twMerge('flex-1 h-full flex-center', cell, className)}>
         {children}
     </button>
 )
@@ -53,8 +53,8 @@ export function PopUpHeader({hasSetpoint, isRunning}: PopUpHeaderProps) {
                 {!hasSetpoint && <HeaderButton><BackIcon/></HeaderButton>}
                 <HeaderButton className='text-[8px] text-black'>...</HeaderButton>
                 <div className='-mr-px flex-1 h-full flex flex-col -space-y-px'>
-                    <button type='button' className={twMerge('flex-1 flex-center hover:brightness-80', cell)}><PinIcon/></button>
-                    <button type='button' className={twMerge('flex-1 flex-center hover:brightness-80', cell)}><ReloadIcon/></button>
+                    <button type='button' className={twMerge('flex-1 flex-center', cell)}><PinIcon/></button>
+                    <button type='button' className={twMerge('flex-1 flex-center', cell)}><ReloadIcon/></button>
                 </div>
             </div>
         </header>
