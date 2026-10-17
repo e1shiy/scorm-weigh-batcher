@@ -1,4 +1,3 @@
-import type {SchemeStatus} from "../../scenario/types.ts";
 import {twMerge} from "tailwind-merge";
 import {Panel} from "./Panel.tsx";
 import {MotorButton} from "./MotorButton.tsx";
