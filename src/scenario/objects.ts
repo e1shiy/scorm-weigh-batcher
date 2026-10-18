@@ -4,7 +4,7 @@ export const buttons = ['inspection'] as const
 export const mixers = ['3121/A', '3121/B', '3121/C', '3121/D', '3121/E', '3121/K', '3121/L', '3121/M', '3121/N', '3121/O'] as const
 export const circulators = ['3122/A', '3122/B', '3122/B1', '3122/C'] as const
 export const pumps = ['3129/1', '3129/2', '5145/1', '5145/2', '5145/3'] as const
-export const transporters = ['3119', '1119/B', '1119/V', '3117/1', '3117/2', '1118/3', '1118/4'] as const
+export const transporters = ['3119', '1119/B', '1119/V', '3117/1', '3117/2', '1118/3', '1118/4', '1118/1', '1118/2'] as const
 export const vents = ['3166A'] as const
 export const valves = ['2FIC 310', '2FIC 311', '2FIC 308', '2FIC 307'] as const
 
@@ -73,5 +73,7 @@ export const startAmperage: Record<DeviceId, number> = {
   '3117/1': 10,
   '3117/2': 10,
   '1118/3': 10,
-  '1118/4': 10
+  '1118/4': 10,
+  '1118/1': 10,
+  '1118/2': 10,
 }

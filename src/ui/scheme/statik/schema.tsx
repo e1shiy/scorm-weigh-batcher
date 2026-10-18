@@ -11,6 +11,15 @@ import { P2K9Badge } from "./2k-9";
 import { P2k9_DATA, Kvit_Data, Accord_Data } from "../config/diagramData";
 import { At } from "./map_shablon";
 import { StepMarker } from "./StepMarker";
+import {  Panel_Data} from "../config/staticData";
+import { Panel } from "../Panel";
+import { Valve } from "../Valve";
+import { Circulator } from "../Circulator";
+import { Vent } from "../Vent";
+import { Mixer } from "../Mixer";
+import { Pump } from "../Pump";
+import { Transporter } from "../Transporter";
+import {  Circulator_Data,  Vent_Data,  Mixer_Data,  Pump_Data,  Transporter_Data,  Valve_Data,} from "../config/dinamikData"
 
 export interface SpacingDiagramProps {
   className?: string;
@@ -58,6 +67,36 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
         {/* 2K-9 */}
         {P2k9_DATA.map(({ id, x, y, name }) => (
           <At key={id} x={x} y={y}><P2K9Badge name={name} /></At>
+        ))}
+
+        {/* Статичные панели (без стора) */}
+        {Panel_Data.map(({ x, y, ...panelProps }) => (
+          <At key={panelProps.id} x={x} y={y}><Panel {...panelProps} /></At>
+        ))}
+
+        {/* Оборудование, читающее состояние из стора */}
+        {Mixer_Data.map(({ x, y, ...props }) => (
+          <At key={props.id} x={x} y={y}><Mixer {...props} /></At>
+        ))}
+ 
+        {Circulator_Data.map(({ x, y, ...props }) => (
+          <At key={props.id} x={x} y={y}><Circulator {...props} /></At>
+        ))}
+ 
+        {Vent_Data.map(({ x, y, ...props }) => (
+          <At key={props.id} x={x} y={y}><Vent {...props} /></At>
+        ))}
+ 
+        {Pump_Data.map(({ x, y, ...props }) => (
+          <At key={props.id} x={x} y={y}><Pump {...props} /></At>
+        ))}
+ 
+        {Transporter_Data.map(({ x, y, ...props }) => (
+          <At key={props.id} x={x} y={y}><Transporter {...props} /></At>
+        ))}
+ 
+        {Valve_Data.map(({ x, y, ...props }) => (
+          <At key={props.id} x={x} y={y}><Valve {...props} /></At>
         ))}
       </foreignObject>
     </svg>

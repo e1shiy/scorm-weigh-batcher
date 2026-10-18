@@ -59,13 +59,13 @@ export const RightPanelka = () => {
       <div className="absolute left-[14px] top-[552px] w-[5px] h-[44px] bg-[#7C0000]" />
 
       {/* Rectangle 149 */}
-      <div className="absolute left-[108px] top-[555px] w-[4px] h-[42px] bg-[#ABABAB] border-[1.5px] border-black" />
+      <div className="absolute left-[101px] top-[555px] w-[4px] h-[42px] bg-[#ABABAB] border-[1.5px] border-black" />
       {/* Rectangle 148 */}
-      <div className="absolute left-[151px] top-[555px] w-[4px] h-[42px] bg-[#ABABAB] border-[1.5px] border-black" />
+      <div className="absolute left-[146px] top-[555px] w-[4px] h-[42px] bg-[#ABABAB] border-[1.5px] border-black" />
       {/* Rectangle 150 */}
-      <div className="absolute left-[176px] top-[555px] w-[4px] h-[42px] bg-[#ABABAB] border-[1.5px] border-black" />
+      <div className="absolute left-[179px] top-[555px] w-[4px] h-[42px] bg-[#ABABAB] border-[1.5px] border-black" />
       {/* Rectangle 151 */}
-      <div className="absolute left-[219px] top-[555px] w-[4px] h-[42px] bg-[#ABABAB] border-[1.5px] border-black" />
+      <div className="absolute left-[224px] top-[555px] w-[4px] h-[42px] bg-[#ABABAB] border-[1.5px] border-black" />
     </div>
   );
 };

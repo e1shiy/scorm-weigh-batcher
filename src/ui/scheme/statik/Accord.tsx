@@ -1,7 +1,7 @@
 export const AccordItem = ({ name }: { name: string }) => (
   <div className="flex w-[65px] h-[14px] items-center justify-between border bg-[#FFFFFF] border-black rounded-[1px] px-[1px] font-medium">
     {/* Текстовая плашка */}
-    <div className="flex w-[50px] h-[10px] items-center justify-center bg-[#D9D9D9] border border-black text-[8px] truncate">
+    <div className="flex w-[50px] h-[10px] items-center justify-center bg-[#D9D9D9] border border-black text-[8px] text-black truncate">
       {name}
     </div>
 

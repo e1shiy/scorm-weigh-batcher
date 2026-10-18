@@ -15,16 +15,12 @@ export function ValvePanel({ id }: ValvePanelProps) {
     setIsOpen(true)
   }
 
-  const { status, value: payload } = useScenarioStore(s => s.objects[id])
-  const { amperage } = payload
+  const { status, value } = useScenarioStore(s => s.objects[id])
+
+  // Panel не принимает onStatusClick, поэтому клик ловим на обёртке.
   return (
-    <Panel
-      id={id}
-      status={status}
-      value={amperage.toString()}
-      unit={'А'}
-      onStatusClick={handlePopUpOpen}
-      headerClassName='bg-dark-orange'
-    />
+    <div onClick={handlePopUpOpen} className='cursor-pointer'>
+      <Panel id={id} status={status} value={value.amperage} unit='А' headerClassName='bg-dark-orange' />
+    </div>
   )
 }

@@ -7,12 +7,12 @@ export const SchemeLabels = () => {
       </div>
 
       {/* Текущее соотношение серной кислоты и апатита */}
-      <div className="absolute left-[45px] top-[3px] flex h-[22px] w-[100px] items-center justify-center text-center font-['Inter'] text-[9px] font-normal leading-[11px] text-black">
+      <div className="absolute left-[45px] top-[3px] flex h-[22px] w-[120px] items-center justify-center text-center font-['Inter'] text-[9px] font-normal leading-[11px] text-black">
         Текущее соотношение серной кислоты и апатита
       </div>
 
       {/* Базовое соотношение серной кислоты и апатита */}
-      <div className="absolute left-[46px] top-[62px] flex h-[22px] w-[100px] items-center justify-center text-center font-['Inter'] text-[9px] font-normal leading-[11px] text-black">
+      <div className="absolute left-[46px] top-[62px] flex h-[22px] w-[120px] items-center justify-center text-center font-['Inter'] text-[9px] font-normal leading-[11px] text-black">
         Базовое соотношение серной кислоты и апатита
       </div>
 
