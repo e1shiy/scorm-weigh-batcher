@@ -1,10 +1,13 @@
 import type { PanelProps } from "../Panel"; // поправь путь (поправил)
+import type { LAUProps } from "../statik/LAU"
 
 // 2
 
 export type PanelData = PanelProps & { x: number; y: number };
 
 export type SimpleObjectData = {x: number, y: number};
+
+export type LAUData = LAUProps & {x: number, y: number};
 
 export const Panel_Data: PanelData[] = [
   { id: "2K-919", x: 55, y: 27, value: 0.82, unit: " "},
@@ -79,6 +82,14 @@ export const Panel_Data: PanelData[] = [
   { id: "2FIC-308", x: 1057, y: 50, value: 19.9, status: "auto", headerClassName: "bg-header-orange", unit: "т/ч"},
 ];
 
-export const Long_Mixer_Data: LongMixerData[] = [
+export const Long_Mixer_Data: SimpleObjectData[] = [
     {x: 1075, y: 245}
 ];
+
+export const LAU_Data: LAUData[] = [
+    {x: 403, y: 190, id: 12},
+    {x: 935, y: 180, id: 14},
+    {x: 403, y: 233, id: 15},
+    {x: 485, y: 195, id: 15},
+    {x: 760, y: 50, id: 17}
+]
