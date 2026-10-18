@@ -40,7 +40,7 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
     setCurrentStep: stepIndex => {
       set({
         currentStepIndex: stepIndex,
-        stepProgress: createProgress(scenarioSteps[stepIndex]),
+        stepProgress: createProgress(scenarioSteps[stepIndex])
       })
       if (stepIndex >= get().totalSteps) useScormStore.getState().finish()
     },
@@ -70,10 +70,7 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
 
       // Защищённые поля берём из стора, затем применяем эффекты засчитанных действий.
       const base = keepOwnedFields(change.value, objects[change.id]?.value)
-      const value = result.matched.reduce(
-        (v, action) => (action.effect ? action.effect(v) : v),
-        base,
-      )
+      const value = result.matched.reduce((v, action) => (action.effect ? action.effect(v) : v), base)
 
       const isStepDone = result.progress.every(done => done.every(Boolean))
       const stepIndex = isStepDone ? currentStepIndex + 1 : currentStepIndex
@@ -93,7 +90,7 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
   }))
 
 const initialObjects = Object.fromEntries(
-  objects.map(object => [object.id, { status: object.status, value: object.value }]),
+  objects.map(object => [object.id, { status: object.status, value: object.value }])
 ) as ObjectsState
 
 export const useScenarioStore = createScenarioStore(steps, initialObjects)

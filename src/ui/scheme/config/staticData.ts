@@ -1,4 +1,4 @@
-import type { PanelProps } from "../Panel"; // поправь путь
+import type { PanelProps } from "../Panel"; // поправь путь (поправил)
 
 // 2
 
@@ -14,17 +14,17 @@ export const Panel_Data: PanelData[] = [
   { id: "2T-101", x: 63, y: 433, value: 93.9, unit: "°C"},
   { id: "2L-404", x: 12, y: 476, value: 68.4, unit: "%"},
   { id: "2L-404_", x: 63, y: 476, value: 1159.2, unit: "мм", valueClassName: "bg-red text-white"},
-  { id: "2W-714", x: 179, y: 45, value: 113.1, unit: "Т"},
+  { id: "2W-714", x: 179, y: 46, value: 113.1, unit: "Т"},
   { id: "2L-714", x: 179, y: 73, value: 5.3, unit: "М"},
-  { id: "2W-715", x: 300, y: 45, value: 111.3, unit: "Т"},
+  { id: "2W-715", x: 300, y: 46, value: 111.3, unit: "Т"},
   { id: "2L-715", x: 300, y: 73, value: 5.2, unit: "М"},
-  { id: "2W-1114_3", x: 410, y: 45, value: 146.6, unit: "Т"},
+  { id: "2W-1114_3", x: 410, y: 46, value: 146.6, unit: "Т"},
   { id: "2L-400", x: 410, y: 73, value: 4.4, unit: "М"},
-  { id: "2W-1114_4", x: 527, y: 45, value: 124.7, unit: "Т"},
+  { id: "2W-1114_4", x: 527, y: 46, value: 124.7, unit: "Т"},
   { id: "2L-401", x: 527, y: 73, value: 3.8, unit: "М"},
-  { id: "2W-1114_1", x: 653, y: 45, value: 26.2, unit: "Т"},
+  { id: "2W-1114_1", x: 653, y: 46, value: 26.2, unit: "Т"},
   { id: "2L-470", x: 653, y: 73, value: 1.2, unit: "М"},
-  { id: "2W-1114_2", x: 828, y: 45, value: 223.2, unit: "Т", valueClassName: "bg-red text-white"},
+  { id: "2W-1114_2", x: 828, y: 46, value: 223.2, unit: "Т", valueClassName: "bg-red text-white"},
   { id: "2W-304", x: 340, y: 220, value: 60.3, unit: "т/ч"},
   { id: "2P-202", x: 449, y: 340, value: 847.5, unit: "мм вод.ст."},
   { id: "2T-125_1", x: 494, y: 340, value: 43.5, unit: "°C"},
