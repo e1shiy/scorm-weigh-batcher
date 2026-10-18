@@ -102,11 +102,11 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
         ))}
 
         {Long_Mixer_Data.map(({ x, y}) => (
-          <At key={'5144'} x={x} y={y}><LongMixer /></At>
+          <At key={`5144-${x}-${y}`} x={x} y={y}><LongMixer /></At>
         ))}
 
         {LAU_Data.map(({ x, y, ...props}) => (
-          <At key={props.id} x={x} y={y}><LAU id={props.id}/></At>
+          <At key={`${props.id}-${x}-${y}`} x={x} y={y}><LAU id={props.id}/></At>
         ))}
 
         {Silo_Data.map(({ x, y, ...props }) => (
