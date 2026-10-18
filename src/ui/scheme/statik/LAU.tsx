@@ -3,7 +3,7 @@ import {Panel} from "../Panel.tsx";
 import {MotorButton} from "../MotorButton.tsx";
 import {ValuesBadge} from "../ValuesBadge.tsx";
 
-interface LAUProps {
+export interface LAUProps {
     id: number;
 }
 
