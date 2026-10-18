@@ -41,9 +41,9 @@ export const Pump_Data: Placed<ComponentProps<typeof Pump>>[] = [
 ]
 // 2
 export const Transporter_Data: Placed<ComponentProps<typeof Transporter>>[] = [
-  { id: '3119', x: 295, y: 253, length: 'small' },
-  { id: '1119/V', x: 515, y: 243, length: 'medium', isReversed: true },
-  { id: '1119/B', x: 526, y: 195, length: 'medium'},
+  { id: '3119', x: 295, y: 253, length: 'small', hasValuesBadge: true},
+  { id: '1119/V', x: 515, y: 243, length: 'medium', isReversed: true, hasValuesBadge: true},
+  { id: '1119/B', x: 526, y: 195, length: 'medium', hasValuesBadge: true},
   { id: '3117/1', x: 193, y: 122, length: 'small' },
   { id: '3117/2', x: 325, y: 122, length: 'small' , isReversed: true },
   { id: '1118/3', x: 430, y: 122, length: 'small' },
