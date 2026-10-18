@@ -20,6 +20,7 @@ import { Mixer } from "../Mixer";
 import { Pump } from "../Pump";
 import { Transporter } from "../Transporter";
 import {  Circulator_Data,  Vent_Data,  Mixer_Data,  Pump_Data,  Transporter_Data,  Valve_Data,} from "../config/dinamikData"
+import { Kvf3, Kvf4, Apatite, Lvf } from "./TableTitle";
 
 export interface SpacingDiagramProps {
   className?: string;
@@ -97,6 +98,12 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
         {Pump_Data.map(({ x, y, ...props }) => (
           <At key={props.id} x={x} y={y}><Pump {...props} /></At>
         ))}
+        <div className="relative">
+          <Apatite x={1155} y={12}/>
+          <Kvf3 x={1155} y={193}/>
+          <Kvf4 x={1155} y={336}/>
+          <Lvf x={1155} y={445}/>
+        </div>
       </foreignObject>
     </svg>
   );
