@@ -11,7 +11,7 @@ import { P2K9Badge } from "./2k-9";
 import { P2k9_DATA, Kvit_Data, Accord_Data } from "../config/diagramData";
 import { At } from "./map_shablon";
 import { StepMarker } from "./StepMarker";
-import {LAU_Data, Long_Mixer_Data, Panel_Data} from "../config/staticData";
+import {LAU_Data, Long_Mixer_Data, Panel_Data, Silo_Data} from "../config/staticData";
 import { Panel } from "../Panel";
 import { Valve } from "../Valve";
 import { Circulator } from "../Circulator";
@@ -22,6 +22,7 @@ import { Transporter } from "../Transporter";
 import {  Circulator_Data,  Vent_Data,  Mixer_Data,  Pump_Data,  Transporter_Data,  Valve_Data,} from "../config/dinamikData"
 import {LongMixer} from "./LongMixer.tsx";
 import {LAU} from "./LAU.tsx";
+import {Silo} from "./Silo.tsx";
 
 export interface SpacingDiagramProps {
   className?: string;
@@ -106,6 +107,10 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
 
         {LAU_Data.map(({ x, y, ...props}) => (
           <At key={props.id} x={x} y={y}><LAU id={props.id}/></At>
+        ))}
+
+        {Silo_Data.map(({ x, y, ...props }) => (
+          <At key={props.id} x={x} y={y}><Silo id={props.id}/></At>
         ))}
       </foreignObject>
     </svg>
