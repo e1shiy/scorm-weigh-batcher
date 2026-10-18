@@ -98,7 +98,6 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
         {Pump_Data.map(({ x, y, ...props }) => (
           <At key={props.id} x={x} y={y}><Pump {...props} /></At>
         ))}
-        <div className=""></div>
         <div className="relative">
           <Apatite x={1155} y={12}/>
           <Kvf3 x={1155} y={193}/>
