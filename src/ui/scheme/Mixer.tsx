@@ -36,7 +36,7 @@ export function Mixer({ id }: MixerProps) {
         <MixerIcon className='absolute top-full left-1/2 -translate-x-1/2' />
         {modeBadge}
       </div>
-      <ValuesBadge className='z-10' payload={[{ value: amperage, unit: 'A' }]} />
+      <ValuesBadge className='z-10' payload={[{ value: amperage!, unit: 'A' }]} />
     </div>
   )
 }

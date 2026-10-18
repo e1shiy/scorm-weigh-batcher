@@ -6,7 +6,7 @@ import { useScenarioStore } from '../../scenario/useScenarioStore'
 import type { VentId } from '../../scenario/objects'
 import { usePopUpStore } from './pop-up/usePopUpStore'
 
-export interface VentProps {
+interface VentProps {
   id: VentId
 }
 
@@ -18,10 +18,8 @@ export function Vent({ id }: VentProps) {
     setIsOpen(true)
   }
 
-  const { value } = useScenarioStore(s => s.objects[id])
+  const { status, value } = useScenarioStore(s => s.objects[id])
   const { running, amperage } = value
-
-  const modeIndicator = <Indicator className={running ? 'bg-light-seagreen' : ''}>{running ? 'M' : 'L'}</Indicator>
 
   return (
     <div className='flex-center flex-col'>
@@ -29,9 +27,11 @@ export function Vent({ id }: VentProps) {
       <div className='flex -space-x-1'>
         <Indicator className='bg-light-yellow z-10'>W</Indicator>
         <MotorButton isRunning={running} hasBorder hasLabel onClick={handlePopUpOpen} />
-        {modeIndicator}
+        <Indicator className={!running ? 'bg-light-seagreen' : status === 'auto' ? 'bg-neon-green' : ''}>
+          {!running ? 'L' : status === 'auto' ? 'A' : 'M'}
+        </Indicator>
       </div>
-      <ValuesBadge payload={[{ value: amperage, unit: 'A' }]} />
+      {amperage !== undefined && <ValuesBadge payload={[{ value: amperage, unit: 'A' }]} />}
     </div>
   )
 }

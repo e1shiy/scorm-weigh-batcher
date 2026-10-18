@@ -23,10 +23,12 @@ export function Pump({ id, className }: PumpProps) {
   const { status, value: payload } = useScenarioStore(s => s.objects[id])
   const { running, setpoint, amperage } = payload
 
-  const values = [{ value: setpoint ?? 0, unit: '%' }, { value: amperage, unit: 'A' }]
+  const values = []
+  if (setpoint !== undefined) values.push({ value: setpoint, unit: '%' })
+  if (amperage !== undefined) values.push({ value: amperage, unit: 'A' })
+
   const statusBg = status === 'manual' ? 'bg-red' : 'bg-neon-green'
 
-  // absolute убран: позицию задаёт At по x, y из конфига.
   return (
     <div className={twMerge('flex-center justify-start flex-col text-[8px]', className)}>
       <Panel id={`2H${id}`} headerClassName='bg-light-seagreen' />

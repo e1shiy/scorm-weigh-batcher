@@ -10,23 +10,37 @@ export const valves = ['2FIC 310', '2FIC 311', '2FIC 308', '2FIC 307', '2SH3136_
 // 2
 export const devices = [...mixers, ...circulators, ...pumps, ...transporters, ...vents]
 
-export type DeviceValue = { running: boolean; amperage: number; setpoint?: number }
+export type DeviceValue = { running: boolean; amperage?: number; setpoint?: number }
 export type ValveValue = { amperage: number; setpoint: number }
 export type ButtonValue = { checked: boolean }
 
 const create = <Id extends string, V>(id: Id, value: V, status: SchemeStatus = 'manual') => ({ id, status, value })
 
-const device = <Id extends string>(id: Id, setpoint?: number) => create(id, { running: false, amperage: 0, setpoint })
+const device = <Id extends string>(id: Id, payload: { setpoint?: number; amperage?: number }) => create(id, { running: false, ...payload })
 const valve = <Id extends string>(id: Id) => create(id, { amperage: 0, setpoint: 0 })
 const button = <Id extends string>(id: Id) => create(id, { checked: false })
 
+const transporter = <Id extends string>(id: Id) => {
+  switch (id) {
+    case '3119': {
+      return device(id, { amperage: 0 })
+    }
+    case '1118/2': {
+      return device(id, {})
+    }
+    default: {
+      return device(id, { amperage: 0, setpoint: 0 })
+    }
+  }
+}
+
 export const objects = [
   ...buttons.map(id => button(id)),
-  ...mixers.map(id => device(id)),
-  ...circulators.map(id => device(id, 0)),
-  ...vents.map(id => device(id)),
-  ...transporters.map(id => (id === '3119' ? device(id) : device(id, 0))),
-  ...pumps.map(id => device(id, 0)),
+  ...mixers.map(id => device(id, { amperage: 0 })),
+  ...circulators.map(id => device(id, { setpoint: 0, amperage: 0 })),
+  ...vents.map(id => device(id, { amperage: 0 })),
+  ...transporters.map(id => transporter(id)),
+  ...pumps.map(id => device(id, { amperage: 0, setpoint: 0 })),
   ...valves.map(id => valve(id))
 ]
 

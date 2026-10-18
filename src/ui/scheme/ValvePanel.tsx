@@ -17,10 +17,5 @@ export function ValvePanel({ id }: ValvePanelProps) {
 
   const { status, value } = useScenarioStore(s => s.objects[id])
 
-  // Panel не принимает onStatusClick, поэтому клик ловим на обёртке.
-  return (
-    <div onClick={handlePopUpOpen} className='cursor-pointer'>
-      <Panel id={id} status={status} value={value.amperage} unit='А' headerClassName='bg-dark-orange' />
-    </div>
-  )
+  return <Panel id={id} status={status} value={value.amperage} unit='А' onStatusClick={handlePopUpOpen} headerClassName='bg-dark-orange' />
 }
