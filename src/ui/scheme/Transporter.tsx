@@ -18,6 +18,7 @@ interface TransporterProps {
   }[]
   isReversed?: boolean
   isLocked?: boolean
+  hasValuesBadge?: boolean
 }
 
 const lengths = {
@@ -26,7 +27,7 @@ const lengths = {
   large: 'w-73'
 }
 
-export function Transporter({ id, length, payload, isReversed, isLocked }: TransporterProps) {
+export function Transporter({ id, length, payload, isReversed, isLocked, hasValuesBadge }: TransporterProps) {
   const setIsOpen = usePopUpStore(s => s.setIsOpen)
   const setObjectId = usePopUpStore(s => s.setObjectId)
   const handlePopUpOpen = () => {
@@ -41,7 +42,6 @@ export function Transporter({ id, length, payload, isReversed, isLocked }: Trans
   if (setpoint !== undefined) values.push({ value: setpoint, unit: '%' })
   if (amperage !== undefined) values.push({ value: amperage, unit: 'A' })
 
-  const isValuesBadgeVisible = payload?.length !== 0 || setpoint !== undefined || amperage !== undefined
   const statusBg = isLocked ? 'bg-light-seagreen' : status === 'auto' && 'bg-neon-green'
 
   return (
@@ -66,7 +66,7 @@ export function Transporter({ id, length, payload, isReversed, isLocked }: Trans
           </div>
         </div>
       </div>
-      {isValuesBadgeVisible && <ValuesBadge payload={payload?.length ? payload : values} />}
+      {hasValuesBadge && <ValuesBadge payload={payload?.length ? payload : values} />}
     </div>
   )
 }
