@@ -1,8 +1,6 @@
 import type { PanelProps } from "../Panel"; // поправь путь
-import type { ValveProps } from "../Valve";
-import type {CirculatorProps} from "../Circulator"
-import type {VentProps} from "../Vent"
 
+// 2
 
 export type PanelData = PanelProps & { x: number; y: number };
 

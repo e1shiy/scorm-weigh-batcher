@@ -102,3 +102,4 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
     </svg>
   );
 }
+// 2

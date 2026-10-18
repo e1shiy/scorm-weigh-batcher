@@ -7,7 +7,7 @@ export const pumps = ['3129/1', '3129/2', '5145/1', '5145/2', '5145/3'] as const
 export const transporters = ['3119', '1119/B', '1119/V', '3117/1', '3117/2', '1118/3', '1118/4', '1118/1', '1118/2'] as const
 export const vents = ['3166A'] as const
 export const valves = ['2FIC 310', '2FIC 311', '2FIC 308', '2FIC 307'] as const
-
+// 2
 export const devices = [...mixers, ...circulators, ...pumps, ...transporters, ...vents]
 
 export type DeviceValue = { running: boolean; amperage: number; setpoint?: number }
