@@ -67,8 +67,38 @@ export const Panel_Data: PanelData[] = [
   { id: "2T-120", x: 632, y: 525, value: 72.6, unit: "°C"},
   { id: "2Q-502", x: 632, y: 562, value: 84.0, unit: "мСм/м"},
   { id: "2T-3122C", x: 712, y: 472, value: 76.6, unit: "°C", valueClassName: "bg-bright-blue text-white"},
-  
-  
+    
+  { id: "2W-900", x: 1189, y: 25, value: 66.1, unit: "т/ч"},
+  { id: "2W-911", x: 1290, y: 25, value: 84.4, unit: "т/ч"},
+  { id: "2F-901", x: 1189, y: 67, value: 54.0, unit: "т/ч"},
+  { id: "2F-940", x: 1290, y: 67, value: 53.6, unit: "т/ч"},
+  { id: "2T-915", x: 1189, y: 111, value: 94.2, unit: "°C"},
+  { id: "2F-909", x: 1290, y: 111, value: 80.8, unit: "м3/ч"},
+  { id: "2T-916", x: 1189, y: 155, value: 95.0, unit: "°C"},
+  { id: "2L-905", x: 1290, y: 155, value: 64.9, unit: "%"},
+
+  { id: "2F-376", x: 1170, y: 220, value: 190.3, unit: "м3/ч"},
+  { id: "2D-554", x: 1219, y: 220, value: 1.5, unit: "г/см3"},
+  { id: "2F-381", x: 1290, y: 220, value: 192.8, unit: "м3/ч"},
+  { id: "2F-380", x: 1170, y: 281, value: 5.0, unit: "м3/ч"},
+  { id: "2P-258", x: 1219, y: 281, value: -0.306, unit: "кг/см2"},
+  { id: "2F-382", x: 1290, y: 267, value: 28.1, unit: "м3/ч"},
+  { id: "2D-552", x: 1290, y: 297, value: 1.1, unit: "г/см3"},
+
+  { id: "2F-320", x: 1189, y: 362, value: 211.1, unit: "м3/ч"},
+  { id: "2F-322", x: 1290, y: 362, value: 170.2, unit: "м3/ч"},
+  { id: "2F-326", x: 1170, y: 406, value: 3.9, unit: "м3/ч"},
+  { id: "2P-210", x: 1219, y: 406, value: -0.422, unit: "кг/см2"},
+  { id: "2F-321", x: 1290, y: 406, value: 80.7, unit: "м3/ч"},
+
+  { id: "2F-330", x: 1170, y: 471, value: 0.3, unit: "м3/ч"},
+  { id: "2D-510", x: 1219, y: 471, value: 28.1, unit: "г/см3"},
+  { id: "2F-347", x: 1290, y: 471, value: 0.0, unit: "м3/ч"},
+  { id: "2F-335", x: 1170, y: 535, value: 0.0, unit: "м3/ч"},
+  { id: "2P-215", x: 1219, y: 535, value: 0.0, unit: "кг/см2"},
+  { id: "2F-301", x: 1290, y: 515, value: 0.1, unit: "м3/ч"},
+  { id: "2D-507", x: 1290, y: 549, value: 1.1, unit: "г/см3"},
+
   { id: "2TIC-100", x: 232, y: 404, value: 94.2, status: "manual", headerClassName: "bg-header-orange", unit: "°C", indicatorSlot: "F"},
   { id: "2AIC-500", x: 94, y: 133, value: 0.86, status: "manual", headerClassName: "bg-header-orange", unit: "мСм/м"},
   { id: "2FIC-310", x: 94, y: 183, value: 0.86, status: "auto", headerClassName: "bg-header-orange",unit: "т/ч"},

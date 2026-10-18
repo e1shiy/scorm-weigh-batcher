@@ -23,6 +23,7 @@ import {  Circulator_Data,  Vent_Data,  Mixer_Data,  Pump_Data,  Transporter_Dat
 import {LongMixer} from "./LongMixer.tsx";
 import {LAU} from "./LAU.tsx";
 import {Silo} from "./Silo.tsx";
+import { Kvf3, Kvf4, Apatite, Lvf } from "./TableTitle";
 
 export interface SpacingDiagramProps {
   className?: string;
@@ -112,6 +113,13 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
         {Silo_Data.map(({ x, y, ...props }) => (
           <At key={props.id} x={x} y={y}><Silo id={props.id}/></At>
         ))}
+        
+        <div className="relative">
+          <Apatite x={1155} y={12}/>
+          <Kvf3 x={1155} y={193}/>
+          <Kvf4 x={1155} y={336}/>
+          <Lvf x={1155} y={445}/>
+        </div>
       </foreignObject>
     </svg>
   );
