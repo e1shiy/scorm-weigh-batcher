@@ -3,18 +3,29 @@ import { twMerge } from 'tailwind-merge'
 
 export interface PanelProps {
   id: string
-  value?: string
+  value?: number
   status?: 'manual' | 'auto'
   unit?: string
   indicatorSlot?: ReactNode
-  onStatusClick?: MouseEventHandler,
+  onStatusClick?: MouseEventHandler
   className?: string
   headerClassName?: string
   valueClassName?: string
 }
 
-export const Panel = ({ id, value, status, unit, indicatorSlot, onStatusClick, className, headerClassName, valueClassName }: PanelProps) => {
+export const Panel = ({
+  id,
+  value,
+  status,
+  unit,
+  indicatorSlot,
+  onStatusClick,
+  className,
+  headerClassName,
+  valueClassName
+}: PanelProps) => {
   const isExtended = unit !== undefined && status
+  const hasValue = value !== undefined
   return (
     <div
       className={twMerge(
@@ -30,7 +41,10 @@ export const Panel = ({ id, value, status, unit, indicatorSlot, onStatusClick, c
           <span className='grid grid-rows-2 divide-y divide-black' />
           <span className='' />
 
-          <button onClick={onStatusClick} className={twMerge('flex-center transition-colors text-black', status === 'auto' && 'bg-neon-green')}>
+          <button
+            onClick={onStatusClick}
+            className={twMerge('flex-center cursor-pointer transition-colors text-black', status === 'auto' && 'bg-neon-green')}
+          >
             {status === 'manual' ? 'M' : 'A'}
           </button>
 
@@ -41,26 +55,28 @@ export const Panel = ({ id, value, status, unit, indicatorSlot, onStatusClick, c
 
       {isExtended ? (
         <div className='grid grid-cols-2 grid-rows-2'>
-          {value && (
+          {hasValue && (
             <div
               className={twMerge(
                 'min-w-6.5 flex-center bg-light text-black font-semibold border-r border-b border-black text-[7px]',
                 valueClassName
               )}
             >
-              {value}
+              {value.toFixed(1)}
             </div>
           )}
 
           <div className='flex-center font-medium text-black text-[6px] row-[1/3] col-2'>{unit}</div>
-          {value && <p className={'flex-center font-semibold text-blue-alt text-[7px] row-2 col-1'}>{value}</p>}
+          {hasValue && <p className={'flex-center font-semibold text-blue-alt text-[7px] row-2 col-1'}>{value.toFixed(1)}</p>}
         </div>
       ) : (
         <>
-          {value && (
-            <div className={twMerge('min-w-6.5 flex-center bg-light text-black font-semibold text-[9px]', valueClassName)}>{value}</div>
+          {hasValue && (
+            <div className={twMerge('min-w-6.5 flex-center bg-light text-black font-semibold text-[9px]', valueClassName)}>
+              {value.toFixed(1)}
+            </div>
           )}
-          {unit !== undefined && <div className='flex-center font-medium text-black text-[7px]'>{unit}</div>}
+          {unit !== undefined && <div className='flex-center font-medium text-black text-[7px] min-h-2'>{unit}</div>}
         </>
       )}
     </div>

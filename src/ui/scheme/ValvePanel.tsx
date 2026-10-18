@@ -15,16 +15,7 @@ export function ValvePanel({ id }: ValvePanelProps) {
     setIsOpen(true)
   }
 
-  const { status, value: payload } = useScenarioStore(s => s.objects[id])
-  const { amperage } = payload
-  return (
-    <Panel
-      id={id}
-      status={status}
-      value={amperage.toString()}
-      unit={'А'}
-      onStatusClick={handlePopUpOpen}
-      headerClassName='bg-dark-orange'
-    />
-  )
+  const { status, value } = useScenarioStore(s => s.objects[id])
+
+  return <Panel id={id} status={status} value={value.amperage} unit='А' onStatusClick={handlePopUpOpen} headerClassName='bg-dark-orange' />
 }

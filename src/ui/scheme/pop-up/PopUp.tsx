@@ -67,7 +67,7 @@ const SetpointRow = ({
   </div>
 )
 
-const isDeviceValue = (v: DeviceValue | ValveValue): v is DeviceValue => 'setpoint' in v && 'running' in v && typeof v.running === 'number'
+const isDeviceValue = (v: DeviceValue | ValveValue): v is DeviceValue => 'running' in v && typeof v.running === 'boolean'
 
 export function PopUp() {
   const { isOpen, setIsOpen, objectId } = usePopUpStore()

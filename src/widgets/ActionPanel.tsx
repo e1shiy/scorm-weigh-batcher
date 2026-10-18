@@ -5,11 +5,14 @@ import { Button } from '../ui/components/Button'
 import SettingsIcon from '../assets/icons/settings.svg?react'
 import ChevronIcon from '../assets/icons/chevron.svg?react'
 import Tooltip from '../ui/components/Tooltip'
+import { useScenarioStore } from '../scenario/useScenarioStore'
 
 const OPEN_WIDTH = 320
 const OPEN_WIDTH_NARROW = 240
 
 export function ActionPanel() {
+  const setObject = useScenarioStore(s => s.setObject)
+
   const isNarrow = useIsMaxMd()
   const { isOpen, open, close, expandToggleRef, collapseToggleRef } = useCollapsiblePanel(isNarrow)
 
@@ -39,7 +42,13 @@ export function ActionPanel() {
             </Tooltip>
           </div>
           <div className='flex flex-col gap-2.5'>
-            <p className='text-dark font-normal'>Объекты появятся после проработки схемы</p>
+            <Button
+              onClick={() => setObject({ id: 'inspection', status: 'manual', value: { checked: true } })}
+              variant='light'
+              className='text-nowrap'
+            >
+              Визуальный осмотр
+            </Button>
           </div>
         </div>
       }
