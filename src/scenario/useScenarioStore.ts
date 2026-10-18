@@ -38,7 +38,10 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
     history: [],
 
     setCurrentStep: stepIndex => {
-      set({ currentStepIndex: stepIndex })
+      set({
+        currentStepIndex: stepIndex,
+        stepProgress: createProgress(scenarioSteps[stepIndex]),
+      })
       if (stepIndex >= get().totalSteps) useScormStore.getState().finish()
     },
     setObject: change => {

@@ -54,26 +54,21 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
           <At key={id} x={left} y={top}><StepMarker id={id} /></At>
         ))}
 
-        {/* Квитирование */}
-        {Kvit_Data.map(({ id, x, y }) => (
-          <At key={id} x={x} y={y}><KvitButton /></At>
+        {Kvit_Data.map(({ id, x, y }, i) => (
+          <At key={`kvit-${id}-${i}`} x={x} y={y}><KvitButton /></At>
         ))}
 
-        {/* Каратау, Ковдорский */}
-        {Accord_Data.map(({ id, x, y, name }) => (
-          <At key={id} x={x} y={y}><AccordItem name={name} /></At>
+        {Accord_Data.map(({ id, x, y, name }, i) => (
+          <At key={`accord-${id}-${i}`} x={x} y={y}><AccordItem name={name} /></At>
         ))}
 
-        {/* 2K-9 */}
-        {P2k9_DATA.map(({ id, x, y, name }) => (
-          <At key={id} x={x} y={y}><P2K9Badge name={name} /></At>
+        {P2k9_DATA.map(({ id, x, y, name }, i) => (
+          <At key={`p2k9-${id}-${i}`} x={x} y={y}><P2K9Badge name={name} /></At>
         ))}
 
-        {/* Статичные панели (без стора) */}
-        {Panel_Data.map(({ x, y, ...panelProps }) => (
-          <At key={panelProps.id} x={x} y={y}><Panel {...panelProps} /></At>
+        {Panel_Data.map(({ x, y, ...panelProps }, i) => (
+          <At key={`panel-${panelProps.id}-${i}`} x={x} y={y}><Panel {...panelProps} /></At>
         ))}
-
         {/* Оборудование, читающее состояние из стора */}
         {Mixer_Data.map(({ x, y, ...props }) => (
           <At key={props.id} x={x} y={y}><Mixer {...props} /></At>
@@ -87,8 +82,8 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
           <At key={props.id} x={x} y={y}><Vent {...props} /></At>
         ))}
  
-        {Pump_Data.map(({ x, y, ...props }) => (
-          <At key={props.id} x={x} y={y}><Pump {...props} /></At>
+        {Panel_Data.map(({ x, y, ...panelProps }) => (
+          <At key={`${panelProps.id}-${x}-${y}`} x={x} y={y}><Panel {...panelProps} /></At>
         ))}
  
         {Transporter_Data.map(({ x, y, ...props }) => (
@@ -97,6 +92,10 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
  
         {Valve_Data.map(({ x, y, ...props }) => (
           <At key={props.id} x={x} y={y}><Valve {...props} /></At>
+        ))}
+
+        {Pump_Data.map(({ x, y, ...props }) => (
+          <At key={props.id} x={x} y={y}><Pump {...props} /></At>
         ))}
       </foreignObject>
     </svg>

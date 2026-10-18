@@ -30,14 +30,14 @@ export const Circulator_Data: Placed<ComponentProps<typeof Circulator>>[] = [
   { id: '3122/C', x: 778, y: 452 },
 ]
 
-export const Vent_Data: Placed<ComponentProps<typeof Vent>>[] = [{ id: '3166A', x: 0, y: 0 }]
+export const Vent_Data: Placed<ComponentProps<typeof Vent>>[] = [{ id: '3166A', x: 372, y: 300 }, { id: '3166B', x: 740, y: 300 }]
 
 export const Pump_Data: Placed<ComponentProps<typeof Pump>>[] = [
-  { id: '3129/1', x: 0, y: 0 },
-  { id: '3129/2', x: 0, y: 0 },
-  { id: '5145/1', x: 0, y: 0 },
-  { id: '5145/2', x: 0, y: 0 },
-  { id: '5145/3', x: 0, y: 0 },
+  { id: '3129/1', x: 460, y: 400 },
+  { id: '3129/2', x: 1008, y: 410 },
+  { id: '5145/1', x: 868, y: 287 },
+  { id: '5145/2', x: 916, y: 287 },
+  { id: '5145/3', x: 964, y: 287 },
 ]
 // 2
 export const Transporter_Data: Placed<ComponentProps<typeof Transporter>>[] = [
@@ -50,11 +50,15 @@ export const Transporter_Data: Placed<ComponentProps<typeof Transporter>>[] = [
   { id: '1118/4', x: 545, y: 122, length: 'small' },
   { id: '1118/1', x: 670, y: 122, length: 'small' },
   { id: '1118/2', x: 858, y: 122, length: 'small' , isReversed: true },
+  { id: '1119', x: 820, y: 180, length: 'small' }
 ]
 
 export const Valve_Data: Placed<ComponentProps<typeof Valve>>[] = [
-  { id: '2FIC 310', x: 0, y: 0 },
-  { id: '2FIC 311', x: 0, y: 0 },
-  { id: '2FIC 308', x: 0, y: 0 },
-  { id: '2FIC 307', x: 0, y: 0 },
+  { id: '2FIC 310', x: 154, y: 208 },
+  { id: '2FIC 311', x: 154, y: 283 },
+  { id: '2FIC 308', x: 1061, y: 93 },
+  { id: '2FIC 307', x: 1061, y: 187 },
+  { id: '2SH3136_3', x: 375, y: 360 , isVertical:true},
+  { id: '2SH3136_4', x: 744, y: 375, isVertical:true },
+
 ]
