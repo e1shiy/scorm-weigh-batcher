@@ -11,7 +11,7 @@ import { P2K9Badge } from "./2k-9";
 import { P2k9_DATA, Kvit_Data, Accord_Data } from "../config/diagramData";
 import { At } from "./map_shablon";
 import { StepMarker } from "./StepMarker";
-import {  Panel_Data} from "../config/staticData";
+import {Long_Mixer_Data, Panel_Data} from "../config/staticData";
 import { Panel } from "../Panel";
 import { Valve } from "../Valve";
 import { Circulator } from "../Circulator";
@@ -20,6 +20,7 @@ import { Mixer } from "../Mixer";
 import { Pump } from "../Pump";
 import { Transporter } from "../Transporter";
 import {  Circulator_Data,  Vent_Data,  Mixer_Data,  Pump_Data,  Transporter_Data,  Valve_Data,} from "../config/dinamikData"
+import {LongMixer} from "./LongMixer.tsx";
 
 export interface SpacingDiagramProps {
   className?: string;
@@ -73,29 +74,33 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
         {Mixer_Data.map(({ x, y, ...props }) => (
           <At key={props.id} x={x} y={y}><Mixer {...props} /></At>
         ))}
- 
+
         {Circulator_Data.map(({ x, y, ...props }) => (
           <At key={props.id} x={x} y={y}><Circulator {...props} /></At>
         ))}
- 
+
         {Vent_Data.map(({ x, y, ...props }) => (
           <At key={props.id} x={x} y={y}><Vent {...props} /></At>
         ))}
- 
+
         {Panel_Data.map(({ x, y, ...panelProps }) => (
           <At key={`${panelProps.id}-${x}-${y}`} x={x} y={y}><Panel {...panelProps} /></At>
         ))}
- 
+
         {Transporter_Data.map(({ x, y, ...props }) => (
           <At key={props.id} x={x} y={y}><Transporter {...props} /></At>
         ))}
- 
+
         {Valve_Data.map(({ x, y, ...props }) => (
           <At key={props.id} x={x} y={y}><Valve {...props} /></At>
         ))}
 
         {Pump_Data.map(({ x, y, ...props }) => (
           <At key={props.id} x={x} y={y}><Pump {...props} /></At>
+        ))}
+
+        {Long_Mixer_Data.map(({ x, y}) => (
+          <At key={'5144'} x={x} y={y}><LongMixer /></At>
         ))}
       </foreignObject>
     </svg>

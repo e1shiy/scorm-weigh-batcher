@@ -4,6 +4,8 @@ import type { PanelProps } from "../Panel"; // поправь путь (попр
 
 export type PanelData = PanelProps & { x: number; y: number };
 
+export type LongMixerData = {x: number, y: number};
+
 export const Panel_Data: PanelData[] = [
   { id: "2K-919", x: 55, y: 27, value: 0.82, unit: " "},
   { id: "2K-31212", x: 107, y: 27, value: 0.64, unit: " "},
@@ -77,3 +79,6 @@ export const Panel_Data: PanelData[] = [
   { id: "2FIC-308", x: 1057, y: 50, value: 19.9, status: "auto", headerClassName: "bg-header-orange", unit: "т/ч"},
 ];
 
+export const Long_Mixer_Data: LongMixerData[] = [
+    {x: 1075, y: 245}
+];
