@@ -4,7 +4,7 @@ import type { PanelProps } from "../Panel"; // поправь путь (попр
 
 export type PanelData = PanelProps & { x: number; y: number };
 
-export type LongMixerData = {x: number, y: number};
+export type SimpleObjectData = {x: number, y: number};
 
 export const Panel_Data: PanelData[] = [
   { id: "2K-919", x: 55, y: 27, value: 0.82, unit: " "},
