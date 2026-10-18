@@ -101,8 +101,8 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
           <At key={props.id} x={x} y={y}><Pump {...props} /></At>
         ))}
 
-        {Long_Mixer_Data.map(({ x, y}) => (
-          <At key={`5144-${x}-${y}`} x={x} y={y}><LongMixer /></At>
+        {Long_Mixer_Data.map(({ id, x, y }) => (
+          <At key={`${id}-${x}-${y}`} x={x} y={y}><LongMixer id={id} /></At>
         ))}
 
         {LAU_Data.map(({ x, y, ...props}) => (

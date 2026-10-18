@@ -6,7 +6,7 @@ import type { SiloProps } from "../statik/Silo"
 
 export type PanelData = PanelProps & { x: number; y: number };
 
-export type SimpleObjectData = {x: number, y: number};
+export type SimpleObjectData = {id: string, x: number, y: number};
 
 export type LAUData = LAUProps & {x: number, y: number};
 
@@ -86,7 +86,7 @@ export const Panel_Data: PanelData[] = [
 ];
 
 export const Long_Mixer_Data: SimpleObjectData[] = [
-    {x: 1075, y: 245}
+    {id: '2M5144A', x: 1075, y: 245}
 ];
 
 export const LAU_Data: LAUData[] = [
