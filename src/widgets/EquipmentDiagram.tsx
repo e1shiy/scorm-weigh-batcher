@@ -7,15 +7,36 @@ import ScaleResetIcon from '../assets/icons/scale-reset.svg?react'
 import FullscreenIcon from '../assets/icons/fullscreen.svg?react'
 import FullscreenAltIcon from '../assets/icons/fullscreen-alt.svg?react'
 import Tooltip from '../ui/components/Tooltip'
-import SpacingDiagram from '../ui/scheme/statik/schema'
+import SpacingDiagram, { SCHEMA_WIDTH, SCHEMA_HEIGHT } from '../ui/scheme/statik/schema'
+
+const MIN_ZOOM = 1
+const MAX_ZOOM = 10
+const ZOOM_STEP = 0.25
 
 export function EquipmentDiagram() {
   const diagramRef = useRef<HTMLDivElement>(null)
   const { handlePointerDown, handlePointerMove, handlePointerUp, handlePointerCancel } = usePan(diagramRef)
 
-  const [scale, setScale] = useState(1)
-  const upScale = () => setScale(s => Math.min(s + 0.25, 10))
-  const downScale = () => setScale(s => Math.max(s - 0.25, 1))
+  const [zoom, setZoom] = useState(MIN_ZOOM)
+  const upScale = () => setZoom(z => Math.min(z + ZOOM_STEP, MAX_ZOOM))
+  const downScale = () => setZoom(z => Math.max(z - ZOOM_STEP, MIN_ZOOM))
+
+  const [fitScale, setFitScale] = useState(1)
+
+  useEffect(() => {
+    const diagram = diagramRef.current
+    if (!diagram) return
+
+    const updateFitScale = () => setFitScale(diagram.clientWidth / SCHEMA_WIDTH)
+    updateFitScale()
+
+    const observer = new ResizeObserver(updateFitScale)
+    observer.observe(diagram)
+
+    return () => observer.disconnect()
+  }, [])
+
+  const scale = fitScale * zoom
 
   const handleWheel = useCallback((e: WheelEvent) => {
     e.preventDefault()
@@ -105,7 +126,7 @@ export function EquipmentDiagram() {
           </Button>
         </Tooltip>
         <Tooltip content='Сбросить зум'>
-          <Button onClick={() => setScale(1)} className='w-8 h-8'>
+          <Button onClick={() => setZoom(MIN_ZOOM)} className='w-8 h-8'>
             <ScaleResetIcon className='w-full h-full' />
           </Button>
         </Tooltip>
@@ -115,7 +136,15 @@ export function EquipmentDiagram() {
           </Button>
         </Tooltip>
       </div>
-      <SpacingDiagram className={`w-348.75 h-156.5 top-0 left-0 absolute origin-top-left font-secondary`} style={{ scale }} />
+      <div
+        className='absolute top-0 left-0 origin-top-left'
+        style={{ width: SCHEMA_WIDTH * scale, height: SCHEMA_HEIGHT * scale }}
+      >
+        <SpacingDiagram
+          className={`w-348.75 h-156.5 top-0 left-0 absolute origin-top-left font-secondary`}
+          style={{ transform: `scale(${scale})` }}
+        />
+      </div>
     </div>
   )
 }
