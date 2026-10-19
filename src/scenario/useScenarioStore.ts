@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { useScormStore } from '../api/useScormStore'
 import { applyChange } from './engine'
 import { objects } from './objects'
+import { buildStateAtStep } from './snapshot'
 import { steps } from './steps'
 import type { ObjectsState, ScenarioActions, ScenarioState, Step } from './types'
 
@@ -37,10 +38,12 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
     stepProgress: createProgress(scenarioSteps[0]),
     history: [],
 
+    // Перескок из админ-панели: объекты приводятся к состоянию на начало шага.
     setCurrentStep: stepIndex => {
       set({
         currentStepIndex: stepIndex,
-        stepProgress: createProgress(scenarioSteps[stepIndex])
+        stepProgress: createProgress(scenarioSteps[stepIndex]),
+        objects: buildStateAtStep(scenarioSteps, initialObjects, stepIndex),
       })
       if (stepIndex >= get().totalSteps) useScormStore.getState().finish()
     },

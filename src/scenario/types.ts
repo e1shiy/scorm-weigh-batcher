@@ -18,11 +18,17 @@ export interface ActionMeta {
   toast?: string
 }
 
+export interface ActionState {
+  status: SchemeStatus
+  value: unknown
+}
+
 export interface Action {
   objectId: string
   meta: ActionMeta
   check: (status: SchemeStatus, value: unknown) => boolean // состояние верное?
   effect?: (value: unknown) => unknown // что записать в objects, если check пройден
+  target?: (state: ActionState) => ActionState // в какое состояние действие переводит объект (для перескока из админ-панели)
 }
 
 export type StepGroup =
