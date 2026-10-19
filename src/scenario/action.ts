@@ -3,19 +3,23 @@ import type { Action, ActionMeta, SchemeStatus, StepGroup } from './types'
 import type { AnyObject, CirculatorId, DeviceId, ObjectId, ValveId } from './objects'
 
 type ValueOf<Id extends ObjectId> = Extract<AnyObject, { id: Id }>['value']
+type State<Id extends ObjectId> = { status: SchemeStatus; value: ValueOf<Id> }
 
-// Id выводится из objectId, поэтому check и effect знают точный тип value.
+// Id выводится из objectId, поэтому check, effect и target знают точный тип value.
 // effect вызывается стором, только если check прошёл.
+// target используется при перескоке из админ-панели: возвращает состояние, в котором check проходит.
 export const defineAction = <Id extends ObjectId>(
   objectId: Id,
   meta: ActionMeta,
   check: (status: SchemeStatus, value: ValueOf<Id>) => boolean,
   effect?: (value: ValueOf<Id>) => ValueOf<Id>,
+  target?: (state: State<Id>) => State<Id>,
 ): Action => ({
   objectId,
   meta,
   check: check as Action['check'],
   effect: effect as Action['effect'],
+  target: target as Action['target'],
 })
 
 export const inRange = (value: number, min: number, max = min) => value >= min && value <= max
@@ -36,14 +40,21 @@ export const start = (id: DeviceId, title: string, toast?: string) =>
       amperage: startAmperage[id],
       ...(isCirculator(id) ? { setpoint: CIRCULATOR_START_SETPOINT } : {}),
     }),
+    ({ status, value }) => ({ status, value: { ...value, running: true } }),
   )
 
 // Уставка: ручной режим и setpoint в диапазоне, running не проверяем.
+// При перескоке берётся середина диапазона.
 export const setpoint = (id: DeviceId | ValveId, title: string, min: number, max = min) =>
   defineAction(
     id,
     { title: `${title}: ${label(min, max)}` },
     (s, v) => s === 'manual' && inRange(v.setpoint!, min, max),
+    undefined,
+    ({ value }) => ({
+      status: 'manual',
+      value: { ...value, setpoint: Math.round((min + max) / 2) },
+    }),
   )
 
 // Автоматический режим: значение не важно.
@@ -52,6 +63,8 @@ export const toAuto = (id: DeviceId | ValveId, title: string) =>
     id,
     { title },
     s => s === 'auto',
+    undefined,
+    ({ value }) => ({ status: 'auto', value }),
   )
 
 // Пуск → задание → авто, строго по порядку.
