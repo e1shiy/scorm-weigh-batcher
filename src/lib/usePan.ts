@@ -1,7 +1,10 @@
 import { useCallback, useRef, type RefObject } from 'react'
 
+const DRAG_THRESHOLD = 4
+
 export const usePan = (containerRef: RefObject<HTMLDivElement | null>) => {
   const isDraggingRef = useRef(false)
+  const didDragRef = useRef(false)
   const startXRef = useRef(0)
   const startYRef = useRef(0)
   const startScrollLeftRef = useRef(0)
@@ -9,20 +12,19 @@ export const usePan = (containerRef: RefObject<HTMLDivElement | null>) => {
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
-      const target = e.target as HTMLElement
-      if (target.closest('button, input, select, a')) return
+      if (e.button !== 0) return
 
       const container = containerRef.current
       if (!container) return
 
       isDraggingRef.current = true
+      didDragRef.current = false
       startXRef.current = e.clientX
       startYRef.current = e.clientY
       startScrollLeftRef.current = container.scrollLeft
       startScrollTopRef.current = container.scrollTop
 
       container.style.cursor = 'grabbing'
-      container.setPointerCapture(e.pointerId)
     },
     [containerRef]
   )
@@ -35,6 +37,13 @@ export const usePan = (containerRef: RefObject<HTMLDivElement | null>) => {
 
       const deltaX = e.clientX - startXRef.current
       const deltaY = e.clientY - startYRef.current
+
+      if (!didDragRef.current) {
+        if (Math.hypot(deltaX, deltaY) < DRAG_THRESHOLD) return
+
+        didDragRef.current = true
+        container.setPointerCapture(e.pointerId)
+      }
 
       let newScrollLeft = startScrollLeftRef.current - deltaX
       let newScrollTop = startScrollTopRef.current - deltaY
@@ -57,10 +66,12 @@ export const usePan = (containerRef: RefObject<HTMLDivElement | null>) => {
       const container = containerRef.current
       if (!container) return
       container.removeAttribute('style')
-      container.releasePointerCapture(e.pointerId)
+      if (container.hasPointerCapture(e.pointerId)) {
+        container.releasePointerCapture(e.pointerId)
+      }
     },
     [containerRef]
   )
 
-  return { handlePointerDown, handlePointerMove, handlePointerUp }
+  return { handlePointerDown, handlePointerMove, handlePointerUp, didDragRef }
 }
