@@ -138,13 +138,10 @@ export function EquipmentDiagram() {
           </Button>
         </Tooltip>
       </div>
-      <div
-        className='absolute top-0 left-0 origin-top-left'
-        style={{ width: SCHEMA_WIDTH * scale, height: SCHEMA_HEIGHT * scale }}
-      >
+      <div className='absolute top-0 left-0' style={{ width: SCHEMA_WIDTH * scale, height: SCHEMA_HEIGHT * scale }}>
         <SpacingDiagram
           className={`w-348.75 h-156.5 top-0 left-0 absolute origin-top-left font-secondary`}
-          style={{ transform: `scale(${scale})` }}
+          style={{ scale: scale }}
         />
       </div>
     </div>
