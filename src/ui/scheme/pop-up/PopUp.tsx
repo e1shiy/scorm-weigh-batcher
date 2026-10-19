@@ -110,6 +110,7 @@ export function PopUp() {
   const handleApplySetpoint = () => {
     if (hasSetpoint) {
       const nextSetpoint = Math.min(Math.max(setpoint + setpointDelta, SETPOINT_MIN), SETPOINT_MAX)
+      setIsOpen(false)
       setObject({ id: objectId, status, value: { ...value, setpoint: nextSetpoint } })
     }
     setIsEditingSetpoint(false)
