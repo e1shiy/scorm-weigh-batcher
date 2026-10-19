@@ -17,14 +17,22 @@ export function EquipmentDiagram() {
   const upScale = () => setScale(s => Math.min(s + 0.25, 10))
   const downScale = () => setScale(s => Math.max(s - 0.25, 1))
 
-  const handleWheel = useCallback((e: WheelEvent) => (e.deltaY < 0 ? upScale() : downScale()), [])
+  const handleWheel = useCallback((e: WheelEvent) => {
+    e.preventDefault()
+    if (e.deltaY < 0) {
+      upScale()
+    } else {
+      downScale()
+    }
+  }, [])
+
   useEffect(() => {
     const diagram = diagramRef.current
     if (!diagram) return
 
-    diagram.addEventListener('wheel', handleWheel)
+    diagram.addEventListener('wheel', handleWheel, { passive: false })
     return () => diagram.removeEventListener('wheel', handleWheel)
-  })
+  }, [handleWheel])
 
   const [isFullscreen, setIsFullscreen] = useState(false)
 
