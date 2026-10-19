@@ -55,13 +55,15 @@ export function EquipmentDiagram() {
     return () => diagram.removeEventListener('wheel', handleWheel)
   }, [handleWheel])
 
-  const prevScaleRef = useRef(scale)
+  const prevScaleRef = useRef<number | null>(null)
 
   useLayoutEffect(() => {
     const diagram = diagramRef.current
     const prevScale = prevScaleRef.current
     prevScaleRef.current = scale
-    if (!diagram || prevScale === scale) return
+
+    // Первый запуск и случай без изменения масштаба — центрировать нечего
+    if (!diagram || prevScale === null || prevScale === scale) return
 
     const centerX = diagram.clientWidth / 2
     const centerY = diagram.clientHeight / 2
