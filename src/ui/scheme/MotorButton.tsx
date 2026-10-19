@@ -17,7 +17,8 @@ export function MotorButton({ hasLabel, hasArrow, hasBorder, isRunning, onClick,
     const button = (
         <button
             className={twMerge(
-                'size-4.75 border border-black rounded-full flex-center text-[8px] font-medium relative text-white cursor-pointer',
+                'size-4.75 border border-black rounded-full flex-center text-[8px] font-medium relative text-white',
+                onClick && 'cursor-pointer',
                 isRunning ? 'bg-light-green' : 'bg-gray-alt', className
             )}
             onClick={ onClick }

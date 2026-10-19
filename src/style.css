@@ -95,32 +95,32 @@
   --color-blue: rgb(0, 58, 103);
   --color-light-blue: #00467e;
   --color-dark-blue: #002542;
-  --color-blue-alt: #15008C;
-  --color-bright-blue: #1D15CD;
-  --color-deep-blue: #1711A4;
+  --color-blue-alt: #15008c;
+  --color-bright-blue: #1d15cd;
+  --color-deep-blue: #1711a4;
 
   --color-red: rgb(253, 2, 2);
   --color-orange: rgb(253, 196, 39);
-  --color-dark-orange: #C59028;
+  --color-dark-orange: #c59028;
   --color-ligth-yellow: rgb(237, 240, 75);
   --color-yellow: rgb(255, 255, 2);
   --color-light-yellow: rgb(254, 226, 147);
-  --color-light-seagreen: #29A6A0;
-  --color-pale-seagreen: #4EA4A0;
+  --color-light-seagreen: #29a6a0;
+  --color-pale-seagreen: #4ea4a0;
   --color-light-green: rgb(32, 225, 52);
-  --color-neon-green: #03FD07;
+  --color-neon-green: #03fd07;
   --color-green: rgb(135, 207, 67);
   --color-dark-green: #259229;
   --color-gray: #c4c4c4;
   --color-gray-alt: #d9d9d9;
   --color-light-gray: #efefef;
-  --color-dark-gray: #B8B9BB;
-  --color-indigo: #5E6099;
-  --color-teal: #22A8A2;
-  --color-aquamarine: #31EEC5;
-  --color-lime: #4EEE31;
-  --color-brown: #743C03;
-  --color-header-orange: #C59028;
+  --color-dark-gray: #b8b9bb;
+  --color-indigo: #5e6099;
+  --color-teal: #22a8a2;
+  --color-aquamarine: #31eec5;
+  --color-lime: #4eee31;
+  --color-brown: #743c03;
+  --color-header-orange: #c59028;
 
   --font-primary: 'ProximaNova', sans-serif;
   --font-secondary: 'Inter', sans-serif;
@@ -132,7 +132,7 @@
   ::before,
   ::after {
     transition: 0.2s ease-out;
-    transition-property: opacity, color, background-color, border-color, box-shadow, filter, scale, visibility;
+    transition-property: opacity, color, background-color, border-color, box-shadow, filter, visibility;
   }
 
   *::-webkit-scrollbar {
@@ -167,6 +167,14 @@
 
   #modal-root {
     @apply relative z-1000;
+  }
+
+  #schema-diagram svg button {
+    cursor: grab;
+  }
+
+  #schema-diagram.cursor-grabbing svg button {
+    cursor: grabbing;
   }
 }
 

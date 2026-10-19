@@ -21,16 +21,17 @@ export function Circulator({ id }: CirculatorProps) {
     setIsOpen(true)
   }
 
+  const setObject = useScenarioStore(s => s.setObject)
   const { status, value: payload } = useScenarioStore(s => s.objects[id])
   const { running, amperage, setpoint } = payload
+
+  const toggleSetpoint = (value: number) => setObject({ id, status, value: { running, amperage, setpoint: value } })
 
   const values = []
   if (setpoint !== undefined) values.push({ value: setpoint, unit: '%' })
   if (amperage !== undefined) values.push({ value: amperage, unit: 'A' })
 
-  const modeBadge = (
-    <Indicator className={status === 'auto' ? 'bg-neon-green' : ''}>{status === 'manual' ? 'M' : 'A'}</Indicator>
-  )
+  const modeBadge = <Indicator className={status === 'auto' ? 'bg-neon-green' : ''}>{status === 'manual' ? 'M' : 'A'}</Indicator>
 
   return (
     <div className='flex flex-col justify-start items-center gap-px'>
@@ -48,9 +49,9 @@ export function Circulator({ id }: CirculatorProps) {
         <ValuesBadge payload={values} className='z-10' />
         <LongMixerIcon className='absolute top-full left-1/2 -translate-x-1/2' />
       </div>
-      <div className='flex-center gap-1.25 mt-1.25'>
-        <LoadPanel load={30} isActive={setpoint === 30} />
-        <LoadPanel load={100} isActive={setpoint === 100} />
+      <div className='flex-center gap-1.25 mt-1.25 z-10'>
+        <LoadPanel onClick={() => toggleSetpoint(30)} load={30} isActive={setpoint === 30} />
+        <LoadPanel onClick={() => toggleSetpoint(100)} load={100} isActive={setpoint === 100} />
       </div>
     </div>
   )

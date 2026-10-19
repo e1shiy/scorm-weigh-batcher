@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react'
-import { type ReactNode, useEffect, useMemo } from 'react'
+import { type ReactNode, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { twMerge } from 'tailwind-merge'
 
@@ -20,13 +20,27 @@ export function Modal({ children, className, isOpened, onClose, onOpen }: ModalP
   }, [onOpen, onClose])
 
   const modalRootElement = useMemo(() => document.getElementById('modal-root'), [])
-  if (!modalRootElement) {
+
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(modalRootElement)
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setPortalContainer((document.fullscreenElement as HTMLElement | null) ?? modalRootElement)
+    }
+
+    handleFullscreenChange()
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
+  }, [modalRootElement])
+
+  if (!portalContainer) {
     console.error('#modal-root not found')
     return null
   }
 
   return createPortal(
-    <AnimatePresence initial={false}>
+    <AnimatePresence>
       {isOpened && (
         <motion.div
           key='modal'
@@ -56,6 +70,6 @@ export function Modal({ children, className, isOpened, onClose, onOpen }: ModalP
         </motion.div>
       )}
     </AnimatePresence>,
-    modalRootElement
+    portalContainer
   )
 }
