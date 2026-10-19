@@ -7,8 +7,8 @@ export const usePan = (containerRef: RefObject<HTMLDivElement | null>) => {
   const didDragRef = useRef(false)
   const startXRef = useRef(0)
   const startYRef = useRef(0)
-  const startScrollLeftRef = useRef(0)
-  const startScrollTopRef = useRef(0)
+  const lastXRef = useRef(0)
+  const lastYRef = useRef(0)
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
@@ -21,8 +21,8 @@ export const usePan = (containerRef: RefObject<HTMLDivElement | null>) => {
       didDragRef.current = false
       startXRef.current = e.clientX
       startYRef.current = e.clientY
-      startScrollLeftRef.current = container.scrollLeft
-      startScrollTopRef.current = container.scrollTop
+      lastXRef.current = e.clientX
+      lastYRef.current = e.clientY
 
       container.classList.add('cursor-grabbing')
     },
@@ -45,8 +45,15 @@ export const usePan = (containerRef: RefObject<HTMLDivElement | null>) => {
         container.setPointerCapture(e.pointerId)
       }
 
-      let newScrollLeft = startScrollLeftRef.current - deltaX
-      let newScrollTop = startScrollTopRef.current - deltaY
+      // Сдвигаем прокрутку на шаг, а не пересчитываем от точки нажатия:
+      // так пан складывается с внешними изменениями прокрутки (зумом), а не затирает их
+      const stepX = e.clientX - lastXRef.current
+      const stepY = e.clientY - lastYRef.current
+      lastXRef.current = e.clientX
+      lastYRef.current = e.clientY
+
+      let newScrollLeft = container.scrollLeft - stepX
+      let newScrollTop = container.scrollTop - stepY
 
       const maxScrollLeft = container.scrollWidth - container.clientWidth
       const maxScrollTop = container.scrollHeight - container.clientHeight
