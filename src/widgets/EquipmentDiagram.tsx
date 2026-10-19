@@ -11,7 +11,7 @@ import SpacingDiagram from '../ui/scheme/statik/schema'
 
 export function EquipmentDiagram() {
   const diagramRef = useRef<HTMLDivElement>(null)
-  const { handlePointerDown, handlePointerMove, handlePointerUp } = usePan(diagramRef)
+  const { handlePointerDown, handlePointerMove, handlePointerUp, handlePointerCancel } = usePan(diagramRef)
 
   const [scale, setScale] = useState(1)
   const upScale = () => setScale(s => Math.min(s + 0.25, 10))
@@ -63,6 +63,7 @@ export function EquipmentDiagram() {
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
     >
       <div className='sticky top-2.5 left-2.5 flex flex-col gap-2.5 z-2 w-max'>
         <Tooltip content='Приблизить'>

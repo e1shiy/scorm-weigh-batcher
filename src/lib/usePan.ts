@@ -1,4 +1,4 @@
-import { useCallback, useRef, type RefObject } from 'react'
+import { useCallback, useEffect, useRef, type RefObject } from 'react'
 
 const DRAG_THRESHOLD = 4
 
@@ -73,5 +73,29 @@ export const usePan = (containerRef: RefObject<HTMLDivElement | null>) => {
     [containerRef]
   )
 
-  return { handlePointerDown, handlePointerMove, handlePointerUp, didDragRef }
+  const handlePointerCancel = useCallback(
+    (e: React.PointerEvent) => {
+      didDragRef.current = false
+      handlePointerUp(e)
+    },
+    [handlePointerUp]
+  )
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const handleClick = (e: MouseEvent) => {
+      if (!didDragRef.current) return
+
+      e.preventDefault()
+      e.stopPropagation()
+      didDragRef.current = false
+    }
+
+    container.addEventListener('click', handleClick, true)
+    return () => container.removeEventListener('click', handleClick, true)
+  }, [containerRef])
+
+  return { handlePointerDown, handlePointerMove, handlePointerUp, handlePointerCancel }
 }
