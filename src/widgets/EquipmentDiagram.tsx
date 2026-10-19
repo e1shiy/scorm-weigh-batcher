@@ -133,7 +133,11 @@ export function EquipmentDiagram() {
   }, [scheduleTick])
 
   useEffect(() => () => {
-    if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
+    if (rafRef.current === null) return
+    cancelAnimationFrame(rafRef.current)
+    // Обязательно сбрасываем, иначе после StrictMode-двойного монтирования
+    // scheduleTick будет считать, что цикл уже запущен, и зум перестанет работать
+    rafRef.current = null
   }, [])
 
   const handleWheel = useCallback((e: WheelEvent) => {
