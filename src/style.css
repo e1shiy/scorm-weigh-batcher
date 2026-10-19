@@ -168,6 +168,15 @@
   #modal-root {
     @apply relative z-1000;
   }
+
+  /* Базовый слой слабее utilities, поэтому компоненты перебивают это своей утилитой cursor-pointer */
+  #schema-diagram svg button {
+    cursor: grab;
+  }
+
+  #schema-diagram.cursor-grabbing svg button {
+    cursor: grabbing;
+  }
 }
 
 @utility flex-center {

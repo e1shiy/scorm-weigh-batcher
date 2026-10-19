@@ -199,6 +199,7 @@ export function EquipmentDiagram() {
 
   return (
     <div
+      id='schema-diagram'
       className={'grow relative bg-light rounded-st overflow-auto scrollbar-none w-full h-full cursor-grab select-none'}
       ref={diagramRef}
       onPointerDown={handlePointerDown}
