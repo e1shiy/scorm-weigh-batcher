@@ -40,7 +40,7 @@ export function Modal({ children, className, isOpened, onClose, onOpen }: ModalP
   }
 
   return createPortal(
-    <AnimatePresence initial={false}>
+    <AnimatePresence>
       {isOpened && (
         <motion.div
           key='modal'
