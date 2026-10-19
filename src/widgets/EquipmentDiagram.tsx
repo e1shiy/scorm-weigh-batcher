@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { usePan } from '../lib/usePan'
 import { Button } from '../ui/components/Button'
 import ScaleUpIcon from '../assets/icons/scale-up.svg?react'
@@ -33,6 +33,26 @@ export function EquipmentDiagram() {
     diagram.addEventListener('wheel', handleWheel, { passive: false })
     return () => diagram.removeEventListener('wheel', handleWheel)
   }, [handleWheel])
+
+  const prevScaleRef = useRef(scale)
+
+  useLayoutEffect(() => {
+    const diagram = diagramRef.current
+    const prevScale = prevScaleRef.current
+    prevScaleRef.current = scale
+    if (!diagram || prevScale === scale) return
+
+    const centerX = diagram.clientWidth / 2
+    const centerY = diagram.clientHeight / 2
+    const contentX = (diagram.scrollLeft + centerX) / prevScale
+    const contentY = (diagram.scrollTop + centerY) / prevScale
+
+    const maxScrollLeft = diagram.scrollWidth - diagram.clientWidth
+    const maxScrollTop = diagram.scrollHeight - diagram.clientHeight
+
+    diagram.scrollLeft = Math.max(0, Math.min(contentX * scale - centerX, maxScrollLeft))
+    diagram.scrollTop = Math.max(0, Math.min(contentY * scale - centerY, maxScrollTop))
+  }, [scale])
 
   const [isFullscreen, setIsFullscreen] = useState(false)
 
