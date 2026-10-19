@@ -25,6 +25,9 @@ import {LAU} from "./LAU.tsx";
 import {Silo} from "./Silo.tsx";
 import { Kvf3, Kvf4, Apatite, Lvf } from "./TableTitle";
 
+export const SCHEMA_WIDTH = 1395;
+export const SCHEMA_HEIGHT = 626;
+
 export interface SpacingDiagramProps {
   className?: string;
   style?: React.CSSProperties;
@@ -34,7 +37,7 @@ export default function SpacingDiagram({ className, style }: SpacingDiagramProps
   return (
     <svg
       className={className}
-      style={{ width: "100%", height: "auto", ...style }}
+      style={style}
       viewBox="0 0 1395 626"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
