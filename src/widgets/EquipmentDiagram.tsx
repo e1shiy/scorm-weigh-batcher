@@ -12,14 +12,26 @@ import SpacingDiagram, { SCHEMA_WIDTH, SCHEMA_HEIGHT } from '../ui/scheme/statik
 const MIN_ZOOM = 1
 const MAX_ZOOM = 10
 const ZOOM_STEP = 0.25
+const ZOOM_WHEEL_SPEED = 0.002
+
+const LINE_HEIGHT_PX = 16
+
+const clampZoom = (value: number) => Math.min(Math.max(value, MIN_ZOOM), MAX_ZOOM)
+
+/** Браузеры отдают дельту в пикселях, строках или страницах — приводим к пикселям */
+const normalizeWheelDelta = (e: WheelEvent, pageHeight: number) => {
+  if (e.deltaMode === WheelEvent.DOM_DELTA_LINE) return e.deltaY * LINE_HEIGHT_PX
+  if (e.deltaMode === WheelEvent.DOM_DELTA_PAGE) return e.deltaY * pageHeight
+  return e.deltaY
+}
 
 export function EquipmentDiagram() {
   const diagramRef = useRef<HTMLDivElement>(null)
   const { handlePointerDown, handlePointerMove, handlePointerUp, handlePointerCancel } = usePan(diagramRef)
 
   const [zoom, setZoom] = useState(MIN_ZOOM)
-  const upScale = () => setZoom(z => Math.min(z + ZOOM_STEP, MAX_ZOOM))
-  const downScale = () => setZoom(z => Math.max(z - ZOOM_STEP, MIN_ZOOM))
+  const upScale = () => setZoom(z => clampZoom(z + ZOOM_STEP))
+  const downScale = () => setZoom(z => clampZoom(z - ZOOM_STEP))
 
   const [fitScale, setFitScale] = useState(1)
 
@@ -40,11 +52,11 @@ export function EquipmentDiagram() {
 
   const handleWheel = useCallback((e: WheelEvent) => {
     e.preventDefault()
-    if (e.deltaY < 0) {
-      upScale()
-    } else {
-      downScale()
-    }
+
+    const pageHeight = diagramRef.current?.clientHeight ?? 0
+    const delta = normalizeWheelDelta(e, pageHeight)
+
+    setZoom(z => clampZoom(z * Math.exp(-delta * ZOOM_WHEEL_SPEED)))
   }, [])
 
   useEffect(() => {
