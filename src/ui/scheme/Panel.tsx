@@ -43,7 +43,7 @@ export const Panel = ({
 
           <button
             onClick={onStatusClick}
-            className={twMerge('flex-center cursor-pointer transition-colors text-black', status === 'auto' && 'bg-neon-green')}
+            className={twMerge('flex-center transition-colors text-black', onStatusClick && 'cursor-pointer', status === 'auto' && 'bg-neon-green')}
           >
             {status === 'manual' ? 'M' : 'A'}
           </button>

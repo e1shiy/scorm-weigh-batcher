@@ -168,6 +168,14 @@
   #modal-root {
     @apply relative z-1000;
   }
+
+  #schema-diagram svg button {
+    cursor: grab;
+  }
+
+  #schema-diagram.cursor-grabbing svg button {
+    cursor: grabbing;
+  }
 }
 
 @utility flex-center {
