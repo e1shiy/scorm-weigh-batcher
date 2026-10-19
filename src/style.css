@@ -132,7 +132,7 @@
   ::before,
   ::after {
     transition: 0.2s ease-out;
-    transition-property: opacity, color, background-color, border-color, box-shadow, filter, scale, visibility;
+    transition-property: opacity, color, background-color, border-color, box-shadow, filter, visibility;
   }
 
   *::-webkit-scrollbar {
