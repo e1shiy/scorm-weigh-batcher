@@ -24,7 +24,7 @@ export const usePan = (containerRef: RefObject<HTMLDivElement | null>) => {
       startScrollLeftRef.current = container.scrollLeft
       startScrollTopRef.current = container.scrollTop
 
-      container.style.cursor = 'grabbing'
+      container.classList.add('cursor-grabbing')
     },
     [containerRef]
   )
@@ -65,7 +65,7 @@ export const usePan = (containerRef: RefObject<HTMLDivElement | null>) => {
       isDraggingRef.current = false
       const container = containerRef.current
       if (!container) return
-      container.removeAttribute('style')
+      container.classList.remove('cursor-grabbing')
       if (container.hasPointerCapture(e.pointerId)) {
         container.releasePointerCapture(e.pointerId)
       }
