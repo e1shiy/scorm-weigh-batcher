@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { usePan } from '../lib/usePan'
 import { Button } from '../ui/components/Button'
 import ScaleUpIcon from '../assets/icons/scale-up.svg?react'
@@ -114,6 +114,15 @@ export function EquipmentDiagram() {
     targetZoomRef.current = MIN_ZOOM
     scheduleTick()
   }
+
+  // Первый fit-масштаб применяем до отрисовки, иначе схема мелькнёт в 1:1
+  useLayoutEffect(() => {
+    const diagram = diagramRef.current
+    if (!diagram) return
+
+    fitScaleRef.current = diagram.clientWidth / SCHEMA_WIDTH
+    applyScale(fitScaleRef.current * currentZoomRef.current)
+  }, [applyScale])
 
   useEffect(() => {
     const diagram = diagramRef.current
