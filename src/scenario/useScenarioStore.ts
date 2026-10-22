@@ -1,10 +1,11 @@
 import { create } from 'zustand'
 import { useScormStore } from '../api/useScormStore'
-import { applyChange } from './engine'
+import { applyChange, showStepToasts } from './engine'
 import { objects } from './objects'
 import { buildStateAtStep } from './snapshot'
 import { steps } from './steps'
 import type { ObjectsState, ScenarioActions, ScenarioState, Step } from './types'
+import { useToastStore } from '../ui/components/toast/useToastStore'
 
 const WRONG_ACTION_PENALTY = 1 // из 100 баллов.
 
@@ -43,8 +44,12 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
       set({
         currentStepIndex: stepIndex,
         stepProgress: createProgress(scenarioSteps[stepIndex]),
-        objects: buildStateAtStep(scenarioSteps, initialObjects, stepIndex),
+        objects: buildStateAtStep(scenarioSteps, initialObjects, stepIndex)
       })
+      
+      const prevStep = get().steps[stepIndex - 1]
+      if (prevStep) showStepToasts(prevStep)
+
       if (stepIndex >= get().totalSteps) useScormStore.getState().finish()
     },
     setObject: change => {
@@ -87,6 +92,9 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
           ...history
         ]
       })
+
+      useToastStore.getState().clear()
+      result.matched.map(action => action.meta.toast && useToastStore.getState().addToast({ message: action.meta.toast }))
 
       if (stepIndex === totalSteps) useScormStore.getState().finish()
     }

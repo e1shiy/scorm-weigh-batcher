@@ -9,18 +9,21 @@ import { AdminPanel } from './widgets/admin/AdminPanel'
 import { useAdminStore } from './widgets/admin/useAdminStore'
 import { AnimatePresence, motion } from 'motion/react'
 import { PopUp } from './ui/scheme/pop-up/PopUp'
+import { useEffect } from 'react'
 
 function App() {
-  // SCORM init (появляется при запуске в LMS):
-  // useEffect(() => {
-  //   initialize()
-  //   window.addEventListener('beforeunload', finish)
-  //   window.addEventListener('pagehide', finish)
-  //   return () => {
-  //     window.removeEventListener('beforeunload', finish)
-  //     window.removeEventListener('pagehide', finish)
-  //   }
-  // }, [initialize, finish])
+  const initialize = useScormStore(s => s.initialize)
+  const finish = useScormStore(s => s.finish)
+
+  useEffect(() => {
+    initialize()
+    window.addEventListener('beforeunload', finish)
+    window.addEventListener('pagehide', finish)
+    return () => {
+      window.removeEventListener('beforeunload', finish)
+      window.removeEventListener('pagehide', finish)
+    }
+  }, [initialize, finish])
 
   const isFinished = useScormStore(s => s.isTerminated)
   const isAdmin = useAdminStore(s => s.isAdmin)
