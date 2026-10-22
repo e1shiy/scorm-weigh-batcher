@@ -53,7 +53,7 @@ export function HistoryPanel() {
             <p className='leading-[110%]'>
               {history.length - index}. {title}
             </p>
-            <p className='text-dark font-medium'>{isSuccess ? (description ?? title) : 'Выбрано неверно'}</p>
+            <p className='text-dark font-medium'>{description ?? title}</p>
           </div>
           {!isSuccess && <p>{scoreDelta}</p>}
         </div>
