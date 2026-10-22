@@ -101,8 +101,6 @@ export const Panel_Data: PanelData[] = [
 
   { id: "2TIC-100", x: 232, y: 404, value: 94.2, status: "manual", headerClassName: "bg-dark-orange", unit: "°C", indicatorSlot: "F"},
   { id: "2AIC-500", x: 94, y: 133, value: 0.86, status: "manual", headerClassName: "bg-dark-orange", unit: "мСм/м"},
-  { id: "2FIC-310", x: 94, y: 183, value: 0.86, status: "auto", headerClassName: "bg-dark-orange",unit: "т/ч"},
-  { id: "2FIC-311", x: 94, y: 252, value: 34.0, status: "auto", headerClassName: "bg-dark-orange",unit: "т/ч"},
   { id: "2FIC-362", x: 135, y: 356, value: 149.6, status: "auto", headerClassName: "bg-dark-orange",unit: "м3/ч"},
   { id: "2LIC-403", x: 555, y: 400, value: 64.9, status: "auto", headerClassName: "bg-dark-orange",unit: "%"},
   { id: "2TIC-103", x: 781, y: 338, value: 94.1, status: "manual", headerClassName: "bg-dark-orange", unit: "°C", indicatorSlot: "F"},
@@ -111,8 +109,6 @@ export const Panel_Data: PanelData[] = [
   { id: "2LIC-459", x: 1014, y: 296, value: 65.4, status: "auto", headerClassName: "bg-dark-orange",unit: "%"},
   { id: "2FIC-389", x: 1014, y: 248, value: 88.3, status: "auto", headerClassName: "bg-dark-orange", unit: "м3/ч", indicatorSlot: "F"},
   { id: "2AIC-502", x: 985, y: 147, value: 84.0, status: "manual", headerClassName: "bg-dark-orange", unit: "мСм/м"},
-  { id: "2FIC-307", x: 1057, y: 147, value: 33.6, status: "auto", headerClassName: "bg-dark-orange", unit: "т/ч"},
-  { id: "2FIC-308", x: 1057, y: 50, value: 19.9, status: "auto", headerClassName: "bg-dark-orange", unit: "т/ч"},
 ];
 
 export const Long_Mixer_Data: SimpleObjectData[] = [

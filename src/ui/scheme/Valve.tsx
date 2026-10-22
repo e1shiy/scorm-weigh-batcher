@@ -21,15 +21,17 @@ export const Valve = ({ id, isVertical }: ValveProps) => {
     setIsOpen(true)
   }
 
-  const { status, value: { setpoint } } = useScenarioStore(s => s.objects[id])
-  const modeBadge = <Indicator className={status === 'auto' ? 'bg-neon-green' : ''}>{status === 'manual' ? 'M' : 'A'}</Indicator>
+  const { status, value: payload } = useScenarioStore(s => s.objects[id])
+  const { setpoint } = payload
 
   return isVertical ? (
     <div className='flex gap-px'>
       <Indicator>I</Indicator>
       <ValveVerticalIcon className='w-4 h-6.5 translate-y-0.5' />
       <div className='flex flex-col items-start gap-px'>
-        {modeBadge}
+        <Indicator onClick={handlePopUpOpen} className={twMerge('cursor-pointer', status === 'auto' ? 'bg-neon-green' : '')}>
+          {status === 'manual' ? 'M' : 'A'}
+        </Indicator>
         <ValuesBadge payload={[{ value: setpoint, unit: '%' }]} />
         <Panel id={id} headerClassName='bg-dark-green' />
       </div>
@@ -39,7 +41,9 @@ export const Valve = ({ id, isVertical }: ValveProps) => {
       <Panel id={id} headerClassName='bg-dark-green' className='col-[1/4]' />
       <Indicator className='bg-[#004CB7] text-light col-1 row-2'>E</Indicator>
       <ValveHorizontalIcon className='w-6.5 h-4 col-2 row-2 self-end' />
-      <Indicator onClick={handlePopUpOpen} className={twMerge('col-3 row-2', status === 'auto' ? 'bg-neon-green' : '')}>{status === 'manual' ? 'M' : 'A'}</Indicator>
+      <Indicator onClick={handlePopUpOpen} className={twMerge('col-3 row-2 cursor-pointer', status === 'auto' ? 'bg-neon-green' : '')}>
+        {status === 'manual' ? 'M' : 'A'}
+      </Indicator>
       <ValuesBadge className='col-[1/4] row-3 mx-auto w-max' payload={[{ value: setpoint, unit: '%' }]} />
     </div>
   )

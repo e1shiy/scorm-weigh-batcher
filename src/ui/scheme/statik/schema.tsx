@@ -19,11 +19,12 @@ import { Vent } from "../Vent";
 import { Mixer } from "../Mixer";
 import { Pump } from "../Pump";
 import { Transporter } from "../Transporter";
-import {  Circulator_Data,  Vent_Data,  Mixer_Data,  Pump_Data,  Transporter_Data,  Valve_Data,} from "../config/dinamikData"
+import {  Circulator_Data,  Vent_Data,  Mixer_Data,  Pump_Data,  Transporter_Data,  Valve_Data, ValvePanel_Data,} from "../config/dinamikData"
 import {LongMixer} from "./LongMixer.tsx";
 import {LAU} from "./LAU.tsx";
 import {Silo} from "./Silo.tsx";
 import { Kvf3, Kvf4, Apatite, Lvf } from "./TableTitle";
+import { ValvePanel } from "../ValvePanel.tsx";
 
 export const SCHEMA_WIDTH = 1395;
 export const SCHEMA_HEIGHT = 626;
@@ -101,6 +102,10 @@ export default function SpacingDiagram({ className, style, ref }: SpacingDiagram
 
         {Valve_Data.map(({ x, y, ...props }) => (
           <At key={props.id} x={x} y={y}><Valve {...props} /></At>
+        ))}
+        
+        {ValvePanel_Data.map(({ x, y, ...props }) => (
+          <At key={props.id} x={x} y={y}><ValvePanel {...props} /></At>
         ))}
 
         {Pump_Data.map(({ x, y, ...props }) => (

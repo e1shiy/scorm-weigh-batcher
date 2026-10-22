@@ -7,6 +7,7 @@ import type { Transporter } from '../Transporter'
 import type { Valve } from '../Valve'
 import type { Circulator } from '../Circulator'
 import type { Vent } from '../Vent'
+import type { ValvePanel } from '../ValvePanel'
 
 export type Placed<P> = P & { x: number; y: number }
 
@@ -60,5 +61,11 @@ export const Valve_Data: Placed<ComponentProps<typeof Valve>>[] = [
   { id: '2FIC 307', x: 1061, y: 187 },
   { id: '2SH3136_3', x: 375, y: 360 , isVertical:true},
   { id: '2SH3136_4', x: 744, y: 375, isVertical:true },
+]
 
+export const ValvePanel_Data: Placed<ComponentProps<typeof ValvePanel>>[] = [
+  { id: '2FIC 310', x: 94, y: 183 },
+  { id: '2FIC 311', x: 94, y: 252 },
+  { id: '2FIC 308', x: 1057, y: 50 },
+  { id: '2FIC 307', x: 1057, y: 147 },
 ]
