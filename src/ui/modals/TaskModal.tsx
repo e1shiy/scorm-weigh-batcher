@@ -24,9 +24,11 @@ export function TaskModal({ isOpened, onOpen, onClose }: TaskModalProps) {
           <CloseIcon className='w-full h-full' onClick={onClose} />
         </Button>
       </div>
-      <p className='font-normal leading-[150%] text-dark'>
-        Приемка насосных установок в эксплуатацию: требуется выполнить пуск водокольцевого вакуумного насоса
-      </p>
+
+      <div className='flex flex-col gap-1.25 font-normal leading-[150%] text-dark'>
+        <p>Требуется запустить узел разложения после продолжительного ремонта.</p>
+        <p>Нагрузка на дозаторы: 3117/1 = 5 т/ч; 3117/2 = 60 т/ч; 1118/3 = 30 т/ч; 1118/4 = 35 т/ч</p>
+      </div>
 
       <Button variant='light' onClick={handleAdminToggle}>
         {isAdmin ? 'Выйти из режима тестирования' : 'Перейти в режим тестирования'}
