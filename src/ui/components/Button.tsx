@@ -5,7 +5,7 @@ interface ButtonProps extends ComponentPropsWithRef<'button'> {
   variant?: 'light' | 'dark' | 'light-borderless'
 }
 
-export function Button({ variant = 'dark', type = 'button', disabled = false, className, children, ...props }: ButtonProps) {
+export function Button({ variant, type = 'button', disabled = false, className, children, ...props }: ButtonProps) {
   const colorStyles = (variant: ButtonProps['variant'], disabled: boolean) => {
     switch (variant) {
       case 'light':
@@ -15,7 +15,7 @@ export function Button({ variant = 'dark', type = 'button', disabled = false, cl
       case 'dark':
         return twMerge('bg-blue text-light/60 border-light', !disabled && 'text-light hover:bg-dark-blue active:bg-light-blue')
       case undefined:
-        return ''
+        return twMerge('bg-transparent text-dark/60 border-none', !disabled && 'text-dark hover:bg-dark/10 active:bg-dark/20')
     }
   }
 

@@ -105,8 +105,8 @@ export function HistoryPanel() {
                 </p>
               </div>
               <div className='flex flex-col gap-2.5'>
-                <Button onClick={() => setIsTaskOpen(true)}>Задание</Button>
-                <Button onClick={() => setIsConfirmOpen(true)}>Завершить досрочно</Button>
+                <Button onClick={() => setIsTaskOpen(true)} variant='dark'>Задание</Button>
+                <Button onClick={() => setIsConfirmOpen(true)} variant='dark'>Завершить досрочно</Button>
               </div>
             </div>
           </div>
@@ -146,12 +146,12 @@ export function HistoryPanel() {
             </button>
             <div className='flex flex-col gap-2.5'>
               <Tooltip content='Задание'>
-                <Button onClick={() => setIsTaskOpen(true)} className='p-1'>
+                <Button onClick={() => setIsTaskOpen(true)} className='p-1' variant='dark'>
                   <TaskIcon />
                 </Button>
               </Tooltip>
               <Tooltip content='Завершить досрочно'>
-                <Button onClick={() => setIsConfirmOpen(true)} className='p-1'>
+                <Button onClick={() => setIsConfirmOpen(true)} className='p-1' variant='dark'>
                   <CancelIcon />
                 </Button>
               </Tooltip>

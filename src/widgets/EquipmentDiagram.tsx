@@ -209,22 +209,22 @@ export function EquipmentDiagram() {
     >
       <div className='sticky top-2.5 left-2.5 flex flex-col gap-2.5 z-2 w-max'>
         <Tooltip content='Приблизить'>
-          <Button onClick={upScale} className='w-8 h-8'>
+          <Button onClick={upScale} className='w-8 h-8' variant='dark'>
             <ScaleUpIcon className='w-full h-full' />
           </Button>
         </Tooltip>
         <Tooltip content='Отдалить'>
-          <Button onClick={downScale} className='w-8 h-8'>
+          <Button onClick={downScale} className='w-8 h-8' variant='dark'>
             <ScaleDownIcon className='w-full h-full' />
           </Button>
         </Tooltip>
         <Tooltip content='Сбросить зум'>
-          <Button onClick={resetScale} className='w-8 h-8'>
+          <Button onClick={resetScale} className='w-8 h-8' variant='dark'>
             <ScaleResetIcon className='w-full h-full' />
           </Button>
         </Tooltip>
         <Tooltip content={isFullscreen ? 'Свернуть' : 'На весь экран'}>
-          <Button onClick={toggleFullscreen} className='w-8 h-8'>
+          <Button onClick={toggleFullscreen} className='w-8 h-8' variant='dark'>
             {isFullscreen ? <FullscreenAltIcon className='w-full h-full' /> : <FullscreenIcon className='w-full h-full' />}
           </Button>
         </Tooltip>
