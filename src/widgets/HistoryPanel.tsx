@@ -53,7 +53,7 @@ export function HistoryPanel() {
             <p className='leading-[110%]'>
               {history.length - index}. {title}
             </p>
-            <p className='text-dark font-medium'>{isSuccess ? (description ?? title) : 'Выбрано неверно'}</p>
+            {description && <p className='text-dark font-medium'>{description}</p>}
           </div>
           {!isSuccess && <p>{scoreDelta}</p>}
         </div>
@@ -105,8 +105,12 @@ export function HistoryPanel() {
                 </p>
               </div>
               <div className='flex flex-col gap-2.5'>
-                <Button onClick={() => setIsTaskOpen(true)} variant='dark'>Задание</Button>
-                <Button onClick={() => setIsConfirmOpen(true)} variant='dark'>Завершить досрочно</Button>
+                <Button onClick={() => setIsTaskOpen(true)} variant='dark'>
+                  Задание
+                </Button>
+                <Button onClick={() => setIsConfirmOpen(true)} variant='dark'>
+                  Завершить досрочно
+                </Button>
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import type { SchemeStatus } from './types'
 
-export const buttons = ['inspection'] as const
+export const buttons = ['Визуальный осмотр'] as const
 export const mixers = ['3121/A', '3121/B', '3121/C', '3121/D', '3121/E', '3121/K', '3121/L', '3121/M', '3121/N', '3121/O'] as const
 export const circulators = ['3122/A', '3122/B', '3122/B1', '3122/C'] as const
 export const pumps = ['3129/1', '3129/2', '5145/1', '5145/2', '5145/3'] as const
