@@ -31,6 +31,7 @@ const normalizeWheelDelta = (e: WheelEvent, pageHeight: number) => {
 }
 
 export function EquipmentDiagram() {
+  const containerRef = useRef<HTMLDivElement>(null)
   const diagramRef = useRef<HTMLDivElement>(null)
   const { handlePointerDown, handlePointerMove, handlePointerUp, handlePointerCancel } = usePan(diagramRef)
 
@@ -171,7 +172,7 @@ export function EquipmentDiagram() {
   const [isFullscreen, setIsFullscreen] = useState(false)
 
   const toggleFullscreen = useCallback(async () => {
-    const element = diagramRef.current
+    const element = containerRef.current
     if (!element) return
 
     try {
@@ -199,42 +200,44 @@ export function EquipmentDiagram() {
   }, [])
 
   return (
-    <div
-      id='schema-diagram'
-      className={'grow relative bg-light rounded-st overflow-auto scrollbar-none w-full h-full cursor-grab select-none'}
-      ref={diagramRef}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerCancel}
-    >
-      <div className='sticky top-2.5 left-2.5 flex flex-col gap-2.5 z-2 w-max'>
-        <Tooltip content='Приблизить'>
-          <Button onClick={upScale} className='w-8 h-8' variant='dark'>
-            <ScaleUpIcon className='w-full h-full' />
-          </Button>
-        </Tooltip>
-        <Tooltip content='Отдалить'>
-          <Button onClick={downScale} className='w-8 h-8' variant='dark'>
-            <ScaleDownIcon className='w-full h-full' />
-          </Button>
-        </Tooltip>
-        <Tooltip content='Сбросить зум'>
-          <Button onClick={resetScale} className='w-8 h-8' variant='dark'>
-            <ScaleResetIcon className='w-full h-full' />
-          </Button>
-        </Tooltip>
-        <Tooltip content={isFullscreen ? 'Свернуть' : 'На весь экран'}>
-          <Button onClick={toggleFullscreen} className='w-8 h-8' variant='dark'>
-            {isFullscreen ? <FullscreenAltIcon className='w-full h-full' /> : <FullscreenIcon className='w-full h-full' />}
-          </Button>
-        </Tooltip>
-      </div>
-      <div ref={wrapperRef} className='absolute top-0 left-0'>
-        <SpacingDiagram
-          ref={schemaRef}
-          className='w-348.75 h-156.5 top-0 left-0 absolute origin-top-left font-secondary'
-        />
+    <div ref={containerRef} className='grow relative min-w-0'>
+      <div
+        id='schema-diagram'
+        className={'w-full h-full relative bg-light rounded-st overflow-auto scrollbar-none cursor-grab select-none'}
+        ref={diagramRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerCancel}
+      >
+        <div className='sticky top-2.5 left-2.5 flex flex-col gap-2.5 z-2 w-max'>
+          <Tooltip content='Приблизить'>
+            <Button onClick={upScale} className='w-8 h-8' variant='dark'>
+              <ScaleUpIcon className='w-full h-full' />
+            </Button>
+          </Tooltip>
+          <Tooltip content='Отдалить'>
+            <Button onClick={downScale} className='w-8 h-8' variant='dark'>
+              <ScaleDownIcon className='w-full h-full' />
+            </Button>
+          </Tooltip>
+          <Tooltip content='Сбросить зум'>
+            <Button onClick={resetScale} className='w-8 h-8' variant='dark'>
+              <ScaleResetIcon className='w-full h-full' />
+            </Button>
+          </Tooltip>
+          <Tooltip content={isFullscreen ? 'Свернуть' : 'На весь экран'}>
+            <Button onClick={toggleFullscreen} className='w-8 h-8' variant='dark'>
+              {isFullscreen ? <FullscreenAltIcon className='w-full h-full' /> : <FullscreenIcon className='w-full h-full' />}
+            </Button>
+          </Tooltip>
+        </div>
+        <div ref={wrapperRef} className='absolute top-0 left-0'>
+          <SpacingDiagram
+            ref={schemaRef}
+            className='w-348.75 h-156.5 top-0 left-0 absolute origin-top-left font-secondary'
+          />
+        </div>
       </div>
       <ToastProvider />
     </div>
