@@ -18,7 +18,7 @@ export const steps: Step[] = [
         type: 'sequence',
         actions: [
           defineAction(
-            'inspection' satisfies ButtonId,
+            'Визуальный осмотр' satisfies ButtonId,
             {
               title: 'Осмотр оборудования',
               toast:

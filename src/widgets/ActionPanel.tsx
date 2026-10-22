@@ -43,7 +43,7 @@ export function ActionPanel() {
           </div>
           <div className='flex flex-col gap-2.5'>
             <Button
-              onClick={() => setObject({ id: 'inspection', status: 'manual', value: { checked: true } })}
+              onClick={() => setObject({ id: 'Визуальный осмотр', status: 'manual', value: { checked: true } })}
               variant='light'
               className='text-nowrap'
             >
