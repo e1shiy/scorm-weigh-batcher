@@ -8,6 +8,7 @@ import FullscreenIcon from '../assets/icons/fullscreen.svg?react'
 import FullscreenAltIcon from '../assets/icons/fullscreen-alt.svg?react'
 import Tooltip from '../ui/components/Tooltip'
 import SpacingDiagram, { SCHEMA_WIDTH, SCHEMA_HEIGHT } from '../ui/scheme/statik/schema'
+import { ToastProvider } from '../ui/components/toast/ToastProvider'
 
 const MIN_ZOOM = 1
 const MAX_ZOOM = 10
@@ -235,6 +236,7 @@ export function EquipmentDiagram() {
           className='w-348.75 h-156.5 top-0 left-0 absolute origin-top-left font-secondary'
         />
       </div>
+      <ToastProvider />
     </div>
   )
 }
