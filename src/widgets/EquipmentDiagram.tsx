@@ -210,34 +210,34 @@ export function EquipmentDiagram() {
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerCancel}
       >
-        <div className='sticky top-2.5 left-2.5 flex flex-col gap-2.5 z-2 w-max'>
-          <Tooltip content='Приблизить'>
-            <Button onClick={upScale} className='w-8 h-8' variant='dark'>
-              <ScaleUpIcon className='w-full h-full' />
-            </Button>
-          </Tooltip>
-          <Tooltip content='Отдалить'>
-            <Button onClick={downScale} className='w-8 h-8' variant='dark'>
-              <ScaleDownIcon className='w-full h-full' />
-            </Button>
-          </Tooltip>
-          <Tooltip content='Сбросить зум'>
-            <Button onClick={resetScale} className='w-8 h-8' variant='dark'>
-              <ScaleResetIcon className='w-full h-full' />
-            </Button>
-          </Tooltip>
-          <Tooltip content={isFullscreen ? 'Свернуть' : 'На весь экран'}>
-            <Button onClick={toggleFullscreen} className='w-8 h-8' variant='dark'>
-              {isFullscreen ? <FullscreenAltIcon className='w-full h-full' /> : <FullscreenIcon className='w-full h-full' />}
-            </Button>
-          </Tooltip>
-        </div>
         <div ref={wrapperRef} className='absolute top-0 left-0'>
           <SpacingDiagram
             ref={schemaRef}
             className='w-348.75 h-156.5 top-0 left-0 absolute origin-top-left font-secondary'
           />
         </div>
+      </div>
+      <div className='absolute top-2.5 left-2.5 flex flex-col gap-2.5 z-2 w-max'>
+        <Tooltip content='Приблизить'>
+          <Button onClick={upScale} className='w-8 h-8' variant='dark'>
+            <ScaleUpIcon className='w-full h-full' />
+          </Button>
+        </Tooltip>
+        <Tooltip content='Отдалить'>
+          <Button onClick={downScale} className='w-8 h-8' variant='dark'>
+            <ScaleDownIcon className='w-full h-full' />
+          </Button>
+        </Tooltip>
+        <Tooltip content='Сбросить зум'>
+          <Button onClick={resetScale} className='w-8 h-8' variant='dark'>
+            <ScaleResetIcon className='w-full h-full' />
+          </Button>
+        </Tooltip>
+        <Tooltip content={isFullscreen ? 'Свернуть' : 'На весь экран'}>
+          <Button onClick={toggleFullscreen} className='w-8 h-8' variant='dark'>
+            {isFullscreen ? <FullscreenAltIcon className='w-full h-full' /> : <FullscreenIcon className='w-full h-full' />}
+          </Button>
+        </Tooltip>
       </div>
       <ToastProvider />
     </div>
