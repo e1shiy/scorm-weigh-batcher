@@ -14,40 +14,36 @@ import PopUpArrowRightIcon from '../../../assets/icons/pop-up-arrow-right.svg?re
 import PopUpArrowRightWithLineIcon from '../../../assets/icons/pop-up-arrow-right-with-line.svg?react'
 import PopUpStoppedIcon from '../../../assets/icons/pop-up-stopped.svg?react'
 import OpenedLockIcon from '../../../assets/icons/opened-lock.svg?react'
+import { SetpointInput } from './SetpointInput.tsx'
+import { setpointModes } from './setpointModes.ts'
 import { usePopUpStore } from './usePopUpStore.ts'
 import type { DeviceValue, ValveValue } from '../../../scenario/objects.ts'
 
 const SETPOINT_MIN = 0
 const SETPOINT_MAX = 100
 
-const ValueField = ({ className, onClick, children }: { className?: string; onClick?: () => void; children: ReactNode }) => {
-  const classes = twMerge(
-    'w-9.75 h-2.75 flex items-center justify-end pr-px border border-black bg-dark-gray text-[10px] leading-none',
-    className
-  )
-
-  return onClick ? (
-    <button type='button' className={twMerge(classes, 'hover:brightness-80')} onClick={onClick}>
-      {children}
-    </button>
-  ) : (
-    <div className={classes}>{children}</div>
-  )
-}
+const ValueField = ({ className, children }: { className?: string; children: ReactNode }) => (
+  <div
+    className={twMerge(
+      'w-9.75 h-2.75 flex items-center justify-end pr-px border border-black bg-dark-gray text-[10px] leading-none',
+      className
+    )}
+  >
+    {children}
+  </div>
+)
 
 const SetpointRow = ({
   label,
   color,
   valueClassName,
   isActive,
-  onClick,
   children
 }: {
   label: string
   color: string
   valueClassName?: string
   isActive?: boolean
-  onClick?: () => void
   children: ReactNode
 }) => (
   <div className='flex items-end'>
@@ -60,9 +56,7 @@ const SetpointRow = ({
     >
       {label}
     </span>
-    <ValueField className={twMerge(color, valueClassName)} onClick={onClick}>
-      {children}
-    </ValueField>
+    <ValueField className={twMerge(color, valueClassName)}>{children}</ValueField>
     <span className='ml-0.5 text-[8px] leading-none'>%</span>
   </div>
 )
@@ -75,7 +69,6 @@ export function PopUp() {
   const objects = useScenarioStore(s => s.objects)
   const setObject = useScenarioStore(s => s.setObject)
 
-  const [isEditingSetpoint, setIsEditingSetpoint] = useState(false)
   const [setpointDelta, setSetpointDelta] = useState(0)
 
   if (!objectId) return
@@ -84,19 +77,22 @@ export function PopUp() {
   const { setpoint } = value
 
   const isDevice = isDeviceValue(value)
+  const setpointMode = setpointModes[objectId]
   const hasSetpoint = setpoint !== undefined
-  const isApplyPanelShown = hasSetpoint && isEditingSetpoint
+  const isApplyPanelShown = hasSetpoint && setpointMode === 'panel'
+  const isSetpointInputShown = hasSetpoint && setpointMode === 'input'
 
   const RunningIcon = hasSetpoint ? PopUpArrowRightWithLineIcon : PopUpArrowRightIcon
 
   const handleClose = () => {
-    setIsEditingSetpoint(false)
+    setSetpointDelta(0)
     setIsOpen(false)
   }
 
-  const handleEditSetpoint = () => {
-    setSetpointDelta(0)
-    setIsEditingSetpoint(true)
+  const clampSetpoint = (nextSetpoint: number) => Math.min(Math.max(nextSetpoint, SETPOINT_MIN), SETPOINT_MAX)
+
+  const handleSetpointInput = (nextSetpoint: number) => {
+    setObject({ id: objectId, status, value: { ...value, setpoint: clampSetpoint(nextSetpoint) } })
   }
 
   const handleStatusChange = (nextStatus: SchemeStatus) => {
@@ -109,11 +105,10 @@ export function PopUp() {
 
   const handleApplySetpoint = () => {
     if (hasSetpoint) {
-      const nextSetpoint = Math.min(Math.max(setpoint + setpointDelta, SETPOINT_MIN), SETPOINT_MAX)
       setIsOpen(false)
-      setObject({ id: objectId, status, value: { ...value, setpoint: nextSetpoint } })
+      setObject({ id: objectId, status, value: { ...value, setpoint: clampSetpoint(setpoint + setpointDelta) } })
     }
-    setIsEditingSetpoint(false)
+    setSetpointDelta(0)
   }
 
   return (
@@ -190,10 +185,9 @@ export function PopUp() {
                   label='Уставка'
                   color='border-deep-blue'
                   valueClassName='bg-light'
-                  isActive={isEditingSetpoint}
-                  onClick={handleEditSetpoint}
+                  isActive={isApplyPanelShown}
                 >
-                  <div className='cursor-pointer'>{formatValue(setpoint)}</div>
+                  {isSetpointInputShown ? <SetpointInput value={setpoint} onApply={handleSetpointInput} /> : formatValue(setpoint)}
                 </SetpointRow>
                 <SetpointRow label='Эхоконтроль' color='border-teal'>
                   {formatValue(setpoint)}
@@ -210,7 +204,7 @@ export function PopUp() {
           delta={setpointDelta}
           onStep={step => setSetpointDelta(delta => delta + step)}
           onApply={handleApplySetpoint}
-          onCancel={() => setIsEditingSetpoint(false)}
+          onCancel={() => setSetpointDelta(0)}
         />
       )}
     </Modal>
