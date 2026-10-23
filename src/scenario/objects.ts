@@ -58,38 +58,47 @@ export type VentId = (typeof vents)[number]
 
 export type ValveId = (typeof valves)[number]
 
-export const CIRCULATOR_START_SETPOINT = 30
+type StartValues = { amperage: number; setpoint?: number }
 
-export const startAmperage: Record<DeviceId, number> = {
-  '3121/A': 10,
-  '3121/B': 10,
-  '3121/C': 10,
-  '3121/D': 10,
-  '3121/E': 10,
-  '3121/K': 10,
-  '3121/L': 10,
-  '3121/M': 10,
-  '3121/N': 10,
-  '3121/O': 10,
-  '3122/A': 10,
-  '3122/B': 10,
-  '3122/B1': 10,
-  '3122/C': 10,
-  '3166A': 10,
-  '3119': 10,
-  '1119/V': 10,
-  '1119/B': 10,
-  '3129/1': 10,
-  '3129/2': 10,
-  '5145/1': 10,
-  '5145/2': 10,
-  '5145/3': 10,
-  '3117/1': 10,
-  '3117/2': 10,
-  '1118/3': 10,
-  '1118/4': 10,
-  '1118/1': 10,
-  '1118/2': 10,
-  '1119': 10,
-  '3166B' : 10,
+export const startValues: Record<DeviceId, StartValues> = {
+  // мешалки
+  '3121/A': { amperage: 50 },
+  '3121/B': { amperage: 46 },
+  '3121/C': { amperage: 45 },
+  '3121/D': { amperage: 48 },
+  '3121/E': { amperage: 54 },
+  '3121/K': { amperage: 50 },
+  '3121/L': { amperage: 46 },
+  '3121/M': { amperage: 45 },
+  '3121/N': { amperage: 48 },
+  '3121/O': { amperage: 54 },
+
+  // циркуляторы
+  '3122/A': { amperage: 90, setpoint: 30 },
+  '3122/B': { amperage: 87, setpoint: 30 },
+  '3122/B1': { amperage: 85, setpoint: 30 },
+  '3122/C': { amperage: 89, setpoint: 30 },
+
+  // вентиляторы
+  '3166A': { amperage: 118.5 },
+  '3166B': { amperage: 0 },
+
+  // конвейеры
+  '3119': { amperage: 4.7 },
+  '1119/V': { amperage: 8.7, setpoint: 60 },
+  '1119/B': { amperage: 15 },
+  '3117/1': { amperage: 0 },
+  '3117/2': { amperage: 0 },
+  '1118/3': { amperage: 0 },
+  '1118/4': { amperage: 0 },
+  '1118/1': { amperage: 0 },
+  '1118/2': { amperage: 0 },
+  '1119': { amperage: 0 },
+
+  // насосы
+  '3129/1': { amperage: 80, setpoint: 10 },
+  '3129/2': { amperage: 80, setpoint: 10 },
+  '5145/1': { amperage: 45, setpoint: 10 },
+  '5145/2': { amperage: 43, setpoint: 10 },
+  '5145/3': { amperage: 43, setpoint: 10 },
 }
