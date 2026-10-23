@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { useScormStore } from '../api/useScormStore'
 import { applyChange } from './engine'
 import { objects } from './objects'
-import { buildStateAtStep } from './snapshot'
+import { buildStateAtStep, completedActions } from './snapshot'
 import { steps } from './steps'
 import type { ObjectsState, ScenarioActions, ScenarioState, Step } from './types'
 
@@ -12,7 +12,10 @@ const WRONG_ACTION_PENALTY = 1 // из 100 баллов.
 let idCounter = 0
 const createId = () => `${Date.now().toString(36)}-${(idCounter++).toString(36)}-${Math.random().toString(36).slice(2, 8)}`
 
-const createProgress = (step: Step | undefined) => step?.groups.map(group => group.actions.map(() => false)) ?? []
+const createProgress = (step: Step | undefined, doneInStep = 0) => {
+  let left = doneInStep
+  return step?.groups.map(group => group.actions.map(() => left-- > 0)) ?? []
+}
 
 // Поля value, которыми владеет стор: меняются только эффектами действий,
 // значение от UI их не перезаписывает. setpoint задаёт UI, поэтому его здесь нет.
@@ -39,11 +42,14 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
     history: [],
 
     // Перескок из админ-панели: объекты приводятся к состоянию на начало шага.
-    setCurrentStep: stepIndex => {
+    setCurrentStep: (stepIndex, doneInStep = 0) => {
       set({
         currentStepIndex: stepIndex,
-        stepProgress: createProgress(scenarioSteps[stepIndex]),
-        objects: buildStateAtStep(scenarioSteps, initialObjects, stepIndex),
+        stepProgress: createProgress(scenarioSteps[stepIndex], doneInStep),
+        objects: buildStateAtStep(scenarioSteps, initialObjects, stepIndex, doneInStep),
+        history: completedActions(scenarioSteps, stepIndex, doneInStep)
+          .map(action => ({ id: createId(), meta: action.meta, scoreDelta: 0, isSuccess: true }))
+          .reverse(),
       })
       if (stepIndex >= get().totalSteps) useScormStore.getState().finish()
     },

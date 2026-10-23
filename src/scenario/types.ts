@@ -60,5 +60,5 @@ export type ScenarioState = {
 
 export type ScenarioActions = {
   setObject: <Id extends ObjectId>(change: ObjectChange<Id>) => void
-  setCurrentStep: (stepIndex: number) => void // для админ-панели
+setCurrentStep: (stepIndex: number, doneInStep?: number) => void // для админ-панели
 }
