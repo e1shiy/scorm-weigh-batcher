@@ -85,7 +85,7 @@ export default function SpacingDiagram({ className, style, ref }: SpacingDiagram
         ))}
 
         {Circulator_Data.map(({ x, y, ...props }) => (
-          <At key={props.id} x={x} y={y}><Circulator {...props} /></At>
+          <At key={props.id} x={x} y={y}><Circulator {...props} className="absolute -translate-x-1/2"/></At>
         ))}
 
         {Vent_Data.map(({ x, y, ...props }) => (

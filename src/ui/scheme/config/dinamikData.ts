@@ -25,10 +25,10 @@ export const Mixer_Data: Placed<ComponentProps<typeof Mixer>>[] = [
 ]
 
 export const Circulator_Data: Placed<ComponentProps<typeof Circulator>>[] = [
-  { id: '3122/A', x: 340, y: 452 },
-  { id: '3122/B', x: 263, y: 452 },
-  { id: '3122/B1', x: 853, y: 452 },
-  { id: '3122/C', x: 778, y: 452 },
+  { id: '3122/A', x: 366, y: 452 },
+  { id: '3122/B', x: 288, y: 452 },
+  { id: '3122/B1', x: 877, y: 452 },
+  { id: '3122/C', x: 799, y: 452 },
 ]
 
 export const Vent_Data: Placed<ComponentProps<typeof Vent>>[] = [{ id: '3166A', x: 372, y: 300 }, { id: '3166B', x: 740, y: 300 }]
