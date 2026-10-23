@@ -1,4 +1,4 @@
-import { CIRCULATOR_START_SETPOINT, circulators, startAmperage } from './objects'
+import { startValues } from './objects'
 import type { Action, ActionMeta, SchemeStatus, StepGroup } from './types'
 import type { AnyObject, CirculatorId, DeviceId, ObjectId, ValveId } from './objects'
 
