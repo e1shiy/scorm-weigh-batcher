@@ -1,9 +1,9 @@
-import {useRef, useState, type ReactNode} from 'react'
+import {useRef, type ReactNode} from 'react'
 import {twMerge} from 'tailwind-merge'
 import {PopUpButton} from './PopUpButton.tsx'
 import {Nudge} from './Nudge.tsx'
-import {formatValue} from './formatValue.ts'
 import PinIcon from '../../../assets/icons/pin.svg?react'
+import {DeltaInput} from "./DeltaInput.tsx";
 
 const STEPS = [-5, -1, 1, 5]
 
@@ -15,52 +15,14 @@ interface PopUpApplyPanelProps {
     onCancel?: () => void
 }
 
-const DELTA_PATTERN = /^[+-]?\d*[.,]?\d?$/
-const DELTA_LIMIT = 100
-
 const sunkenFieldClassName = twMerge(
     'w-12.75 h-[11.5px] flex items-center justify-end pr-0.5 border border-black bg-gray-alt',
     'shadow-[inset_2px_2px_0_var(--color-dark-gray)] text-[10px] leading-none'
 )
 
-const formatDelta = (value: number) => `${value > 0 ? '+' : ''}${formatValue(value)}`
-
 const SunkenField = ({children}: { children: ReactNode }) => (
     <div className={sunkenFieldClassName}>{children}</div>
 )
-
-const DeltaInput = ({value, onChange}: { value: number, onChange: (value: number) => void }) => {
-    const [draft, setDraft] = useState<string | null>(null)
-
-    const commit = () => {
-        if (draft !== null && draft !== '') {
-            const parsed = Number(draft.replace(',', '.'))
-            if (Number.isFinite(parsed)) {
-                const clamped = Math.min(Math.max(parsed, -DELTA_LIMIT), DELTA_LIMIT)
-                onChange(Math.round(clamped * 10) / 10)
-            }
-        }
-        setDraft(null)
-    }
-
-    return (
-        <input
-            type='text'
-            inputMode='decimal'
-            aria-label='Изменение уставки'
-            value={draft ?? formatDelta(value)}
-            onFocus={() => setDraft(formatDelta(value))}
-            onChange={event => {
-                if (DELTA_PATTERN.test(event.target.value)) setDraft(event.target.value)
-            }}
-            onBlur={commit}
-            onKeyDown={event => {
-                if (event.key === 'Enter') event.currentTarget.blur()
-            }}
-            className={twMerge(sunkenFieldClassName, 'text-right outline-none hover:brightness-80')}
-        />
-    )
-}
 
 const Triangle = ({className}: { className: string }) => (
     <div className={twMerge('w-1.25 h-[3.5px] bg-black', className)}/>
