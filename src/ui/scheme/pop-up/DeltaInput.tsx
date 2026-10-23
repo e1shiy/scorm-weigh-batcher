@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {twMerge} from "tailwind-merge";
 import {formatValue} from "./formatValue.ts";
 
 const DELTA_PATTERN = /^[+-]?\d*[.,]?\d?$/
@@ -34,10 +35,11 @@ export function DeltaInput({value, onChange}: { value: number, onChange: (value:
             onKeyDown={event => {
                 if (event.key === 'Enter') event.currentTarget.blur()
             }}
-            className={
-                'w-12.75 h-[11.5px] flex items-center justify-end pr-0.5 border border-black' +
-                'bg-gray-alt shadow-[inset_2px_2px_0_var(--color-dark-gray)] text-[10px]' +
-                'leading-none text-right outline-none hover:brightness-80'}
+            className={twMerge(
+                'w-12.75 h-[11.5px] flex items-center justify-end pr-0.5 border border-black',
+                'bg-gray-alt shadow-[inset_2px_2px_0_var(--color-dark-gray)] text-[10px]',
+                'leading-none text-right outline-none hover:brightness-80'
+            )}
         />
     )
 }
