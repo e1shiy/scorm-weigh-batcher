@@ -105,7 +105,6 @@ export function PopUp() {
 
   const handleApplySetpoint = () => {
     if (hasSetpoint) {
-      setIsOpen(false)
       setObject({ id: objectId, status, value: { ...value, setpoint: clampSetpoint(setpoint + setpointDelta) } })
     }
     setSetpointDelta(0)
