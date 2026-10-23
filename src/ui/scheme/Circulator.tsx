@@ -8,12 +8,14 @@ import LongMixerIcon from '../../assets/icons/long-mixer.svg?react'
 import { useScenarioStore } from '../../scenario/useScenarioStore'
 import type { CirculatorId } from '../../scenario/objects'
 import { usePopUpStore } from './pop-up/usePopUpStore'
+import {twMerge} from "tailwind-merge";
 
 export interface CirculatorProps {
   id: CirculatorId
+    className?: string
 }
 
-export function Circulator({ id }: CirculatorProps) {
+export function Circulator({ id, className }: CirculatorProps) {
   const setIsOpen = usePopUpStore(s => s.setIsOpen)
   const setObjectId = usePopUpStore(s => s.setObjectId)
   const handlePopUpOpen = () => {
@@ -34,7 +36,7 @@ export function Circulator({ id }: CirculatorProps) {
   const modeBadge = <Indicator className={status === 'auto' ? 'bg-neon-green' : ''}>{status === 'manual' ? 'M' : 'A'}</Indicator>
 
   return (
-    <div className='flex flex-col justify-start items-center gap-px'>
+    <div className={twMerge('flex flex-col justify-start items-center gap-px', className)}>
       <VentPanel isRunning={running} />
       <Panel id={`2Н${id}`} headerClassName='bg-light-seagreen' />
       <div className='flex gap-0.5'>
