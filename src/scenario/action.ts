@@ -1,6 +1,6 @@
-import { CIRCULATOR_START_SETPOINT, circulators, startAmperage } from './objects'
+import { startValues } from './objects'
 import type { Action, ActionMeta, SchemeStatus, StepGroup } from './types'
-import type { AnyObject, CirculatorId, DeviceId, ObjectId, ValveId } from './objects'
+import type { AnyObject, DeviceId, ObjectId, ValveId } from './objects'
 
 type ValueOf<Id extends ObjectId> = Extract<AnyObject, { id: Id }>['value']
 type State<Id extends ObjectId> = { status: SchemeStatus; value: ValueOf<Id> }
@@ -24,9 +24,6 @@ export const defineAction = <Id extends ObjectId>(
 
 export const inRange = (value: number, min: number, max = min) => value >= min && value <= max
 
-const isCirculator = (id: DeviceId): id is CirculatorId =>
-  (circulators as readonly DeviceId[]).includes(id)
-
 // Пуск: running: true.
 // Эффект: у всех amperage 0 → число, у циркуляторов дополнительно setpoint 0 → 30.
 export const start = (id: DeviceId, meta: ActionMeta) =>
@@ -34,11 +31,7 @@ export const start = (id: DeviceId, meta: ActionMeta) =>
     id,
     meta,
     (_s, v) => v.running,
-    v => ({
-      ...v,
-      amperage: startAmperage[id],
-      ...(isCirculator(id) ? { setpoint: CIRCULATOR_START_SETPOINT } : {}),
-    }),
+    v => ({ ...v, ...startValues[id] }),
     ({ status, value }) => ({ status, value: { ...value, running: true } }),
   )
 
