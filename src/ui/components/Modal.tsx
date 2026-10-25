@@ -48,7 +48,7 @@ export function Modal({ children, className, isOpened, onClose, onOpen }: ModalP
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.1 }}
-          className={'fixed inset-0 flex-center w-screen h-dvh bg-dark/60 z-1000'}
+          className={'fixed inset-0 flex-center w-screen h-dvh z-1000'}
           role={'dialog'}
           aria-modal={'true'}
         >
