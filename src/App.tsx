@@ -8,7 +8,6 @@ import logoSrc from './assets/logo.png'
 import { AdminPanel } from './widgets/admin/AdminPanel'
 import { useAdminStore } from './widgets/admin/useAdminStore'
 import { AnimatePresence, motion } from 'motion/react'
-import { PopUp } from './ui/scheme/pop-up/PopUp'
 
 function App() {
   // const initialize = useScormStore(s => s.initialize)
@@ -57,7 +56,6 @@ function App() {
         <HistoryPanel />
       </div>
       <ResultsModal isOpened={isFinished} />
-      <PopUp />
     </>
   )
 }
