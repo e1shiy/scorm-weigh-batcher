@@ -10,6 +10,7 @@ import { PopUpGauge } from './PopUpGauge.tsx'
 import { PopUpApplyPanel } from './PopUpApplyPanel.tsx'
 import { PopUpDropdown } from './PopUpDropdown.tsx'
 import { formatValue } from './formatValue.ts'
+import { clamp } from '../../../lib/clamp.ts'
 import PopUpArrowRightIcon from '../../../assets/icons/pop-up-arrow-right.svg?react'
 import PopUpArrowRightWithLineIcon from '../../../assets/icons/pop-up-arrow-right-with-line.svg?react'
 import PopUpStoppedIcon from '../../../assets/icons/pop-up-stopped.svg?react'
@@ -89,10 +90,8 @@ export function PopUp() {
     setIsOpen(false)
   }
 
-  const clampSetpoint = (nextSetpoint: number) => Math.min(Math.max(nextSetpoint, SETPOINT_MIN), SETPOINT_MAX)
-
   const handleSetpointInput = (nextSetpoint: number) => {
-    setObject({ id: objectId, status, value: { ...value, setpoint: clampSetpoint(nextSetpoint) } })
+    setObject({ id: objectId, status, value: { ...value, setpoint: clamp(nextSetpoint, SETPOINT_MIN, SETPOINT_MAX) } })
   }
 
   const handleStatusChange = (nextStatus: SchemeStatus) => {
@@ -105,7 +104,7 @@ export function PopUp() {
 
   const handleApplySetpoint = () => {
     if (hasSetpoint) {
-      setObject({ id: objectId, status, value: { ...value, setpoint: clampSetpoint(setpoint + setpointDelta) } })
+      setObject({ id: objectId, status, value: { ...value, setpoint: clamp(setpoint + setpointDelta, SETPOINT_MIN, SETPOINT_MAX) } })
     }
     setSetpointDelta(0)
   }

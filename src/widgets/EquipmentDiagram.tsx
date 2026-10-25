@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { usePan } from '../lib/usePan'
+import { clamp } from '../lib/clamp'
 import { Button } from '../ui/components/Button'
 import ScaleUpIcon from '../assets/icons/scale-up.svg?react'
 import ScaleDownIcon from '../assets/icons/scale-down.svg?react'
@@ -20,8 +21,6 @@ const ZOOM_SMOOTH_FACTOR = 0.2
 const ZOOM_SETTLE_EPSILON = 0.001
 
 const LINE_HEIGHT_PX = 16
-
-const clampZoom = (value: number) => Math.min(Math.max(value, MIN_ZOOM), MAX_ZOOM)
 
 /** Браузеры отдают дельту в пикселях, строках или страницах — приводим к пикселям */
 const normalizeWheelDelta = (e: WheelEvent, pageHeight: number) => {
@@ -103,12 +102,12 @@ export function EquipmentDiagram() {
   }, [tick])
 
   const upScale = () => {
-    targetZoomRef.current = clampZoom(targetZoomRef.current + ZOOM_STEP)
+    targetZoomRef.current = clamp(targetZoomRef.current + ZOOM_STEP, MIN_ZOOM, MAX_ZOOM)
     scheduleTick()
   }
 
   const downScale = () => {
-    targetZoomRef.current = clampZoom(targetZoomRef.current - ZOOM_STEP)
+    targetZoomRef.current = clamp(targetZoomRef.current - ZOOM_STEP, MIN_ZOOM, MAX_ZOOM)
     scheduleTick()
   }
 
@@ -157,7 +156,7 @@ export function EquipmentDiagram() {
     const pageHeight = diagramRef.current?.clientHeight ?? 0
     const delta = normalizeWheelDelta(e, pageHeight)
 
-    targetZoomRef.current = clampZoom(targetZoomRef.current * Math.exp(-delta * ZOOM_WHEEL_SPEED))
+    targetZoomRef.current = clamp(targetZoomRef.current * Math.exp(-delta * ZOOM_WHEEL_SPEED), MIN_ZOOM, MAX_ZOOM)
     scheduleTick()
   }, [scheduleTick])
 

@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {twMerge} from "tailwind-merge";
 import {formatValue} from "./formatValue.ts";
+import {clamp} from "../../../lib/clamp.ts";
 
 const DELTA_PATTERN = /^[+-]?\d*[.,]?\d?$/
 const DELTA_LIMIT = 100
@@ -14,8 +15,7 @@ export function DeltaInput({value, onChange}: { value: number, onChange: (value:
         if (draft !== null && draft !== '') {
             const parsed = Number(draft.replace(',', '.'))
             if (Number.isFinite(parsed)) {
-                const clamped = Math.min(Math.max(parsed, -DELTA_LIMIT), DELTA_LIMIT)
-                onChange(Math.round(clamped * 10) / 10)
+                onChange(Math.round(clamp(parsed, -DELTA_LIMIT, DELTA_LIMIT) * 10) / 10)
             }
         }
         setDraft(null)
