@@ -1,15 +1,16 @@
-import type { ReactNode } from 'react'
+import type { HTMLAttributes, ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { WindowHeader } from './WindowHeader'
 
 interface WindowProps {
   title: string
   onClose: () => void
+  dragHandleProps?: HTMLAttributes<HTMLElement>
   children?: ReactNode
   className?: string
 }
 
-export function Window({ title, onClose, children, className }: WindowProps) {
+export function Window({ title, onClose, dragHandleProps, children, className }: WindowProps) {
   return (
     <div
       className={twMerge(
@@ -18,7 +19,7 @@ export function Window({ title, onClose, children, className }: WindowProps) {
         className
       )}
     >
-      <WindowHeader title={title} onClose={onClose} />
+      <WindowHeader title={title} onClose={onClose} dragHandleProps={dragHandleProps} />
       {children}
     </div>
   )

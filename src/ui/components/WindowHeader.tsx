@@ -1,13 +1,16 @@
+import type { HTMLAttributes } from 'react'
+import { twMerge } from 'tailwind-merge'
 import CloseIcon from '../../assets/icons/x.svg?react'
 
 interface WindowHeaderProps {
   title: string
   onClose: () => void
+  dragHandleProps?: HTMLAttributes<HTMLElement>
 }
 
-export function WindowHeader({ title, onClose }: WindowHeaderProps) {
+export function WindowHeader({ title, onClose, dragHandleProps }: WindowHeaderProps) {
   return (
-    <header className='h-5 flex items-start justify-between'>
+    <header {...dragHandleProps} className={twMerge('h-5 flex items-start justify-between select-none', dragHandleProps && 'cursor-move')}>
       <span className='self-center pl-1 text-[9px] leading-none text-black truncate'>{title}</span>
       <button
         type='button'
