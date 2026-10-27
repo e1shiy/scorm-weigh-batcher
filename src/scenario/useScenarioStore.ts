@@ -1,11 +1,10 @@
 import { create } from 'zustand'
 import { useScormStore } from '../api/useScormStore'
-import { applyChange, showStepToasts } from './engine'
+import { applyChange } from './engine'
 import { objects } from './objects'
-import { buildStateAtStep } from './snapshot'
+import { buildStateAtStep, completedActions } from './snapshot'
 import { steps } from './steps'
 import type { ObjectsState, ScenarioActions, ScenarioState, Step } from './types'
-import { useToastStore } from '../ui/components/toast/useToastStore'
 
 const WRONG_ACTION_PENALTY = 1 // из 100 баллов.
 
@@ -31,7 +30,21 @@ const keepOwnedFields = (incoming: unknown, prev: unknown) => {
 
 // Фабрика принимает сценарий и объекты, чтобы в тестах подставлять свои.
 export const createScenarioStore = (scenarioSteps: Step[], initialObjects: ObjectsState) =>
-  create<ScenarioState & ScenarioActions>((set, get) => ({
+  create<ScenarioState & ScenarioActions>((set, get) => {
+    const jumpTo = (stepIndex: number, progress = createProgress(scenarioSteps[stepIndex])) => {
+      set({
+        currentStepIndex: stepIndex,
+        stepProgress: progress,
+        objects: buildStateAtStep(scenarioSteps, initialObjects, stepIndex, progress),
+        // история соответствует выполненным действиям, новые записи в начале
+        history: completedActions(scenarioSteps, stepIndex, progress)
+          .map(action => ({ id: createId(), meta: action.meta, scoreDelta: 0, isSuccess: true }))
+          .reverse(),
+      })
+      if (stepIndex >= get().totalSteps) useScormStore.getState().finish()
+    }
+
+    return {
     objects: initialObjects,
     steps: scenarioSteps,
     totalSteps: scenarioSteps.length,
@@ -39,18 +52,13 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
     stepProgress: createProgress(scenarioSteps[0]),
     history: [],
 
-    // Перескок из админ-панели: объекты приводятся к состоянию на начало шага.
-    setCurrentStep: stepIndex => {
-      set({
-        currentStepIndex: stepIndex,
-        stepProgress: createProgress(scenarioSteps[stepIndex]),
-        objects: buildStateAtStep(scenarioSteps, initialObjects, stepIndex)
-      })
-      
-      const prevStep = get().steps[stepIndex - 1]
-      if (prevStep) showStepToasts(prevStep)
-
-      if (stepIndex >= get().totalSteps) useScormStore.getState().finish()
+    // Перескок из админ-панели: объекты, прогресс и история приводятся к выбранному состоянию.
+    // progress — отмеченные подпункты шага stepIndex (по умолчанию ничего не отмечено).
+    setCurrentStep: stepIndex => jumpTo(stepIndex),
+    setStepProgress: (stepIndex, progress) => {
+      // Отмечены все подпункты: шаг выполнен.
+      if (progress.every(done => done.every(Boolean))) jumpTo(stepIndex + 1)
+      else jumpTo(stepIndex, progress)
     },
     setObject: change => {
       const { history, currentStepIndex, totalSteps, objects, stepProgress } = get()
@@ -65,7 +73,7 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
           history: [
             {
               id: createId(),
-              meta: { title: change.id[0]?.toUpperCase() + change.id.slice(1), description: 'Выбрано неверно' },
+              meta: { title: 'Выбрано неверно', description: String(change.id) },
               scoreDelta: -WRONG_ACTION_PENALTY,
               isSuccess: false
             },
@@ -93,12 +101,10 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
         ]
       })
 
-      useToastStore.getState().clear()
-      result.matched.map(action => action.meta.toast && useToastStore.getState().addToast({ message: action.meta.toast }))
-
       if (stepIndex === totalSteps) useScormStore.getState().finish()
     }
-  }))
+    }
+  })
 
 const initialObjects = Object.fromEntries(
   objects.map(object => [object.id, { status: object.status, value: object.value }])
