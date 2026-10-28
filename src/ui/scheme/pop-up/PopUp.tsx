@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react'
+import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { Window } from '../../components/Window.tsx'
 import { useScenarioStore } from '../../../scenario/useScenarioStore.ts'
@@ -11,6 +11,7 @@ import { PopUpApplyPanel } from './PopUpApplyPanel.tsx'
 import { PopUpDropdown } from './PopUpDropdown.tsx'
 import { formatValue } from './formatValue.ts'
 import { clamp } from '../../../lib/clamp.ts'
+import { useDrag } from '../../../lib/useDrag.ts'
 import PopUpArrowRightIcon from '../../../assets/icons/pop-up-arrow-right.svg?react'
 import PopUpArrowRightWithLineIcon from '../../../assets/icons/pop-up-arrow-right-with-line.svg?react'
 import PopUpStoppedIcon from '../../../assets/icons/pop-up-stopped.svg?react'
@@ -80,7 +81,23 @@ export function PopUp() {
   const [setpointDelta, setSetpointDelta] = useState(0)
 
   const rootRef = useRef<HTMLDivElement>(null)
-  const dragRef = useRef<{ pointerX: number; pointerY: number; origin: PopUpPosition } | null>(null)
+  const dragOriginRef = useRef<PopUpPosition | null>(null)
+
+  const dragHandleProps = useDrag({
+    onStart: event => {
+      if (event.button !== 0 || !position || (event.target as HTMLElement).closest('button')) return false
+      dragOriginRef.current = position
+      return true
+    },
+    onMove: (deltaX, deltaY) => {
+      const origin = dragOriginRef.current
+      const root = rootRef.current
+      if (!origin || !root) return
+
+      const { scale, size } = measurePopUp(root)
+      setPosition(clampPopUpPosition({ x: origin.x + deltaX / scale, y: origin.y + deltaY / scale }, size))
+    }
+  })
 
   useLayoutEffect(() => {
     const root = rootRef.current
@@ -108,30 +125,6 @@ export function PopUp() {
   const handleClose = () => {
     setSetpointDelta(0)
     setIsOpen(false)
-  }
-
-  const handleDragStart = (event: PointerEvent<HTMLElement>) => {
-    if (event.button !== 0 || !position || (event.target as HTMLElement).closest('button')) return
-
-    event.currentTarget.setPointerCapture(event.pointerId)
-    dragRef.current = { pointerX: event.clientX, pointerY: event.clientY, origin: position }
-  }
-
-  const handleDragMove = (event: PointerEvent<HTMLElement>) => {
-    const drag = dragRef.current
-    const root = rootRef.current
-    if (!drag || !root) return
-
-    const { scale, size } = measurePopUp(root)
-    const nextPosition = {
-      x: drag.origin.x + (event.clientX - drag.pointerX) / scale,
-      y: drag.origin.y + (event.clientY - drag.pointerY) / scale
-    }
-    setPosition(clampPopUpPosition(nextPosition, size))
-  }
-
-  const handleDragEnd = () => {
-    dragRef.current = null
   }
 
   const handleSetpointInput = (nextSetpoint: number) => {
@@ -163,12 +156,7 @@ export function PopUp() {
       <Window
         title={objectId}
         onClose={handleClose}
-        dragHandleProps={{
-          onPointerDown: handleDragStart,
-          onPointerMove: handleDragMove,
-          onPointerUp: handleDragEnd,
-          onPointerCancel: handleDragEnd
-        }}
+        dragHandleProps={dragHandleProps}
       >
         <div
           className={twMerge(

@@ -1,11 +1,12 @@
-import type { HTMLAttributes, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
+import type { DragHandleProps } from '../../lib/useDrag'
 import { WindowHeader } from './WindowHeader'
 
 interface WindowProps {
   title: string
   onClose: () => void
-  dragHandleProps?: HTMLAttributes<HTMLElement>
+  dragHandleProps?: DragHandleProps
   children?: ReactNode
   className?: string
 }

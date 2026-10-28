@@ -1,11 +1,11 @@
-import type { HTMLAttributes } from 'react'
 import { twMerge } from 'tailwind-merge'
+import type { DragHandleProps } from '../../lib/useDrag'
 import CloseIcon from '../../assets/icons/x.svg?react'
 
 interface WindowHeaderProps {
   title: string
   onClose: () => void
-  dragHandleProps?: HTMLAttributes<HTMLElement>
+  dragHandleProps?: DragHandleProps
 }
 
 export function WindowHeader({ title, onClose, dragHandleProps }: WindowHeaderProps) {
