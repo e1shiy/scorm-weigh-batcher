@@ -48,90 +48,94 @@ export default function SpacingDiagram({ className, style, ref }: SpacingDiagram
     >
       <DiagramDefs />
       <DiagramLines />
-
-      <foreignObject x="0" y="0" overflow="visible">
-        <div style={{ position: "absolute", left: 0, top: 395 }}>
-          <LeftPanelka />
-        </div>
-        <div style={{ position: "absolute", left: 678, top: 395 }}>
-          <RightPanelka />
-        </div>
-        <SidePanelka />
-        <SchemeLabels />
-
-        {/* Метки шагов */}
-        {MARKERS.map(({ id, left, top }) => (
-          <At key={id} x={left} y={top}><StepMarker id={id} /></At>
-        ))}
-
-        {Kvit_Data.map(({ id, x, y }, i) => (
-          <At key={`kvit-${id}-${i}`} x={x} y={y}><KvitButton /></At>
-        ))}
-
-        {Accord_Data.map(({ id, x, y, name }, i) => (
-          <At key={`accord-${id}-${i}`} x={x} y={y}><AccordItem name={name} /></At>
-        ))}
-
-        {P2k9_DATA.map(({ id, x, y, name }, i) => (
-          <At key={`p2k9-${id}-${i}`} x={x} y={y}><P2K9Badge name={name} /></At>
-        ))}
-
-        {Panel_Data.map(({ x, y, ...panelProps }, i) => (
-          <At key={`panel-${panelProps.id}-${i}`} x={x} y={y}><Panel {...panelProps} /></At>
-        ))}
-        {/* Оборудование, читающее состояние из стора */}
-        {Mixer_Data.map(({ x, y, ...props }) => (
-          <At key={props.id} x={x} y={y}><Mixer {...props} /></At>
-        ))}
-
-        {Circulator_Data.map(({ x, y, ...props }) => (
-          <At key={props.id} x={x} y={y}><Circulator {...props} className="absolute -translate-x-1/2"/></At>
-        ))}
-
-        {Vent_Data.map(({ x, y, ...props }) => (
-          <At key={props.id} x={x} y={y}><Vent {...props} /></At>
-        ))}
-
-        {Panel_Data.map(({ x, y, ...panelProps }) => (
-          <At key={`${panelProps.id}-${x}-${y}`} x={x} y={y}><Panel {...panelProps} /></At>
-        ))}
-
-        {Transporter_Data.map(({ x, y, ...props }) => (
-          <At key={props.id} x={x} y={y}><Transporter {...props} /></At>
-        ))}
-
-        {Valve_Data.map(({ x, y, ...props }) => (
-          <At key={props.id} x={x} y={y}><Valve {...props} /></At>
-        ))}
-        
-        {ValvePanel_Data.map(({ x, y, ...props }) => (
-          <At key={props.id} x={x} y={y}><ValvePanel {...props} /></At>
-        ))}
-
-        {Pump_Data.map(({ x, y, ...props }) => (
-          <At key={props.id} x={x} y={y}><Pump {...props} /></At>
-        ))}
-
-        {Long_Mixer_Data.map(({ id, x, y }) => (
-          <At key={`${id}-${x}-${y}`} x={x} y={y}><LongMixer id={id} /></At>
-        ))}
-
-        {LAU_Data.map(({ x, y, ...props}) => (
-          <At key={`${props.id}-${x}-${y}`} x={x} y={y}><LAU id={props.id}/></At>
-        ))}
-
-        {Silo_Data.map(({ x, y, ...props }) => (
-          <At key={props.id} x={x} y={y}><Silo id={props.id}/></At>
-        ))}
-        
-        <div className="relative">
-          <Apatite x={1155} y={12}/>
-          <Kvf3 x={1155} y={193}/>
-          <Kvf4 x={1155} y={336}/>
-          <Lvf x={1155} y={445}/>
-        </div>
-      </foreignObject>
     </svg>
+  );
+}
+
+export function SchemeObjects() {
+  return (
+    <>
+      <div style={{ position: "absolute", left: 0, top: 395 }}>
+        <LeftPanelka />
+      </div>
+      <div style={{ position: "absolute", left: 678, top: 395 }}>
+        <RightPanelka />
+      </div>
+      <SidePanelka />
+      <SchemeLabels />
+
+      {/* Метки шагов */}
+      {MARKERS.map(({ id, left, top }) => (
+        <At key={id} x={left} y={top}><StepMarker id={id} /></At>
+      ))}
+
+      {Kvit_Data.map(({ id, x, y }, i) => (
+        <At key={`kvit-${id}-${i}`} x={x} y={y}><KvitButton /></At>
+      ))}
+
+      {Accord_Data.map(({ id, x, y, name }, i) => (
+        <At key={`accord-${id}-${i}`} x={x} y={y}><AccordItem name={name} /></At>
+      ))}
+
+      {P2k9_DATA.map(({ id, x, y, name }, i) => (
+        <At key={`p2k9-${id}-${i}`} x={x} y={y}><P2K9Badge name={name} /></At>
+      ))}
+
+      {Panel_Data.map(({ x, y, ...panelProps }, i) => (
+        <At key={`panel-${panelProps.id}-${i}`} x={x} y={y}><Panel {...panelProps} /></At>
+      ))}
+      {/* Оборудование, читающее состояние из стора */}
+      {Mixer_Data.map(({ x, y, ...props }) => (
+        <At key={props.id} x={x} y={y}><Mixer {...props} /></At>
+      ))}
+
+      {Circulator_Data.map(({ x, y, ...props }) => (
+        <At key={props.id} x={x} y={y}><Circulator {...props} className="absolute -translate-x-1/2"/></At>
+      ))}
+
+      {Vent_Data.map(({ x, y, ...props }) => (
+        <At key={props.id} x={x} y={y}><Vent {...props} /></At>
+      ))}
+
+      {Panel_Data.map(({ x, y, ...panelProps }) => (
+        <At key={`${panelProps.id}-${x}-${y}`} x={x} y={y}><Panel {...panelProps} /></At>
+      ))}
+
+      {Transporter_Data.map(({ x, y, ...props }) => (
+        <At key={props.id} x={x} y={y}><Transporter {...props} /></At>
+      ))}
+
+      {Valve_Data.map(({ x, y, ...props }) => (
+        <At key={props.id} x={x} y={y}><Valve {...props} /></At>
+      ))}
+      
+      {ValvePanel_Data.map(({ x, y, ...props }) => (
+        <At key={props.id} x={x} y={y}><ValvePanel {...props} /></At>
+      ))}
+
+      {Pump_Data.map(({ x, y, ...props }) => (
+        <At key={props.id} x={x} y={y}><Pump {...props} /></At>
+      ))}
+
+      {Long_Mixer_Data.map(({ id, x, y }) => (
+        <At key={`${id}-${x}-${y}`} x={x} y={y}><LongMixer id={id} /></At>
+      ))}
+
+      {LAU_Data.map(({ x, y, ...props}) => (
+        <At key={`${props.id}-${x}-${y}`} x={x} y={y}><LAU id={props.id}/></At>
+      ))}
+
+      {Silo_Data.map(({ x, y, ...props }) => (
+        <At key={props.id} x={x} y={y}><Silo id={props.id}/></At>
+      ))}
+      
+      <div className="relative">
+        <Apatite x={1155} y={12}/>
+        <Kvf3 x={1155} y={193}/>
+        <Kvf4 x={1155} y={336}/>
+        <Lvf x={1155} y={445}/>
+      </div>
+    </>
   );
 }
 // 2

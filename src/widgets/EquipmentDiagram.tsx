@@ -8,7 +8,7 @@ import ScaleResetIcon from '../assets/icons/scale-reset.svg?react'
 import FullscreenIcon from '../assets/icons/fullscreen.svg?react'
 import FullscreenAltIcon from '../assets/icons/fullscreen-alt.svg?react'
 import Tooltip from '../ui/components/Tooltip'
-import SpacingDiagram, { SCHEMA_WIDTH, SCHEMA_HEIGHT } from '../ui/scheme/statik/schema'
+import SpacingDiagram, { SchemeObjects, SCHEMA_WIDTH, SCHEMA_HEIGHT } from '../ui/scheme/statik/schema'
 import { ToastProvider } from '../ui/components/toast/ToastProvider'
 import { PopUp } from '../ui/scheme/pop-up/PopUp'
 import { usePopUpStore } from '../ui/scheme/pop-up/usePopUpStore'
@@ -49,6 +49,7 @@ export function EquipmentDiagram() {
 
   const schemaRef = useRef<SVGSVGElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
+  const objectsLayerRef = useRef<HTMLDivElement>(null)
   const popUpLayerRef = useRef<HTMLDivElement>(null)
   const focusPointRef = useRef<{ x: number; y: number } | null>(null)
 
@@ -75,6 +76,7 @@ export function EquipmentDiagram() {
     wrapper.style.width = `${SCHEMA_WIDTH * nextScale}px`
     wrapper.style.height = `${SCHEMA_HEIGHT * nextScale}px`
     schema.style.scale = `${nextScale}`
+    if (objectsLayerRef.current) objectsLayerRef.current.style.zoom = `${nextScale}`
     if (popUpLayerRef.current) popUpLayerRef.current.style.zoom = `${nextScale}`
 
     if (prevScale === nextScale) return
@@ -282,8 +284,14 @@ export function EquipmentDiagram() {
         <div ref={wrapperRef} className='absolute top-0 left-0'>
           <SpacingDiagram
             ref={schemaRef}
-            className={twMerge('w-348.75 h-156.5 top-0 left-0 absolute origin-top-left font-secondary', isPopUpOpen && 'pointer-events-none')}
+            className='w-348.75 h-156.5 top-0 left-0 absolute origin-top-left'
           />
+          <div
+            ref={objectsLayerRef}
+            className={twMerge('absolute top-0 left-0 w-348.75 h-156.5 font-secondary', isPopUpOpen && 'pointer-events-none')}
+          >
+            <SchemeObjects />
+          </div>
           <div ref={popUpLayerRef} className='absolute top-0 left-0 w-348.75 h-156.5 pointer-events-none'>
             <PopUp />
           </div>
