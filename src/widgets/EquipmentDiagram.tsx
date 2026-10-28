@@ -292,7 +292,11 @@ export function EquipmentDiagram() {
           >
             <SchemeObjects />
           </div>
-          <div ref={popUpLayerRef} className='absolute top-0 left-0 w-348.75 h-156.5 pointer-events-none'>
+          <div
+            ref={popUpLayerRef}
+            className='absolute top-0 left-0 w-348.75 h-156.5 pointer-events-none'
+            onPointerDown={event => event.stopPropagation()}
+          >
             <PopUp />
           </div>
         </div>
