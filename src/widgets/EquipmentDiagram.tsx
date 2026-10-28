@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { usePan } from '../lib/usePan'
+import { clamp } from '../lib/clamp'
 import { Button } from '../ui/components/Button'
 import ScaleUpIcon from '../assets/icons/scale-up.svg?react'
 import ScaleDownIcon from '../assets/icons/scale-down.svg?react'
@@ -7,8 +8,11 @@ import ScaleResetIcon from '../assets/icons/scale-reset.svg?react'
 import FullscreenIcon from '../assets/icons/fullscreen.svg?react'
 import FullscreenAltIcon from '../assets/icons/fullscreen-alt.svg?react'
 import Tooltip from '../ui/components/Tooltip'
-import SpacingDiagram, { SCHEMA_WIDTH, SCHEMA_HEIGHT } from '../ui/scheme/statik/schema'
+import SpacingDiagram, { SchemeObjects, SCHEMA_WIDTH, SCHEMA_HEIGHT } from '../ui/scheme/statik/schema'
 import { ToastProvider } from '../ui/components/toast/ToastProvider'
+import { PopUp } from '../ui/scheme/pop-up/PopUp'
+import { usePopUpStore } from '../ui/scheme/pop-up/usePopUpStore'
+import { twMerge } from 'tailwind-merge'
 
 const MIN_ZOOM = 1
 const MAX_ZOOM = 10
@@ -20,8 +24,16 @@ const ZOOM_SMOOTH_FACTOR = 0.2
 const ZOOM_SETTLE_EPSILON = 0.001
 
 const LINE_HEIGHT_PX = 16
+/** Отступ вокруг попапа и объекта, когда камера отъезжает, чтобы их показать */
+const FOCUS_PADDING = 20
+/** Расстояние до цели прокрутки, при котором камера считается доехавшей */
+const FOCUS_SETTLE_PX = 2
 
-const clampZoom = (value: number) => Math.min(Math.max(value, MIN_ZOOM), MAX_ZOOM)
+/** Шаг плавной прокрутки не меньше 1px, иначе браузер округлит его до нуля и камера не доедет */
+const getScrollStep = (delta: number) => {
+  const step = delta * ZOOM_SMOOTH_FACTOR
+  return Math.abs(step) < 1 ? Math.sign(delta) : step
+}
 
 /** Браузеры отдают дельту в пикселях, строках или страницах — приводим к пикселям */
 const normalizeWheelDelta = (e: WheelEvent, pageHeight: number) => {
@@ -37,6 +49,13 @@ export function EquipmentDiagram() {
 
   const schemaRef = useRef<SVGSVGElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
+  const objectsLayerRef = useRef<HTMLDivElement>(null)
+  const popUpLayerRef = useRef<HTMLDivElement>(null)
+  const focusPointRef = useRef<{ x: number; y: number } | null>(null)
+
+  const isPopUpOpen = usePopUpStore(s => s.isOpen)
+  const focusRect = usePopUpStore(s => s.focusRect)
+  const setFocusRect = usePopUpStore(s => s.setFocusRect)
 
   const fitScaleRef = useRef(1)
   const currentZoomRef = useRef(MIN_ZOOM)
@@ -57,6 +76,8 @@ export function EquipmentDiagram() {
     wrapper.style.width = `${SCHEMA_WIDTH * nextScale}px`
     wrapper.style.height = `${SCHEMA_HEIGHT * nextScale}px`
     schema.style.scale = `${nextScale}`
+    if (objectsLayerRef.current) objectsLayerRef.current.style.zoom = `${nextScale}`
+    if (popUpLayerRef.current) popUpLayerRef.current.style.zoom = `${nextScale}`
 
     if (prevScale === nextScale) return
 
@@ -78,6 +99,30 @@ export function EquipmentDiagram() {
     rafRef.current = requestAnimationFrame(tickRef.current)
   }, [])
 
+  /** Плавно сдвигает прокрутку к точке фокуса; возвращает true, когда камера доехала */
+  const moveTowardFocus = useCallback(() => {
+    const diagram = diagramRef.current
+    const focus = focusPointRef.current
+    if (!diagram || !focus) return true
+
+    const scale = prevScaleRef.current
+    const targetLeft = clamp(focus.x * scale - diagram.clientWidth / 2, 0, diagram.scrollWidth - diagram.clientWidth)
+    const targetTop = clamp(focus.y * scale - diagram.clientHeight / 2, 0, diagram.scrollHeight - diagram.clientHeight)
+    const deltaLeft = targetLeft - diagram.scrollLeft
+    const deltaTop = targetTop - diagram.scrollTop
+
+    if (Math.abs(deltaLeft) <= FOCUS_SETTLE_PX && Math.abs(deltaTop) <= FOCUS_SETTLE_PX) {
+      diagram.scrollLeft = targetLeft
+      diagram.scrollTop = targetTop
+      focusPointRef.current = null
+      return true
+    }
+
+    diagram.scrollLeft += getScrollStep(deltaLeft)
+    diagram.scrollTop += getScrollStep(deltaTop)
+    return false
+  }, [])
+
   /** Плавно доводит масштаб до цели, пересчитывая якорь в каждом кадре */
   const tick = useCallback(() => {
     const current = currentZoomRef.current
@@ -88,14 +133,15 @@ export function EquipmentDiagram() {
     currentZoomRef.current = nextZoom
 
     applyScale(fitScaleRef.current * nextZoom)
+    const isFocusSettled = moveTowardFocus()
 
-    if (settled) {
+    if (settled && isFocusSettled) {
       rafRef.current = null
       return
     }
 
     rafRef.current = requestAnimationFrame(tickRef.current)
-  }, [applyScale])
+  }, [applyScale, moveTowardFocus])
 
   // tick и scheduleTick ссылаются друг на друга, поэтому связываем их через ref в эффекте
   useEffect(() => {
@@ -103,12 +149,12 @@ export function EquipmentDiagram() {
   }, [tick])
 
   const upScale = () => {
-    targetZoomRef.current = clampZoom(targetZoomRef.current + ZOOM_STEP)
+    targetZoomRef.current = clamp(targetZoomRef.current + ZOOM_STEP, MIN_ZOOM, MAX_ZOOM)
     scheduleTick()
   }
 
   const downScale = () => {
-    targetZoomRef.current = clampZoom(targetZoomRef.current - ZOOM_STEP)
+    targetZoomRef.current = clamp(targetZoomRef.current - ZOOM_STEP, MIN_ZOOM, MAX_ZOOM)
     scheduleTick()
   }
 
@@ -116,6 +162,31 @@ export function EquipmentDiagram() {
     targetZoomRef.current = MIN_ZOOM
     scheduleTick()
   }
+
+  // При открытии попапа камера отъезжает так, чтобы были видны и объект, и окно рядом с ним
+  useEffect(() => {
+    const diagram = diagramRef.current
+    if (!focusRect || !diagram) return
+    setFocusRect(null)
+
+    const scale = prevScaleRef.current
+    const viewLeft = diagram.scrollLeft / scale
+    const viewTop = diagram.scrollTop / scale
+    const isVisible =
+      focusRect.x >= viewLeft &&
+      focusRect.y >= viewTop &&
+      focusRect.x + focusRect.width <= viewLeft + diagram.clientWidth / scale &&
+      focusRect.y + focusRect.height <= viewTop + diagram.clientHeight / scale
+    if (isVisible) return
+
+    const fittingScale = Math.min(
+      diagram.clientWidth / (focusRect.width + FOCUS_PADDING * 2),
+      diagram.clientHeight / (focusRect.height + FOCUS_PADDING * 2)
+    )
+    targetZoomRef.current = clamp(Math.min(targetZoomRef.current, fittingScale / fitScaleRef.current), MIN_ZOOM, MAX_ZOOM)
+    focusPointRef.current = { x: focusRect.x + focusRect.width / 2, y: focusRect.y + focusRect.height / 2 }
+    scheduleTick()
+  }, [focusRect, setFocusRect, scheduleTick])
 
   // Первый fit-масштаб применяем до отрисовки, иначе схема мелькнёт в 1:1
   useLayoutEffect(() => {
@@ -157,7 +228,7 @@ export function EquipmentDiagram() {
     const pageHeight = diagramRef.current?.clientHeight ?? 0
     const delta = normalizeWheelDelta(e, pageHeight)
 
-    targetZoomRef.current = clampZoom(targetZoomRef.current * Math.exp(-delta * ZOOM_WHEEL_SPEED))
+    targetZoomRef.current = clamp(targetZoomRef.current * Math.exp(-delta * ZOOM_WHEEL_SPEED), MIN_ZOOM, MAX_ZOOM)
     scheduleTick()
   }, [scheduleTick])
 
@@ -213,8 +284,21 @@ export function EquipmentDiagram() {
         <div ref={wrapperRef} className='absolute top-0 left-0'>
           <SpacingDiagram
             ref={schemaRef}
-            className='w-348.75 h-156.5 top-0 left-0 absolute origin-top-left font-secondary'
+            className='w-348.75 h-156.5 top-0 left-0 absolute origin-top-left'
           />
+          <div
+            ref={objectsLayerRef}
+            className={twMerge('absolute top-0 left-0 w-348.75 h-156.5 font-secondary', isPopUpOpen && 'pointer-events-none')}
+          >
+            <SchemeObjects />
+          </div>
+          <div
+            ref={popUpLayerRef}
+            className='absolute top-0 left-0 w-348.75 h-156.5 pointer-events-none'
+            onPointerDown={event => event.stopPropagation()}
+          >
+            <PopUp />
+          </div>
         </div>
       </div>
       <div className='absolute top-2.5 left-2.5 flex flex-col gap-2.5 z-2 w-max'>

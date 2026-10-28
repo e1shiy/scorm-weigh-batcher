@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { animate, motion, MotionConfig, useAnimationFrame, useDragControls, useMotionValue } from 'motion/react'
 import { twMerge } from 'tailwind-merge'
+import { clamp } from '../../../lib/clamp'
 
 type NudgeProps = {
   onChange?: (value: number) => void // вызывается каждый кадр! не сохранять в state, только ref или motionValue
@@ -11,7 +12,6 @@ type NudgeProps = {
   className?: string
 }
 
-const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n))
 const RELEASE_EASE = [0.16, 1, 0.3, 1] as const
 
 export function Nudge({ onChange, vMax = 30, holdSpeed = 3, k = 4, deadZone = 0.04, className }: NudgeProps) {

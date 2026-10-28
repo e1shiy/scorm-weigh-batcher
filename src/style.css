@@ -121,6 +121,13 @@
   --color-lime: #4eee31;
   --color-brown: #743c03;
 
+  --color-window-frame-light: #dbe7f4;
+  --color-window-frame: #b4c9e2;
+  --color-window-border: #4f6787;
+  --color-window-close-light: #e9a99c;
+  --color-window-close: #c4412c;
+  --color-window-close-border: #7e2618;
+
   --font-primary: 'ProximaNova', sans-serif;
   --font-secondary: 'Inter', sans-serif;
   --radius-st: 5px;

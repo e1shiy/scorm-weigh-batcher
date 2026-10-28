@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import type { CompletionStatus, SCORM_API, SuccessStatus } from './types'
 import { getAPI } from './getApi'
 import { useScenarioStore } from '../scenario/useScenarioStore'
+import { clamp } from '../lib/clamp'
 
 type ScormState = {
   api: SCORM_API | null
@@ -102,6 +103,6 @@ export const useScormStore = create<ScormState>((set, get) => ({
       throw new Error("Couldn't set score: no api")
     }
 
-    set({ scoreRaw: Math.min(Math.max(scoreRaw + delta, scoreMin), scoreMax) })
+    set({ scoreRaw: clamp(scoreRaw + delta, scoreMin, scoreMax) })
   }
 }))
