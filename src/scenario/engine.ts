@@ -1,9 +1,10 @@
+import { useToastStore } from '../ui/components/toast/useToastStore'
 import type { ObjectId } from './objects'
+import type { steps } from './steps'
 import type { Action, ObjectChange, Step } from './types'
 
-// exclusive: пока sequence-группа начата, но не закончена, остальные заблокированы.
-// Возвращает индекс такой группы или -1.
-const findBusy = (step: Step, progress: boolean[][]) =>
+// Индекс начатой, но не законченной sequence-группы на exclusive-шаге, иначе -1.
+export const findBusyGroup = (step: Step, progress: boolean[][]) =>
   step.exclusive
     ? step.groups.findIndex((group, g) => {
         const done = progress[g] ?? []
@@ -11,15 +12,28 @@ const findBusy = (step: Step, progress: boolean[][]) =>
       })
     : -1
 
+export type ActionAvailability = 'done' | 'available' | 'locked'
+
+// Доступность подпункта в админ-панели по тем же правилам, что и в applyChange.
+export const getActionState = (step: Step, progress: boolean[][], g: number, a: number): ActionAvailability => {
+  if (progress[g]?.[a]) return 'done'
+
+  const busy = findBusyGroup(step, progress)
+  if (busy !== -1 && g !== busy) return 'locked'
+
+  if (step.groups[g]?.type === 'sequence' && progress[g]?.indexOf(false) !== a) return 'locked'
+  return 'available'
+}
+
 // Возвращает новый прогресс и засчитанные действия, либо null, если действие неверное.
 export const applyChange = <Id extends ObjectId>(step: Step, progress: boolean[][], change: ObjectChange<Id>) => {
-  const matches = (action: Action | undefined) =>
-    !!action && action.objectId === change.id && action.check(change.status, change.value)
+  const matches = (action: Action | undefined) => !!action && action.objectId === change.id && action.check(change.status, change.value)
 
   const next = progress.map(done => [...done])
   const matched: Action[] = []
 
-  const busy = findBusy(step, progress)
+  // exclusive: пока sequence-группа начата, но не закончена, остальные заблокированы.
+  const busy = findBusyGroup(step, progress)
 
   step.groups.forEach((group, g) => {
     const done = next[g]
@@ -46,22 +60,14 @@ export const applyChange = <Id extends ObjectId>(step: Step, progress: boolean[]
   return matched.length ? { progress: next, matched } : null
 }
 
-// Ручная отметка подпункта из админ-панели (j-е действие g-й группы).
-// Возвращает новый прогресс или null, если отметить или снять это действие сейчас нельзя.
-export const toggleAction = (step: Step, progress: boolean[][], g: number, j: number): boolean[][] | null => {
-  const group = step.groups[g]
-  const done = progress[g]
-  if (!group || !done || j < 0 || j >= done.length) return null
-
-  // exclusive: пока начата одна sequence-группа, трогать можно только её.
-  const busy = findBusy(step, progress)
-  if (busy !== -1 && busy !== g) return null
-
-  // sequence: отметить можно только следующее по порядку, снять только последнее выполненное.
-  if (group.type === 'sequence') {
-    const allowed = done[j] ? j === done.lastIndexOf(true) : j === done.indexOf(false)
-    if (!allowed) return null
-  }
-
-  return progress.map((d, i) => (i === g ? d.map((value, k) => (k === j ? !value : value)) : [...d]))
+export const showStepToasts = (step: (typeof steps)[number]): void => {
+  const addToast = useToastStore.getState().addToast
+  useToastStore.getState().clear()
+ 
+  step.groups.forEach(group =>
+    group.actions.forEach(action => {
+      const toast = action.meta.toast
+      if (toast) addToast({ message: toast })
+    })
+  )
 }
