@@ -78,6 +78,7 @@ export function HistoryPanel() {
               </div>
               <Tooltip content='Свернуть'>
                 <Button
+                  variant='dark'
                   ref={collapseToggleRef}
                   onClick={handleClose}
                   className='border-none w-7 h-full'
@@ -119,6 +120,7 @@ export function HistoryPanel() {
           <div className='h-full w-full flex flex-col gap-2.5'>
             <Tooltip content='Развернуть'>
               <Button
+                variant='dark'
                 ref={expandToggleRef}
                 onClick={open}
                 className='border-none w-full h-10'

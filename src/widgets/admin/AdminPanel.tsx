@@ -29,7 +29,7 @@ export function AdminPanel() {
       <p>Перейти на шаг:</p>
       <div className='flex gap-1.5 min-w-0'>
         {hasScroll && (
-          <Button disabled={isAtStart} className='size-9 border-none shrink-0' onClick={() => scrollByDir(-1)}>
+          <Button variant='dark' disabled={isAtStart} className='size-9 border-none shrink-0' onClick={() => scrollByDir(-1)}>
             {isAtStart ? <ChevronLockedIcon className='size-full rotate-180' /> : <ChevronIcon className='size-full rotate-180' />}
           </Button>
         )}
@@ -55,7 +55,7 @@ export function AdminPanel() {
         </nav>
 
         {hasScroll && (
-          <Button className={twMerge('size-9 border-none shrink-0')} disabled={isAtEnd} onClick={() => scrollByDir(1)}>
+          <Button variant='dark' className={twMerge('size-9 border-none shrink-0')} disabled={isAtEnd} onClick={() => scrollByDir(1)}>
             {isAtEnd ? <ChevronLockedIcon className='size-full' /> : <ChevronIcon className='size-full' />}
           </Button>
         )}
