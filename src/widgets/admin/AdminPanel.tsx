@@ -42,7 +42,7 @@ export function AdminPanel() {
                   variant={currentStepIndex > i ? 'light-borderless' : 'dark'}
                   className={'size-9 text-[16px] font-normal shrink-0'}
                   onClick={() => {
-                    setCurrentStep(i)
+                    setCurrentStep(currentStepIndex === i + 1 ? i : i + 1)
                   }}
                 >
                   {i + 1}

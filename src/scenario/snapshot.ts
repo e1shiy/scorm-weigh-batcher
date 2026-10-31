@@ -4,12 +4,13 @@ type Entry = { status: SchemeStatus; value: unknown }
 
 // Состояние объектов на начало шага stepIndex: считаем, что шаги 0..stepIndex-1 выполнены.
 // Действия проигрываются по порядку от начального состояния, поэтому работает и вперёд, и назад.
-export const buildStateAtStep = (steps: Step[], initial: ObjectsState, stepIndex: number): ObjectsState => {
+export const buildStateAtStep = (steps: Step[], initial: ObjectsState, stepIndex: number, progress: boolean[][] = []): ObjectsState => {
   const state: Record<string, Entry> = { ...initial }
 
-  for (const step of steps.slice(0, stepIndex)) {
-    for (const group of step.groups) {
-      for (const action of group.actions) {
+  for (const [index, step] of steps.slice(0, stepIndex + 1).entries()) {
+    for (const [g, group] of step.groups.entries()) {
+      for (const [a, action] of group.actions.entries()) {
+        if (index === stepIndex && !progress[g]?.[a]) continue
         const current = state[action.objectId]
         if (!current || !action.target) continue
 
