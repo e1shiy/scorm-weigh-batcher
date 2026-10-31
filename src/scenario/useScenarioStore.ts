@@ -42,14 +42,32 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
 
     // Перескок из админ-панели: объекты и история приводятся к состоянию на начало шага.
     setCurrentStep: stepIndex => {
+      const { currentStepIndex, stepProgress, history } = get()
+      const completedCount = stepProgress.flat().filter(Boolean).length
+      let nextHistory: typeof history
+
+      if (stepIndex <= currentStepIndex) {
+        let toRemove = completedCount + getDoneActions(scenarioSteps, currentStepIndex).length - getDoneActions(scenarioSteps, stepIndex).length
+        nextHistory = history.filter(entry => {
+          if (!entry.isSuccess || toRemove <= 0) return true
+          toRemove--
+          return false
+        })
+      } else {
+        const skipped = scenarioSteps.slice(currentStepIndex, stepIndex).flatMap((step, index) =>
+          step.groups.flatMap((group, g) => group.actions.filter((_, a) => index !== 0 || !stepProgress[g]?.[a]))
+        )
+        nextHistory = [
+          ...skipped.map(action => ({ id: createId(), meta: action.meta, scoreDelta: 0, isSuccess: true })).reverse(),
+          ...history
+        ]
+      }
+
       set({
         currentStepIndex: stepIndex,
         stepProgress: createProgress(scenarioSteps[stepIndex]),
         objects: buildStateAtStep(scenarioSteps, initialObjects, stepIndex),
-        // Всё, что выполнено до этого шага; новые записи в начале.
-        history: getDoneActions(scenarioSteps, stepIndex)
-          .map(action => ({ id: createId(), meta: action.meta, scoreDelta: 0, isSuccess: true }))
-          .reverse()
+        history: nextHistory
       })
 
       const prevStep = get().steps[stepIndex - 1]
@@ -61,8 +79,44 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
     // Как действие пользователя на схеме: идёт через setObject, поэтому прогресс,
     // история, тост и переход на следующий шаг работают без дублирования.
     activateAction: (g, a) => {
-      const { currentStepIndex, objects } = get()
-      const action = scenarioSteps[currentStepIndex]?.groups[g]?.actions[a]
+      const { currentStepIndex, objects, stepProgress, history } = get()
+      const step = scenarioSteps[currentStepIndex]
+      const group = step?.groups[g]
+      const action = group?.actions[a]
+      if (step && group && action && stepProgress[g]?.[a]) {
+        const nextProgress = stepProgress.map((done, index) => {
+          if (index === g) {
+            return done.map((value, actionIndex) => group.type === 'sequence' ? value && actionIndex < a : value && actionIndex !== a)
+          }
+          if (step.exclusive && group.type === 'sequence' && a > 0 && step.groups[index]?.type === 'sequence' && !done.every(Boolean)) {
+            return done.map(() => false)
+          }
+          return done
+        })
+        const removed = step.groups.flatMap((item, index) =>
+          item.actions.filter((_, actionIndex) => stepProgress[index]?.[actionIndex] && !nextProgress[index]?.[actionIndex])
+        )
+        const completedCount = stepProgress.flat().filter(Boolean).length
+        let successesSeen = 0
+        const remainingHistory = history.filter(entry => {
+          if (!entry.isSuccess || successesSeen >= completedCount) return true
+          successesSeen++
+          return !removed.some(item => item.meta === entry.meta)
+        })
+        const restored = buildStateAtStep(scenarioSteps, initialObjects, currentStepIndex, nextProgress)
+        const nextObjects = { ...objects }
+        for (const item of removed) {
+          const id = item.objectId as ObjectId
+          Object.assign(nextObjects, { [id]: restored[id] })
+        }
+        set({
+          objects: nextObjects,
+          stepProgress: nextProgress,
+          history: remainingHistory
+        })
+        useToastStore.getState().clear()
+        return
+      }
       const current = action && objects[action.objectId as ObjectId]
       const target = action?.target && current ? action.target(current) : undefined
       if (action && target) get().setObject({ id: action.objectId, ...target } as ObjectChange)
