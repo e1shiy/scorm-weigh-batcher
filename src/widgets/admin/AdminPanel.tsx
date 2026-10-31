@@ -72,7 +72,7 @@ export function AdminPanel() {
                   <Button
                     key={a}
                     variant={state === 'done' ? 'light-borderless' : 'dark'}
-                    disabled={state !== 'available'}
+                    disabled={state === 'locked'}
                     className='h-9 px-2.5 text-[14px] font-normal'
                     onClick={() => activateAction(g, a)}
                   >
