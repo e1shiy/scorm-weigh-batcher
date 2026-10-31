@@ -1,4 +1,5 @@
 import { useScenarioStore } from '../../scenario/useScenarioStore'
+import { getActionState } from '../../scenario/engine'
 import { Button } from '../../ui/components/Button'
 import Tooltip from '../../ui/components/Tooltip'
 import { useRef } from 'react'
@@ -8,7 +9,8 @@ import { useScrollEdges } from './useScrollEdges'
 import { twMerge } from 'tailwind-merge'
 
 export function AdminPanel() {
-  const { steps, totalSteps, currentStepIndex, setCurrentStep } = useScenarioStore()
+  const { steps, totalSteps, currentStepIndex, stepProgress, setCurrentStep, activateAction } = useScenarioStore()
+  const activeStep = steps[currentStepIndex] // undefined, когда сценарий завершён
 
   const scrollByDir = (dir: 1 | -1) => {
     navRef.current?.scrollBy({
@@ -40,7 +42,7 @@ export function AdminPanel() {
                   variant={currentStepIndex > i ? 'light-borderless' : 'dark'}
                   className={'size-9 text-[16px] font-normal shrink-0'}
                   onClick={() => {
-                    setCurrentStep(i + 1)
+                    setCurrentStep(i)
                   }}
                 >
                   {i + 1}
@@ -56,6 +58,33 @@ export function AdminPanel() {
           </Button>
         )}
       </div>
+
+      {activeStep && (
+        <div className='flex flex-col gap-1.5'>
+          <p>
+            Шаг {currentStepIndex + 1}: {activeStep.title}
+          </p>
+          {activeStep.groups.map((group, g) => (
+            <div key={g} className='flex flex-wrap gap-1.5'>
+              {group.actions.map((action, a) => {
+                const state = getActionState(activeStep, stepProgress, g, a)
+                return (
+                  <Button
+                    key={a}
+                    variant={state === 'done' ? 'light-borderless' : 'dark'}
+                    disabled={state === 'locked'}
+                    className='h-9 px-2.5 text-[14px] font-normal'
+                    onClick={() => activateAction(g, a)}
+                  >
+                    {group.type === 'sequence' && `${a + 1}. `}
+                    {[action.meta.title, action.meta.description].filter(Boolean).join(' · ')}
+                  </Button>
+                )
+              })}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

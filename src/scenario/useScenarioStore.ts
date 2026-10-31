@@ -2,9 +2,10 @@ import { create } from 'zustand'
 import { useScormStore } from '../api/useScormStore'
 import { applyChange, showStepToasts } from './engine'
 import { objects } from './objects'
-import { buildStateAtStep } from './snapshot'
+import type { ObjectId } from './objects'
+import { buildStateAtStep, getDoneActions } from './snapshot'
 import { steps } from './steps'
-import type { ObjectsState, ScenarioActions, ScenarioState, Step } from './types'
+import type { ObjectChange, ObjectsState, ScenarioActions, ScenarioState, Step } from './types'
 import { useToastStore } from '../ui/components/toast/useToastStore'
 
 const WRONG_ACTION_PENALTY = 1 // из 100 баллов.
@@ -39,19 +40,34 @@ export const createScenarioStore = (scenarioSteps: Step[], initialObjects: Objec
     stepProgress: createProgress(scenarioSteps[0]),
     history: [],
 
-    // Перескок из админ-панели: объекты приводятся к состоянию на начало шага.
+    // Перескок из админ-панели: объекты и история приводятся к состоянию на начало шага.
     setCurrentStep: stepIndex => {
       set({
         currentStepIndex: stepIndex,
         stepProgress: createProgress(scenarioSteps[stepIndex]),
-        objects: buildStateAtStep(scenarioSteps, initialObjects, stepIndex)
+        objects: buildStateAtStep(scenarioSteps, initialObjects, stepIndex),
+        // Всё, что выполнено до этого шага; новые записи в начале.
+        history: getDoneActions(scenarioSteps, stepIndex)
+          .map(action => ({ id: createId(), meta: action.meta, scoreDelta: 0, isSuccess: true }))
+          .reverse()
       })
-      
+
       const prevStep = get().steps[stepIndex - 1]
       if (prevStep) showStepToasts(prevStep)
 
       if (stepIndex >= get().totalSteps) useScormStore.getState().finish()
     },
+
+    // Как действие пользователя на схеме: идёт через setObject, поэтому прогресс,
+    // история, тост и переход на следующий шаг работают без дублирования.
+    activateAction: (g, a) => {
+      const { currentStepIndex, objects } = get()
+      const action = scenarioSteps[currentStepIndex]?.groups[g]?.actions[a]
+      const current = action && objects[action.objectId as ObjectId]
+      const target = action?.target && current ? action.target(current) : undefined
+      if (action && target) get().setObject({ id: action.objectId, ...target } as ObjectChange)
+    },
+
     setObject: change => {
       const { history, currentStepIndex, totalSteps, objects, stepProgress } = get()
       const step = scenarioSteps[currentStepIndex]

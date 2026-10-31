@@ -1,4 +1,4 @@
-import type { ObjectsState, SchemeStatus, Step } from './types'
+import type { Action, ObjectsState, SchemeStatus, Step } from './types'
 
 type Entry = { status: SchemeStatus; value: unknown }
 
@@ -22,3 +22,7 @@ export const buildStateAtStep = (steps: Step[], initial: ObjectsState, stepIndex
 
   return state as ObjectsState
 }
+
+// Действия шагов 0..stepIndex-1 в порядке выполнения.
+export const getDoneActions = (steps: Step[], stepIndex: number): Action[] =>
+  steps.slice(0, stepIndex).flatMap(step => step.groups.flatMap(group => group.actions))
